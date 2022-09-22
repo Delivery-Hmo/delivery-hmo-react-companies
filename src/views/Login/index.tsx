@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Form, Input, Button, Row, Col, message } from 'antd';
-import logoLogin from '../../assets/logo.jpeg';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 
@@ -32,7 +31,7 @@ const Login = () => {
       <Row justify="center">
         <Col>
           <div style={{textAlign: "center"}}>
-            <img alt="rifas-login" height={100} width={300} style={{ marginBottom: 20 }} src={logoLogin}/>
+            {/* <img alt="rifas-login" height={100} width={300} style={{ marginBottom: 20 }} src={logoLogin}/> */}
           </div>
           <Form
             name="basic"
@@ -46,14 +45,14 @@ const Login = () => {
               name="email"
               rules={[{ required: true, message: 'Favor de escribir el correo.' }]}
             >
-              <Input value={account.email} onChange={(e) => setAccount({...account, email: e.target.value})} />
+              <Input autoComplete='username' value={account.email} onChange={(e) => setAccount({...account, email: e.target.value})} />
             </Form.Item>
             <Form.Item
               label="Contraseña"
               name="password"
               rules={[{ required: true, message: 'Favor de escribir la contraseña.' }]}
             >
-              <Input.Password value={account.passowrd} onChange={(e) => setAccount({...account, passowrd: e.target.value})} />
+              <Input.Password autoComplete='current-password' value={account.passowrd} onChange={(e) => setAccount({...account, passowrd: e.target.value})} />
             </Form.Item>
             <Form.Item>
               <div style={{textAlign: "center"}}>
