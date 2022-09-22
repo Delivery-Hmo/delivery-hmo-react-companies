@@ -1,13 +1,13 @@
 import { UserOutlined, DollarOutlined, SettingOutlined } from '@ant-design/icons';
 import { getAuth } from "firebase/auth";
 import React from 'react';
-import { Link, LinkProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface MenuItems {
   key: string;
-  icon: React.ReactNode;
+  icon: JSX.Element;
   title: string;
-  label?: React.ReactElement | string;
+  label?: JSX.Element | string;
   isSubMenu?: boolean;
   childrens?: MenuItems[];
   onClick?: () => void

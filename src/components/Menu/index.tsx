@@ -25,8 +25,7 @@ const MenuComponent = () => {
           children: item.childrens,
           onClick: () => item.onClick && item.onClick()
         }))}
-      >
-      </Menu>
+      />
     </Sider>
   )
 }
