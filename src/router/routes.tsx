@@ -1,15 +1,20 @@
+import { PathRouteProps } from 'react-router-dom';
 import Home from '../views/Home';
 import Login from '../views/Login';
 
-export default [
+const routes: PathRouteProps[] = [
   {
-    key: 'login',
     path: '/login',
     element: <Login />,
   },
   {
-    key: 'home',
     path: '/ventas',
     element: <Home />,
+  },
+  {
+    path: '*',
+    element: <div>404 not found</div>,
   }
 ];
+
+export default routes;

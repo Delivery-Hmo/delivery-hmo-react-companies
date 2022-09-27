@@ -38,7 +38,7 @@ const Login = () => {
       provider.addScope('https://www.googleapis.com/auth/userinfo.email') // permiso correo
       const result = await signInWithPopup(auth, provider)
       const user = result.user;
-      console.log(user);      
+      console.log(user);
     } catch (e) {
       console.log(e);
       message.error("Error, al iniciar con Google.");
