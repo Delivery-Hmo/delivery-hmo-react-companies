@@ -5,7 +5,7 @@ import logo from '../../assets/logo-example.jpg';
 import logoBg from '../../assets/delivery-bg.jpg';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, getAdditionalUserInfo } from 'firebase/auth';
 import '../../assets/styles/Login.css'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
@@ -14,13 +14,23 @@ interface Account {
   passowrd: string;
 }
 
+interface UserAdmin {
+  uid?: string;
+  id?: string;
+  name: string;
+  email: string;
+  phone:  string;
+  company: string;
+  description: string;
+  active: boolean;
+}
+
 const Login = () => {
   const [account, setAccount] = useState<Account>({email: "", passowrd: ""});
   const [loading, setLoading] = useState<boolean>(false);
 
   const onFinish = async () => {
     if(loading) return;
-
     try {
       setLoading(true);
 
@@ -32,13 +42,45 @@ const Login = () => {
     }
   }
 
+  const apiFetch = async (user: UserAdmin) => {
+    try {
+      const createUserAdmin = await fetch('https://www.deliapihmo.xyz/userAdmin/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+
+    if(createUserAdmin.status !== 201) {
+      console.log('error creating', createUserAdmin)
+    }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const signInGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
       provider.addScope('https://www.googleapis.com/auth/userinfo.email') // permiso correo
       const result = await signInWithPopup(auth, provider)
-      const user = result.user;
-      console.log(user);
+      const user = result.user
+      const additional = getAdditionalUserInfo(result)
+
+      if(additional?.isNewUser) {
+        let userInfo: UserAdmin = {
+          uid: user.uid,
+          name: user?.displayName || '',
+          email:  user?.email || '',
+          active: true,
+          phone: user?.phoneNumber || '6621000000',
+          description: 'creado desde provider de google',
+          company: 'Amosay',
+        }
+
+        await apiFetch(userInfo)
+      }
     } catch (e) {
       console.log(e);
       message.error("Error, al iniciar con Google.");
@@ -49,7 +91,24 @@ const Login = () => {
     try {
       const provider = new FacebookAuthProvider();
       provider.addScope('email') // permiso correo
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user
+      const additional = getAdditionalUserInfo(result)
+
+      if(additional?.isNewUser) {
+        let userInfo: UserAdmin = {
+          uid: user.uid,
+          name: user?.displayName || '',
+          email:  user?.email || '',
+          active: true,
+          phone: user?.phoneNumber || '6621111111',
+          description: 'creado desde provider de facebook',
+          company: 'facebook',
+        }
+
+        await apiFetch(userInfo)
+      }
+
     } catch (e) {
       console.log(e);
       message.error("Error, al iniciar con Facebook.");
