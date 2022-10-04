@@ -1,0 +1,71 @@
+.logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.logo img {
+  position: absolute;
+}
+
+.site-layout-background {
+  background-image: url('../delivery-man.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+  border-radius: 7px;
+}
+
+.ant-layout-header {
+  background: #000000
+}
+
+.ant-menu {
+  background: #000000;
+  color:#fff;
+}
+
+@media screen and (max-width:575px){
+  .ant-menu {
+    background: #000000;
+    color: #000000;
+  }
+
+  .anticon-ellipsis {
+    color: #000000;
+    background-color: #f0a818;
+    border-radius: 4px;
+    padding: 3px;
+  }
+}
+
+.ant-layout-footer {
+  background:  #000000
+}
+
+.ant-menu-horizontal, .ant-menu-item::after, .ant-menu-submenu::after {
+  border: none !important;
+}
+
+.ant-divider {
+  border: none !important;
+}
+
+/* Paleta de Colores */
+.color1 { color: #000000 };
+.color2 { color: #7890a8 };
+.color3 { color: #304878 };
+.color4 { color: #181848 };
+.color5 { color: #f0a818 };
+
+.ant-card-meta-detail {
+  color: #f0a818;
+}
+
+.ant-card {
+  background-color: #f6ca74;
+  border-color: #f6ca74
+}
