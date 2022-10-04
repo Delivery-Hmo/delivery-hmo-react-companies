@@ -122,10 +122,12 @@
 
 .icon-google {
   border-radius: '50%';
+  margin: 0 5px
 }
 
 .icon-facebook {
   border-radius: '50%';
+  margin: 0 5px
 }
 
 .ant-col {
@@ -138,6 +140,10 @@
 
 .ant-row .ant-row-center {
   margin-top: 10vh !important;
+}
+
+.login-button {
+  margin: 3px 0
 }
 
 @media screen and (max-width:575px){

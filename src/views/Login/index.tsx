@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Input, Button, Row, Col, message, Card, Divider, Avatar } from 'antd';
+import { Avatar, Button, Card, Col, Form, Input, message, Row } from 'antd';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, getAdditionalUserInfo } from 'firebase/auth';
@@ -162,54 +162,66 @@ const Login = () => {
               placeholder="Contraseña"
             />
           </Form.Item>
-          <Form.Item style={{ marginBottom: '10px' }}>
+          <div
+            style={{
+              flexDirection: 'column',
+              padding: 0
+            }}
+          >
             <Button
-              type="primary"
+              block
+              className="login-button"
               htmlType="submit"
               loading={loading}
-              block
+              shape="round"
+              size="large"
+              type="primary"
             >
               Entrar
             </Button>
-          </Form.Item>
-          <Divider orientation='center' className='divider-or'> ó </Divider>
-          {/* icons google - facebook */}
-          <Row gutter={[16, 0]} justify="space-evenly">
-            <Col span={12}>
-              <Button
-                type='link'
-                style={{
-                  padding: '0 5px',
-                  borderRadius: '50px',
-                }}
-                onClick={signInGoogle}
-              >
+            <Button
+              block
+              className="login-button"
+              icon={
                 <Avatar
                   src='/google.png'
-                  size="large"
+                  size="small"
                   className='icon-google'
+                  style={{
+                  }}
                 />
-              </Button>
-            </Col>
-            <Col span={12}>
-              <Button
-                type='link'
-                style={{
-                  padding: '0 5px',
-                  borderRadius: '50px',
-                }}
-                onClick={signInFacebook}
-              >
+              }
+              onClick={signInGoogle}
+              shape="round"
+              size="large"
+              style={{ backgroundColor: '#eeeeee'}}
+              type='default'
+            >
+              Continuar con Google
+            </Button>
+            <Button
+              block
+              className="login-button"
+              icon={
                 <Avatar
                   src='/facebook.png'
-                  size="large"
+                  size="small"
                   className='icon-facebook'
+                  style={{}}
                 />
-              </Button>
-            </Col>
-          </Row>
+              }
+              onClick={signInFacebook}
+              shape="round"
+              size="large"
+              style={{ backgroundColor: '#eeeeee'}}
+              type='default'
+
+            >
+              Continuar con Facebook
+            </Button>
+          </div>
         </Form>
-        <Divider />
+        <br/>
         <Row gutter={[16, 0]} justify="space-evenly">
           <Col span={12}>
             <a href="#app-store">
