@@ -2,6 +2,7 @@ import { Button, Card, Col, Collapse, Divider, Layout, Menu, Modal, Row, Space, 
 import React, { useState } from 'react';
 import '../../assets/styles/LandingPage.css'
 import logo from '../../assets/logo-hmo2.png';
+import logoHMO from '../../assets/logo-hmo.png';
 import { FacebookOutlined, GoogleOutlined, IdcardOutlined, InstagramOutlined, UserOutlined, } from '@ant-design/icons'
 import image1 from '../../assets/delivery-bg.jpg';
 import image2 from '../../assets/landing-1.png';
@@ -79,7 +80,7 @@ const LandingPage = () => {
       </Header>
 
       {/* MAIN CONTENT */}
-      <Layout style={{ background: "#f0a818" }}>
+      <Layout style={{ background: "#d39c2c" }}>
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50 }}>
           <div className="site-layout-background" style={{ padding: 24 }}>
             <div>
@@ -194,12 +195,12 @@ const LandingPage = () => {
         <Divider />
         <Row gutter={[16, 0]}>
           <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-            <Title level={5} style={{ color: '#fff' }}>
-              Intégrate con nosotros
-            </Title>
-            <Link href='#' target='_blank'>
-              Empieza hoy y expande tu negocio
-            </Link>
+            <Space direction='vertical'>
+              <img src={logoHMO} alt="logo" width="100px"/>
+              <Link href='#' target='_blank'>
+                Empieza hoy y expande tu negocio
+              </Link>
+            </Space>
           </Col>
           <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
             <Title level={5} style={{ color: '#fff' }}>

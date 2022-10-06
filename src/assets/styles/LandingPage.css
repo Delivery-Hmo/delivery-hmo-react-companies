@@ -1,10 +1,14 @@
+.body {
+  font-family: Lora;
+}
+
 .ant-card {
   background-color: #f6ca74;
   border-color: #f6ca74
 }
 
 .ant-card-meta-detail {
-  color: #f0a818;
+  color: #d39c2c;
 }
 
 .ant-divider {
@@ -72,7 +76,7 @@
 
   .anticon-ellipsis {
     color: #000000;
-    background-color: #f0a818;
+    background-color: #d39c2c;
     border-radius: 4px;
     padding: 3px;
   }
