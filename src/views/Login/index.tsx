@@ -147,6 +147,7 @@ const Login = () => {
               value={account.email}
               onChange={(e) => setAccount({...account, email: e.target.value})}
               placeholder="Correo"
+              size='large'
             />
           </Form.Item>
           <Form.Item
@@ -160,6 +161,7 @@ const Login = () => {
               value={account.passowrd}
               onChange={(e) => setAccount({...account, passowrd: e.target.value})}
               placeholder="Contraseña"
+              size='large'
             />
           </Form.Item>
           <div

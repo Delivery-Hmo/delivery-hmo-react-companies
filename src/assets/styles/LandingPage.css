@@ -1,3 +1,46 @@
+.ant-card {
+  background-color: #f6ca74;
+  border-color: #f6ca74
+}
+
+.ant-card-meta-detail {
+  color: #f0a818;
+}
+
+.ant-divider {
+  border: none !important;
+}
+
+.ant-layout-footer {
+  background:  #000000
+}
+
+.ant-layout-header {
+  background: #000000
+}
+
+.ant-menu {
+  background: #000000;
+  color:#fff;
+}
+
+.ant-menu-horizontal, .ant-menu-item::after, .ant-menu-submenu::after {
+  border: none !important;
+}
+
+.ant-collapse-ghost > .ant-collapse-item {
+  border-bottom: 1px solid #000;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  color: #304878;
+  font-size: 22px;
+}
+
+.ant-collapse {
+  font-size: 16px;
+}
+
 .logo {
   float: left;
   width: 120px;
@@ -17,15 +60,8 @@
   background-size: cover;
   color: #fff;
   border-radius: 7px;
-}
-
-.ant-layout-header {
-  background: #000000
-}
-
-.ant-menu {
-  background: #000000;
-  color:#fff;
+  z-index: 1;
+  min-height: 800px;
 }
 
 @media screen and (max-width:575px){
@@ -40,32 +76,11 @@
     border-radius: 4px;
     padding: 3px;
   }
-}
 
-.ant-layout-footer {
-  background:  #000000
-}
-
-.ant-menu-horizontal, .ant-menu-item::after, .ant-menu-submenu::after {
-  border: none !important;
-}
-
-.ant-divider {
-  border: none !important;
-}
-
-/* Paleta de Colores */
-.color1 { color: #000000 };
-.color2 { color: #7890a8 };
-.color3 { color: #304878 };
-.color4 { color: #181848 };
-.color5 { color: #f0a818 };
-
-.ant-card-meta-detail {
-  color: #f0a818;
-}
-
-.ant-card {
-  background-color: #f6ca74;
-  border-color: #f6ca74
+  .site-layout-background {
+    min-height: 500px;
+    background-image: url('../del2.jpg');
+    background-size: cover;
+    background-position: center;
+  }
 }

@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Layout, Menu, Modal, Row, Space, Tooltip, Typography } from 'antd';
+import { Button, Card, Col, Collapse, Divider, Layout, Menu, Modal, Row, Space, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
 import '../../assets/styles/LandingPage.css'
 import logo from '../../assets/logo-hmo2.png';
@@ -8,6 +8,7 @@ import image2 from '../../assets/landing-1.png';
 import image3 from '../../assets/image-3.jpg';
 import Login from '../Login';
 
+const { Panel } = Collapse;
 const { Header, Content, Footer } = Layout;
 const { Title, Link } = Typography;
 
@@ -77,13 +78,22 @@ const LandingPage = () => {
         />
       </Header>
 
+      {/* MAIN CONTENT */}
       <Layout style={{ background: "#f0a818" }}>
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50 }}>
-          <div className="site-layout-background" style={{ padding: 24, minHeight: 800 }}>
-            {/* Main content */}
+          <div className="site-layout-background" style={{ padding: 24 }}>
+            <div>
+              <div className="main-title">
+                Delivery HMO
+              </div>
+              <div className="main-description">
+                descriptions
+              </div>
+            </div>
           </div>
         </Content>
 
+        {/* CONTENT 1 */}
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50, marginBottom: 50 }}>
           <Row
             justify="space-between"
@@ -98,7 +108,7 @@ const LandingPage = () => {
                 {
                   CardContent(
                     "Mayor alcance de clientes",
-                    "Gracias al servicio a domicilio los restaurantes pueden llegar a un mayor número de clientes, principalmente debido a que el rango de alcance aumenta consideradamente en kilómetros.",
+                    "Gracias al servicio a domicilio los restaurantes pueden llegar a un mayor número de clientes, principalmente debido a que el rango de alcance aumenta consideradamente en kilómetros. Tu alcance estará por los cielos.",
                   )
                 }
               </Card>
@@ -126,7 +136,7 @@ const LandingPage = () => {
                 {
                   CardContent(
                     "Servicio Integral",
-                    "Lorem Ipsum dolor sit amet, consectetur adipiscing elit. Lorem Ipsum dolor sit amet, consectetur adipis.",
+                    "Nuestro compromiso es hacer que cada uno de nuestros clientes tenga una experiencia de entrega única. Ofrecemos un equilibrio perfecto entre sustentabilidad, tecnología y eficiencia operativa cuando hablamos de delivery service.",
                   )
                 }
               </Card>
@@ -135,6 +145,42 @@ const LandingPage = () => {
         </Content>
       </Layout>
 
+      {/* Content Collapse */}
+      <Layout style={{ background: "#f6ca74" }}>
+        <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50, marginBottom: 50 }}>
+          <Row
+            justify="space-between"
+          >
+            <Col span={24}>
+              <Title style={{color: "#304878"}}>
+                ¿Sigues con dudas? Pegúntanos:
+              </Title>
+            </Col>
+            <Col span={24}>
+            <Collapse
+              className='collapse-content'
+              defaultActiveKey={['1']}
+              ghost
+            >
+              <Panel header="Lorem Ipsum" key="1">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
+              </Panel>
+              <Panel header="Lorem Ipsum 2" key="2">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
+              </Panel>
+              <Panel header="Lorem Ipsum 3" key="3">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
+              </Panel>
+              <Panel header="Lorem Ipsum 4" key="4">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
+              </Panel>
+            </Collapse>
+            </Col>
+          </Row>
+        </Content>
+      </Layout>
+
+      {/* MODAL LOGIN */}
       <Modal
         open={open}
         onCancel={() => setOpen(false)}
@@ -143,6 +189,7 @@ const LandingPage = () => {
         <Login />
       </Modal>
 
+      {/* FOOTER */}
       <Footer style={{ textAlign: 'center', color: '#fff' }}>
         <Divider />
         <Row gutter={[16, 0]}>
