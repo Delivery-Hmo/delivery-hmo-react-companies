@@ -12,6 +12,9 @@ import Login from '../Login';
 const { Panel } = Collapse;
 const { Header, Content, Footer } = Layout;
 const { Title, Link } = Typography;
+const sizes = {
+  xs:24, sm:24, md:8, lg:8, xl:8, xxl:8,
+}
 
 interface MenuItems {
   key: string;
@@ -194,7 +197,7 @@ const LandingPage = () => {
       <Footer style={{ textAlign: 'center', color: '#fff' }}>
         <Divider />
         <Row gutter={[16, 0]}>
-          <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
+          <Col {...sizes}>
             <Space direction='vertical'>
               <img src={logoHMO} alt="logo" width="100px"/>
               <Link href='#' target='_blank'>
