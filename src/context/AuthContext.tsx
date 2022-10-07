@@ -1,14 +1,13 @@
-import { useEffect, useState, useContext, createContext, FC } from "react";
+import { useEffect, useState, useContext, createContext, FC, ReactNode } from "react";
 import FullLoader from "../components/FullLoader/FullLoader";
-import { User, onIdTokenChanged } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { User, onIdTokenChanged, getAuth } from "firebase/auth";
 
 const AuthContext = createContext<{ user: User | null }>({
   user: null
 });
 
 interface Props {
-  children: JSX.Element;
+  children: ReactNode;
 }
 
 export const AuthProvider: FC<Props> = ({ children }) => {
@@ -16,7 +15,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
   const [loading, setLoading] = useState<Boolean>(true);
 
   useEffect(() => {
-    const uns = onIdTokenChanged(auth, async (user: User | null) => {
+    const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {
       setUser(user);
       setLoading(false);
     });

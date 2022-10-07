@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Form, Input, Button, Row, Col, message } from 'antd';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 interface Account {
   email: string;
@@ -18,7 +17,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      await signInWithEmailAndPassword(auth, account.email, account.passowrd);
+      await signInWithEmailAndPassword(getAuth(), account.email, account.passowrd);
     } catch (error) {
       console.log(error);
       message.error("Error, datos incorrectos.");

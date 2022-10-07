@@ -8,7 +8,7 @@ const routes: PathRouteProps[] = [
     element: <Login />,
   },
   {
-    path: '/ventas',
+    path: '/',
     element: <Home />,
   },
   {
