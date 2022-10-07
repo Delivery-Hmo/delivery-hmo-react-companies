@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { CustomInput, Option } from "../../interfaces";
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, Button, Upload } from "antd";
 import { UploadOutlined } from '@ant-design/icons';
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const DynamicContentForm: FC<Props> = ({inputs}) => {
-  const getInpunt = (input: CustomInput): JSX.Element | null => {
+  const getInpunt = (input: CustomInput): ReactNode | null => {
     let { type, typeInput, value, label, name, rules, options, onChange } = input;
 
     switch (type) {

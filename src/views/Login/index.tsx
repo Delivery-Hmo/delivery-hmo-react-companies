@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Avatar, Button, Card, Col, Form, Input, message, Row } from 'antd';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, getAdditionalUserInfo } from 'firebase/auth';
 import '../../assets/styles/Login.css'
+
+interface UserAdmin {
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
 interface Account {
   email: string;
   passowrd: string;
 }
-
-interface UserAdmin {
   uid?: string;
   id?: string;
   name: string;
@@ -31,7 +31,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      await signInWithEmailAndPassword(auth, account.email, account.passowrd);
+      await signInWithEmailAndPassword(getAuth(), account.email, account.passowrd);
     } catch (error) {
       console.log(error);
       message.error("Error, datos incorrectos.");
