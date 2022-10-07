@@ -1,11 +1,11 @@
 import { PathRouteProps } from 'react-router-dom';
 import Home from '../views/Home';
-import Login from '../views/Login';
+import LandingPage from '../views/LandingPage';
 
 const routes: PathRouteProps[] = [
   {
-    path: '/login',
-    element: <Login />,
+    path: '/home',
+    element: <LandingPage />,
   },
   {
     path: '/',
