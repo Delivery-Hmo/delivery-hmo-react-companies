@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Avatar, Button, Card, Col, Form, Input, message, Row } from 'antd';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
 import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, getAdditionalUserInfo } from 'firebase/auth';
 import '../../assets/styles/Login.css'
-
-interface UserAdmin {
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { auth } from '../../firebaseConfig';
 
 interface Account {
   email: string;
   passowrd: string;
 }
+
+interface UserAdmin {
   uid?: string;
   id?: string;
   name: string;
@@ -31,7 +31,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      await signInWithEmailAndPassword(getAuth(), account.email, account.passowrd);
+      await signInWithEmailAndPassword(auth, account.email, account.passowrd);
     } catch (error) {
       console.log(error);
       message.error("Error, datos incorrectos.");
@@ -61,7 +61,7 @@ const Login = () => {
     try {
       const provider = new GoogleAuthProvider();
       provider.addScope('https://www.googleapis.com/auth/userinfo.email') // permiso correo
-      const result = await signInWithPopup(auth, provider)
+      const result = await signInWithPopup(getAuth(), provider)
       const user = result.user
       const additional = getAdditionalUserInfo(result)
 
@@ -88,7 +88,7 @@ const Login = () => {
     try {
       const provider = new FacebookAuthProvider();
       provider.addScope('email') // permiso correo
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(getAuth(), provider);
       const user = result.user
       const additional = getAdditionalUserInfo(result)
 

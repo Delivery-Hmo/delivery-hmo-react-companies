@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore/lite';
 
 const app = initializeApp({
@@ -11,10 +12,14 @@ const app = initializeApp({
   measurementId: "G-XRCB7GXMBH"
 });
 
+
+
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 export {
-  db
+  db,
+  auth
 }
 
 
