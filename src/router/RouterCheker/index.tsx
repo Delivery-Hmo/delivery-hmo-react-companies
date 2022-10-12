@@ -10,7 +10,7 @@ const RoterChecker = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!user && pathname !== "/home") { // regresar login para poder loguearse
+    if(!user && pathname !== "/home") {
       navigate('/home');
       return;
     }
@@ -23,7 +23,7 @@ const RoterChecker = () => {
   return (
     <Layout style={{minHeight: "100vh"}}>
       { user && <MenuComponent /> }
-      <Layout.Content style={{padding: 80}}>
+      <Layout.Content style={{padding: user ? 80 : 0}}>
         <Outlet />
       </Layout.Content>
     </Layout>

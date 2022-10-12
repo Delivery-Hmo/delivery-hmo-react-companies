@@ -2,7 +2,6 @@ import { Button, Card, Col, Collapse, Divider, Layout, Menu, Modal, Row, Space, 
 import React, { useState } from 'react';
 import '../../assets/styles/LandingPage.css'
 import logo from '../../assets/logo-hmo2.png';
-import logoHMO from '../../assets/logo-hmo.png';
 import { FacebookOutlined, GoogleOutlined, IdcardOutlined, InstagramOutlined, UserOutlined, } from '@ant-design/icons'
 import image1 from '../../assets/delivery-bg.jpg';
 import image2 from '../../assets/landing-1.png';
@@ -82,8 +81,27 @@ const LandingPage = () => {
         />
       </Header>
 
+      {/* #f5b92f
+      #28355b
+      #f7f7e0
+      #ccb986
+      #fbe4cc
+      #242117
+      #f3cab2
+      #876c3b
+      #a4a8ae
+      #fbfbf7
+      #a2894b
+      #fae2c2
+      #e2c8c2
+      #748490
+      #f9f9ec
+      #667494
+      #c3acac
+      #d0d7df  */}
+
       {/* MAIN CONTENT */}
-      <Layout style={{ background: "#d39c2c" }}>
+      <Layout style={{ background: "#28355b" }}>
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50 }}>
           <div className="site-layout-background" style={{ padding: 24 }}>
             <div>
@@ -150,7 +168,7 @@ const LandingPage = () => {
       </Layout>
 
       {/* Content Collapse */}
-      <Layout style={{ background: "#f6ca74" }}>
+      <Layout style={{ background: "#d0d7df" }}>
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50, marginBottom: 50 }}>
           <Row
             justify="space-between"
@@ -199,7 +217,7 @@ const LandingPage = () => {
         <Row gutter={[16, 0]}>
           <Col {...sizes}>
             <Space direction='vertical'>
-              <img src={logoHMO} alt="logo" width="100px"/>
+              <img src={logo} alt="logo" width="100px"/>
               <Link href='#' target='_blank'>
                 Empieza hoy y expande tu negocio
               </Link>
