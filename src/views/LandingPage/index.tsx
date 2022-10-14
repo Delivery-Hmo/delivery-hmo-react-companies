@@ -24,7 +24,7 @@ const LandingPage = () => {
     }}>
       <div style={{
         textAlign: "center",
-        fontSize: "24px",
+        fontSize: "26px",
         fontWeight: "bold",
         padding: "5px",
         color: "#304878",
@@ -33,7 +33,7 @@ const LandingPage = () => {
       </div>
       <div style={{
         textAlign: "center",
-        fontSize: "14px",
+        fontSize: "18px",
         padding: "5px",
       }}>
         {description}

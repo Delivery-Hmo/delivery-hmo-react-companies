@@ -46,15 +46,19 @@
 
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
   color: #304878;
-  font-size: 22px;
+  font-size: 26px;
 }
 
 .ant-collapse {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 a.ant-typography {
   color: #d3d3d3
+}
+
+a.ant-typography:hover {
+  color: #fff
 }
 
 .logo {
