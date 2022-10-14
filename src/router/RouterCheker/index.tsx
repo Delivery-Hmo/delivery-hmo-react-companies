@@ -11,13 +11,13 @@ const RoterChecker = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!user && pathname !== "/home") {
-      navigate('/home');
+    if(!user && pathname !== "/") { // regresar login para poder loguearse
+      navigate('/');
       return;
     }
 
-    if(user && pathname === '/home') {
-      navigate('/');
+    if(user && pathname === '/') {
+      navigate('/sucursales');
     }
   }, [user, pathname, navigate]);
   

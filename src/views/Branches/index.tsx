@@ -1,9 +1,9 @@
 import { Button, Col, Row, Table } from "antd";
 
-const Home = () => {
+const Branches = () => {
   return (
     <div>
-      <Row justify="space-between">
+      <Row>
         <Col>
           <h1>
             Mis sucursales
@@ -31,4 +31,4 @@ const Home = () => {
   )
 }
 
-export default Home;
+export default Branches;
