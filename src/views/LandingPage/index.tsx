@@ -1,43 +1,20 @@
-import { Button, Card, Col, Collapse, Divider, Layout, Menu, Modal, Row, Space, Tooltip, Typography } from 'antd';
-import React, { useState } from 'react';
+import { Button, Card, Col, Collapse, Divider, Layout, Row, Space, Tooltip, Typography } from 'antd';
+import React from 'react';
 import '../../assets/styles/LandingPage.css'
 import logo from '../../assets/logo-hmo2.png';
-import { FacebookOutlined, GoogleOutlined, IdcardOutlined, InstagramOutlined, UserOutlined, } from '@ant-design/icons'
+import { FacebookOutlined, GoogleOutlined, InstagramOutlined } from '@ant-design/icons'
 import image1 from '../../assets/delivery-bg.jpg';
 import image2 from '../../assets/landing-1.png';
 import image3 from '../../assets/image-3.jpg';
-import Login from '../Login';
 
 const { Panel } = Collapse;
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 const { Title, Link } = Typography;
 const sizes = {
   xs:24, sm:24, md:8, lg:8, xl:8, xxl:8,
 }
 
-interface MenuItems {
-  key: string;
-  icon: JSX.Element;
-  label: string;
-  onClick?: () => void
-}
-
 const LandingPage = () => {
-  const [open, setOpen] = useState(false);
-  const menuItems: MenuItems[] = [
-    {
-      key: '0',
-      icon: <UserOutlined />,
-      label: 'Iniciar Sesión',
-      onClick: () => setOpen(true)
-    },
-    {
-      key: '1',
-      icon: <IdcardOutlined />,
-      label: 'Registrarse',
-      onClick: () => console.log('Registrarse')
-    },
-  ]
 
   const CardContent = (title: string, description: string) => (
     <div style={{
@@ -66,39 +43,6 @@ const LandingPage = () => {
 
   return (
     <Layout>
-      <Header>
-        <div className="logo">
-          <img src={logo} alt="logo" width="150px" height="45px" />
-        </div>
-        <Menu
-          className='customclass'
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end'
-          }}
-          mode="horizontal"
-          items={menuItems}
-        />
-      </Header>
-
-      {/* #f5b92f
-      #28355b
-      #f7f7e0
-      #ccb986
-      #fbe4cc
-      #242117
-      #f3cab2
-      #876c3b
-      #a4a8ae
-      #fbfbf7
-      #a2894b
-      #fae2c2
-      #e2c8c2
-      #748490
-      #f9f9ec
-      #667494
-      #c3acac
-      #d0d7df  */}
 
       {/* MAIN CONTENT */}
       <Layout style={{ background: "#28355b" }}>
@@ -201,15 +145,6 @@ const LandingPage = () => {
           </Row>
         </Content>
       </Layout>
-
-      {/* MODAL LOGIN */}
-      <Modal
-        open={open}
-        onCancel={() => setOpen(false)}
-        footer={null}
-      >
-        <Login />
-      </Modal>
 
       {/* FOOTER */}
       <Footer style={{ textAlign: 'center', color: '#fff' }}>
