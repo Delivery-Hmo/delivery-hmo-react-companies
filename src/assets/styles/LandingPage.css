@@ -28,6 +28,14 @@
 	background: transparent;
 }
 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected {
+  color: #fff
+}
+
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover {
+  color:#fff
+}
+
 .ant-menu-horizontal, .ant-menu-item::after, .ant-menu-submenu::after {
   border: none !important;
 }
@@ -43,6 +51,10 @@
 
 .ant-collapse {
   font-size: 16px;
+}
+
+a.ant-typography {
+  color: #d3d3d3
 }
 
 .logo {
