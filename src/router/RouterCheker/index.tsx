@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import MenuComponent from '../../components/Menu';
+import HeaderComponent from '../../components/Header';
 
 const RoterChecker = () => {
   const { user } = useAuth();
@@ -22,8 +23,8 @@ const RoterChecker = () => {
   
   return (
     <Layout style={{minHeight: "100vh"}}>
-      { user && <MenuComponent /> }
-      <Layout.Content style={{padding: 80}}>
+      { user ? <MenuComponent /> : <HeaderComponent />}
+      <Layout.Content style={{padding: user ? 80 : 0}}>
         <Outlet />
       </Layout.Content>
     </Layout>

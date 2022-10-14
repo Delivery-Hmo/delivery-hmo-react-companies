@@ -1,10 +1,6 @@
-.body {
-  font-family: Lora;
-}
-
 .ant-card {
-  background-color: #f6ca74;
-  border-color: #f6ca74
+  background-color: #d0d7df;
+  border-color: #d0d7df
 }
 
 .ant-card-meta-detail {
@@ -16,16 +12,28 @@
 }
 
 .ant-layout-footer {
-  background:  #000000
+  background:  #28355b
 }
 
 .ant-layout-header {
-  background: #000000
+  background: #d39c2c
 }
 
 .ant-menu {
-  background: #000000;
+  background-color: #CF9F29;
   color:#fff;
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+	background: transparent;
+}
+
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected {
+  color: #fff
+}
+
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover {
+  color:#fff
 }
 
 .ant-menu-horizontal, .ant-menu-item::after, .ant-menu-submenu::after {
@@ -38,11 +46,19 @@
 
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
   color: #304878;
-  font-size: 22px;
+  font-size: 26px;
 }
 
 .ant-collapse {
-  font-size: 16px;
+  font-size: 18px;
+}
+
+a.ant-typography {
+  color: #d3d3d3
+}
+
+a.ant-typography:hover {
+  color: #fff
 }
 
 .logo {
