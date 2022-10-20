@@ -1,12 +1,3 @@
-export interface User {
-  id?: number;
-  name?: string;
-  email?: string;
-  password?: string;
-  created_at?: string;
-  updated_at?: string;
-}
-
 export interface CustomInput {
   type: "input" | "select" | "date" | "checkbox" | "radio" | "autocomplete" | "textarea" | "file";
   typeInput?: "text" | "number" | "password" | "email";

@@ -5,22 +5,25 @@ import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, getAdditiona
 import '../../assets/styles/Login.css'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { auth } from '../../firebaseConfig';
+import { UserAdmin } from '../../interfaces/userAdmin';
+import { post } from '../../service/branchOffice';
 
 interface Account {
   email: string;
   passowrd: string;
 }
 
-interface UserAdmin {
-  uid?: string;
-  id?: string;
-  name: string;
-  email: string;
-  phone:  string;
-  company: string;
-  description: string;
-  active: boolean;
-}
+type KeysProviders = "facebook" | "google";
+
+const providers: Record<KeysProviders, FacebookAuthProvider | GoogleAuthProvider> = {
+  "facebook": new FacebookAuthProvider(),
+  "google": new GoogleAuthProvider()
+};
+
+const scopes: Record<KeysProviders, string> = {
+  "facebook": 'email',
+  "google": 'https://www.googleapis.com/auth/userinfo.email'
+};
 
 const Login = () => {
   const [account, setAccount] = useState<Account>({email: "", passowrd: ""});
@@ -39,76 +42,31 @@ const Login = () => {
     }
   }
 
-  const apiFetch = async (user: UserAdmin) => {
+  const signInWithProvider = async (keyProvider: KeysProviders) => {
     try {
-      const createUserAdmin = await fetch('https://www.deliapihmo.xyz/userAdmin/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    })
-
-    if(createUserAdmin.status !== 201) {
-      console.log('error creating', createUserAdmin)
-    }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const signInGoogle = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      provider.addScope('https://www.googleapis.com/auth/userinfo.email') // permiso correo
-      const result = await signInWithPopup(getAuth(), provider)
-      const user = result.user
-      const additional = getAdditionalUserInfo(result)
-
-      if(additional?.isNewUser) {
-        let userInfo: UserAdmin = {
-          uid: user.uid,
-          name: user?.displayName || '',
-          email:  user?.email || '',
-          active: true,
-          phone: user?.phoneNumber || '6621000000',
-          description: 'creado desde provider de google',
-          company: 'Amosay',
-        }
-
-        await apiFetch(userInfo)
-      }
-    } catch (e) {
-      console.log(e);
-      message.error("Error, al iniciar con Google.");
-    }
-  }
-
-  const signInFacebook = async () => {
-    try {
-      const provider = new FacebookAuthProvider();
-      provider.addScope('email') // permiso correo
+      const provider = providers[keyProvider];
+      const scope = scopes[keyProvider];
+      provider.addScope(scope);
       const result = await signInWithPopup(getAuth(), provider);
-      const user = result.user
-      const additional = getAdditionalUserInfo(result)
+      const user = result.user;
+      const additional = getAdditionalUserInfo(result);
 
       if(additional?.isNewUser) {
-        let userInfo: UserAdmin = {
+        const userInfo: UserAdmin = {
           uid: user.uid,
           name: user?.displayName || '',
           email:  user?.email || '',
           active: true,
-          phone: user?.phoneNumber || '6621111111',
-          description: 'creado desde provider de facebook',
-          company: 'facebook',
-        }
+          phone: user?.phoneNumber || '',
+          description: '',
+          company: ''
+        };
 
-        await apiFetch(userInfo)
+        await post("userAdmin/create", userInfo);
       }
-
     } catch (e) {
       console.log(e);
-      message.error("Error, al iniciar con Facebook.");
+      message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
     }
   }
 
@@ -193,7 +151,7 @@ const Login = () => {
                   }}
                 />
               }
-              onClick={signInGoogle}
+              onClick={async () => await signInWithProvider("google")}
               shape="round"
               size="large"
               style={{ backgroundColor: '#eeeeee'}}
@@ -212,7 +170,7 @@ const Login = () => {
                   style={{}}
                 />
               }
-              onClick={signInFacebook}
+              onClick={async () => await signInWithProvider("facebook")}
               shape="round"
               size="large"
               style={{ backgroundColor: '#eeeeee'}}

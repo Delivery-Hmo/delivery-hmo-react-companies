@@ -9,11 +9,15 @@ export const get = async (url: string) => {
     baseUrl + url,
     {
       method: "GET",
-      headers: {
-        Authorization: "Bearer " + token
-      }
+      headers: token 
+        ? { Authorization: "Bearer " + token }
+        : undefined
     }
   );
+
+  if(!response.ok) {
+    throw new Error("Error request!");
+  }
 
   return response.json();
 }
@@ -26,11 +30,15 @@ export const post = async (url: string, body: Record<string, any>) => {
     {
       method: "POST",
       body: JSON.stringify(body),
-      headers: {
-        Authorization: "Bearer " + token
-      }
+      headers: token 
+        ? { Authorization: "Bearer " + token }
+        : undefined
     }
   );
+
+  if(!response.ok) {
+    throw new Error("Error request!");
+  }
 
   return response.json();
 }
