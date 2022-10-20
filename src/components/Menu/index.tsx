@@ -14,17 +14,9 @@ const MenuComponent = () => {
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <Menu 
-        mode="inline"
         theme="dark" 
         selectedKeys={[location.pathname]} 
-        items={menuItems.map(item => ({
-          key: item.key,
-          title: item.title,
-          label: item.label,
-          icon: item.icon,
-          children: item.childrens,
-          onClick: () => item.onClick && item.onClick()
-        }))}
+        items={menuItems}
       />
     </Sider>
   )

@@ -3,6 +3,7 @@ import { getAuth } from "firebase/auth";
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { MdStore } from "react-icons/md";
+import { ItemType } from 'antd/lib/menu/hooks/useItems';
 
 interface MenuItems {
   key: string;
@@ -17,31 +18,30 @@ const signOut = () => getAuth().signOut();
 
 const styleIcon = {
   fontSize: 20
-}
+};
 
-const menuItems: MenuItems[] = [
+const menuItems: ItemType[] = [
   {
-    key: "/",
-    title: "Sucursales",
-    label: <Link to="/">Sucursales</Link>,
+    key: "/sucursales",
+    title: "",
+    label: <Link to="/sucursales">Sucursales</Link>,
     icon: <MdStore style={styleIcon} />
   },
   {
     key: "/usuarios",
-    title: "Usuarios",
+    title: "",
     label: <Link to="/usuarios">Usuarios</Link>,
     icon: <UserOutlined style={styleIcon} />
   },
   {
     key: "/sub1",
-    title: "Configuración",
+    title: "",
     icon: <SettingOutlined style={styleIcon} />,
-    isSubMenu: true,
     label: "Configuración",
-    childrens: [
+    children: [
       {
         key: "1",
-        title: "Cerrar sesión",
+        title: "",
         icon: <UserOutlined style={styleIcon} />,
         label: "Cerrar sesión",
         onClick: async () => await signOut()

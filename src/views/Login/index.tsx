@@ -51,19 +51,19 @@ const Login = () => {
       const user = result.user;
       const additional = getAdditionalUserInfo(result);
 
-      if(additional?.isNewUser) {
-        const userInfo: UserAdmin = {
-          uid: user.uid,
-          name: user?.displayName || '',
-          email:  user?.email || '',
-          active: true,
-          phone: user?.phoneNumber || '',
-          description: '',
-          company: ''
-        };
+      if(!additional?.isNewUser) return;
 
-        await post("userAdmin/create", userInfo);
-      }
+      const userInfo: UserAdmin = {
+        uid: user.uid,
+        name: user?.displayName || '',
+        email:  user?.email || '',
+        active: true,
+        phone: user?.phoneNumber || '',
+        description: '',
+        company: ''
+      };
+
+      await post("userAdmin/create", userInfo);
     } catch (e) {
       console.log(e);
       message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
@@ -106,6 +106,7 @@ const Login = () => {
               onChange={(e) => setAccount({...account, email: e.target.value})}
               placeholder="Correo"
               size='large'
+              autoComplete='username'
             />
           </Form.Item>
           <Form.Item
@@ -120,6 +121,7 @@ const Login = () => {
               onChange={(e) => setAccount({...account, passowrd: e.target.value})}
               placeholder="Contraseña"
               size='large'
+              autoComplete="current-password"
             />
           </Form.Item>
           <div
