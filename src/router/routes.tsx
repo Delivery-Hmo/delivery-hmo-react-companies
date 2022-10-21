@@ -1,6 +1,7 @@
 import { PathRouteProps } from 'react-router-dom';
 import Branches from '../views/Branches';
 import LandingPage from '../views/LandingPage';
+import Seller from '../views/Seller';
 
 const routes: PathRouteProps[] = [
   {
@@ -10,6 +11,10 @@ const routes: PathRouteProps[] = [
   {
     path: '/sucursales',
     element: <Branches />,
+  },
+  {
+    path: '/sellers',
+    element: <Seller />,
   },
   {
     path: '*',
