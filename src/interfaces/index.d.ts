@@ -8,8 +8,8 @@ export interface User {
 }
 
 export interface CustomInput {
-  type: "input" | "select" | "date" | "checkbox" | "radio" | "autocomplete" | "textarea" | "file";
-  typeInput?: "text" | "number" | "password" | "email";
+  type: 'input' | 'select' | 'date' | 'checkbox' | 'radio' | 'autocomplete' | 'textarea' | 'file';
+  typeInput?: 'text' | 'number' | 'password' | 'email';
   value: any;
   name: string;
   md: number;

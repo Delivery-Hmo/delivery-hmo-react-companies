@@ -1,40 +1,39 @@
-import { Button, Card, Col, Collapse, Divider, Layout, Row, Space, Tooltip, Typography } from 'antd';
-import React from 'react';
+import { Button, Card, Col, Collapse, Divider, Layout, Row, Space, Tooltip, Typography } from 'antd'
+import React from 'react'
 import '../../assets/styles/LandingPage.css'
-import logo from '../../assets/logo-hmo2.png';
+import logo from '../../assets/logo-hmo2.png'
 import { FacebookOutlined, GoogleOutlined, InstagramOutlined } from '@ant-design/icons'
-import image1 from '../../assets/delivery-bg.jpg';
-import image2 from '../../assets/landing-1.png';
-import image3 from '../../assets/image-3.jpg';
+import image1 from '../../assets/delivery-bg.jpg'
+import image2 from '../../assets/landing-1.png'
+import image3 from '../../assets/image-3.jpg'
 
-const { Panel } = Collapse;
-const { Content, Footer } = Layout;
-const { Title, Link } = Typography;
+const { Panel } = Collapse
+const { Content, Footer } = Layout
+const { Title, Link } = Typography
 const sizes = {
-  xs:24, sm:24, md:8, lg:8, xl:8, xxl:8,
+  xs: 24, sm: 24, md: 8, lg: 8, xl: 8, xxl: 8
 }
 
 const LandingPage = () => {
-
   const CardContent = (title: string, description: string) => (
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center',
+      justifyContent: 'center'
     }}>
       <div style={{
-        textAlign: "center",
-        fontSize: "26px",
-        fontWeight: "bold",
-        padding: "5px",
-        color: "#304878",
+        textAlign: 'center',
+        fontSize: '26px',
+        fontWeight: 'bold',
+        padding: '5px',
+        color: '#304878'
       }}>
         {title}
       </div>
       <div style={{
-        textAlign: "center",
-        fontSize: "18px",
-        padding: "5px",
+        textAlign: 'center',
+        fontSize: '18px',
+        padding: '5px'
       }}>
         {description}
       </div>
@@ -45,7 +44,7 @@ const LandingPage = () => {
     <Layout>
 
       {/* MAIN CONTENT */}
-      <Layout style={{ background: "#28355b" }}>
+      <Layout style={{ background: '#28355b' }}>
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50 }}>
           <div className="site-layout-background" style={{ padding: 24 }}>
             <div>
@@ -73,8 +72,8 @@ const LandingPage = () => {
               >
                 {
                   CardContent(
-                    "Mayor alcance de clientes",
-                    "Gracias al servicio a domicilio los restaurantes pueden llegar a un mayor número de clientes, principalmente debido a que el rango de alcance aumenta consideradamente en kilómetros. Tu alcance estará por los cielos.",
+                    'Mayor alcance de clientes',
+                    'Gracias al servicio a domicilio los restaurantes pueden llegar a un mayor número de clientes, principalmente debido a que el rango de alcance aumenta consideradamente en kilómetros. Tu alcance estará por los cielos.'
                   )
                 }
               </Card>
@@ -87,8 +86,8 @@ const LandingPage = () => {
               >
                 {
                   CardContent(
-                    "Visibilidad de negocio",
-                    "Todo negocio necesita ser reconocido y transmitir una imagen positiva y es obvio que en el caso de los restaurantes cuánto más les conozcan y más comentarios existan sobre ellos mayor será la captación de posibles clientes.",
+                    'Visibilidad de negocio',
+                    'Todo negocio necesita ser reconocido y transmitir una imagen positiva y es obvio que en el caso de los restaurantes cuánto más les conozcan y más comentarios existan sobre ellos mayor será la captación de posibles clientes.'
                   )
                 }
               </Card>
@@ -101,8 +100,8 @@ const LandingPage = () => {
               >
                 {
                   CardContent(
-                    "Servicio Integral",
-                    "Nuestro compromiso es hacer que cada uno de nuestros clientes tenga una experiencia de entrega única. Ofrecemos un equilibrio perfecto entre sustentabilidad, tecnología y eficiencia operativa cuando hablamos de delivery service.",
+                    'Servicio Integral',
+                    'Nuestro compromiso es hacer que cada uno de nuestros clientes tenga una experiencia de entrega única. Ofrecemos un equilibrio perfecto entre sustentabilidad, tecnología y eficiencia operativa cuando hablamos de delivery service.'
                   )
                 }
               </Card>
@@ -112,35 +111,35 @@ const LandingPage = () => {
       </Layout>
 
       {/* Content Collapse */}
-      <Layout style={{ background: "#d0d7df" }}>
+      <Layout style={{ background: '#d0d7df' }}>
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50, marginBottom: 50 }}>
           <Row
             justify="space-between"
           >
             <Col span={24}>
-              <Title style={{color: "#304878"}}>
+              <Title style={{ color: '#304878' }}>
                 ¿Sigues con dudas? Pegúntanos:
               </Title>
             </Col>
             <Col span={24}>
-            <Collapse
-              className='collapse-content'
-              defaultActiveKey={['1']}
-              ghost
-            >
-              <Panel header="Lorem Ipsum" key="1">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
-              </Panel>
-              <Panel header="Lorem Ipsum 2" key="2">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
-              </Panel>
-              <Panel header="Lorem Ipsum 3" key="3">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
-              </Panel>
-              <Panel header="Lorem Ipsum 4" key="4">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
-              </Panel>
-            </Collapse>
+              <Collapse
+                className='collapse-content'
+                defaultActiveKey={['1']}
+                ghost
+              >
+                <Panel header="Lorem Ipsum" key="1">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
+                </Panel>
+                <Panel header="Lorem Ipsum 2" key="2">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
+                </Panel>
+                <Panel header="Lorem Ipsum 3" key="3">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
+                </Panel>
+                <Panel header="Lorem Ipsum 4" key="4">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan tellus libero, nec placerat nibh semper sed. Donec suscipit, turpis faucibus eleifend maximus, neque orci porttitor erat, et rutrum enim nisi quis quam. Sed condimentum consectetur libero, vel maximus orci lacinia quis. Nullam sodales sem eros, in tempor tellus tincidunt quis. Mauris non sollicitudin neque. Aenean sollicitudin velit eu consectetur egestas. Proin magna augue, consequat id lacus non, sodales lobortis urna.</p>
+                </Panel>
+              </Collapse>
             </Col>
           </Row>
         </Content>
@@ -205,9 +204,9 @@ const LandingPage = () => {
                 <Button
                   icon={<FacebookOutlined />}
                   shape="circle"
-                  onClick={() => console.log("facebook social media")}
+                  onClick={() => console.log('facebook social media')}
                   size="middle"
-                  style={{ color: "#d3d3d3" }}
+                  style={{ color: '#d3d3d3' }}
                   type="link"
                 />
               </Tooltip>
@@ -218,9 +217,9 @@ const LandingPage = () => {
                 <Button
                   icon={<GoogleOutlined />}
                   shape="circle"
-                  onClick={() => console.log("google social media")}
+                  onClick={() => console.log('google social media')}
                   size="middle"
-                  style={{ color: "#d3d3d3" }}
+                  style={{ color: '#d3d3d3' }}
                   type="link"
                 />
               </Tooltip>
@@ -231,9 +230,9 @@ const LandingPage = () => {
                 <Button
                   icon={<InstagramOutlined />}
                   shape="circle"
-                  onClick={() => console.log("instagram social media")}
+                  onClick={() => console.log('instagram social media')}
                   size="middle"
-                  style={{ color: "#d3d3d3" }}
+                  style={{ color: '#d3d3d3' }}
                   type="link"
                 />
               </Tooltip>
