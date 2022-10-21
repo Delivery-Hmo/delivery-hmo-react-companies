@@ -1,4 +1,5 @@
-import { Button, Col, Row, Table } from "antd";
+import React from 'react'
+import { Button, Col, Row, Table } from 'antd'
 
 const Branches = () => {
   return (
@@ -10,7 +11,7 @@ const Branches = () => {
           </h1>
         </Col>
         <Col>
-          <Button 
+          <Button
             type="primary"
             onClick={() => {}}
           >
@@ -20,15 +21,15 @@ const Branches = () => {
       </Row>
       <br />
       <br />
-      <Table 
+      <Table
         locale={{
-          emptyText: <div style={{fontSize: 18}}>
+          emptyText: <div style={{ fontSize: 18 }}>
             Sin sucursales
-          </div> 
+          </div>
         }}
       />
     </div>
   )
 }
 
-export default Branches;
+export default Branches

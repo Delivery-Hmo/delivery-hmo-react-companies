@@ -1,8 +1,6 @@
-import { useState } from 'react';
-import { Form, Input, Button, Row, Col, message } from 'antd';
-import logoLogin from '../../assets/logo.jpeg';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import React, { useState } from 'react'
+import { Form, Button, Row, Col } from 'antd'
+import logoLogin from '../../assets/logo.jpeg'
 // import { UserAdmin } from '../../interfaces/user';
 
 // const initUserAdmin: UserAdmin = {
@@ -14,18 +12,17 @@ import { auth } from "../../firebaseConfig";
 //   name:'',
 //   phone:'',
 //   role: 'Administrador',
-//}
+// }
 
 const Seller = () => {
   // const [user, setUser] = useState<UserAdmin>(initUserAdmin);
-  const [loading, setLoading] = useState<boolean>(false);
-  
+  const [loading] = useState<boolean>(false)
 
   return (
-    <div style={{ marginTop: "15vh", padding: 30 }}>
+    <div style={{ marginTop: '15vh', padding: 30 }}>
       <Row justify="center">
         <Col>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: 'center' }}>
             <img alt="" height={100} width={300} style={{ marginBottom: 20 }} src={logoLogin}></img>
             <Form
               name="basic"
@@ -75,7 +72,7 @@ const Seller = () => {
               >
                 {/* <Input value={user.phone} onChange={(e) => setUser({ ...user, phone: e.target.value })} /> */}
               </Form.Item>
-                <div style={{ textAlign: "center" }}>
+                <div style={{ textAlign: 'center' }}>
                   <Button type="primary" htmlType="submit" loading={loading}>
                     Guardar
                   </Button>
@@ -88,4 +85,4 @@ const Seller = () => {
   )
 }
 
-export default Seller;
+export default Seller
