@@ -1,19 +1,8 @@
-import { UserOutlined, SettingOutlined } from '@ant-design/icons';
+import { UserOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons';
 import { getAuth } from "firebase/auth";
-import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { MdStore } from "react-icons/md";
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 
-interface MenuItems {
-  key: string;
-  icon: ReactNode;
-  title: string;
-  label?: ReactNode | string;
-  isSubMenu?: boolean;
-  childrens?: MenuItems[];
-  onClick?: () => void
-}
 const signOut = () => getAuth().signOut();
 
 const styleIcon = {
@@ -25,7 +14,7 @@ const menuItems: ItemType[] = [
     key: "/sucursales",
     title: "",
     label: <Link to="/sucursales">Sucursales</Link>,
-    icon: <MdStore style={styleIcon} />
+    icon: <ShopOutlined style={styleIcon} />
   },
   {
     key: "/usuarios",
@@ -40,7 +29,7 @@ const menuItems: ItemType[] = [
     label: "Configuración",
     children: [
       {
-        key: "1",
+        key: "/signOut",
         title: "",
         icon: <UserOutlined style={styleIcon} />,
         label: "Cerrar sesión",

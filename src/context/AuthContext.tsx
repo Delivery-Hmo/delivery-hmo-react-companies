@@ -16,6 +16,8 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {
+      
+
       setUser(user);
       setLoading(false);
     });
