@@ -13,7 +13,7 @@ const routes: PathRouteProps[] = [
     element: <Branches />,
   },
   {
-    path: '/sellers',
+    path: '/registrarse',
     element: <Seller />,
   },
   {

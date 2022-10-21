@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { UserAdmin } from '../../interfaces/user';
 import DynamicContentForm from '../../components/DynamicContentForm';
+import "./index.css"
 
 const initUserAdmin: UserAdmin = {
   active: true,
@@ -25,13 +26,9 @@ const Seller = () => {
   }
 
   return (
- 
-     
-
-            
-              <Row >
+              <Row>
                 <Col md={8}>
-                  <Form  layout="vertical">
+                  <Form layout="vertical">
                     <DynamicContentForm inputs={[
                       {
                         ...sizes,

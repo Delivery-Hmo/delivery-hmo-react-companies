@@ -11,7 +11,7 @@ const RoterChecker = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!user && pathname !== "/") { // regresar login para poder loguearse
+    if(!user && (pathname !== "/" && pathname !== "/registrarse")) { // regresar login para poder loguearse
       navigate('/');
       return;
     }
