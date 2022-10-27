@@ -1,22 +1,24 @@
-import React, { useState, FC } from 'react'
-import { Card, Col, Row } from 'antd'
+import { useState, FC } from 'react'
+import { Avatar, Button, Card, Col, Form, Input, message, Row } from 'antd'
 import '../../assets/styles/Login.css'
-<<<<<<< HEAD
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { auth } from '../../firebaseConfig';
 import { UserAdmin } from '../../interfaces/userAdmin';
 import { post } from '../../service/branchOffice';
-=======
-import RegisterForm from './Forms/RegisterForm'
-import RecoveryForm from './Forms/RecoveryForm'
-import LoginForm from './Forms/LoginForm'
->>>>>>> dev
+import { 
+  FacebookAuthProvider, 
+  getAdditionalUserInfo, 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithEmailAndPassword, 
+  signInWithPopup 
+} from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
 
-interface Props {
-  open: boolean;
+interface Account {
+  email: string;
+  passowrd: string;
 }
 
-<<<<<<< HEAD
 type KeysProviders = "facebook" | "google";
 
 const providers: Record<KeysProviders, FacebookAuthProvider | GoogleAuthProvider> = {
@@ -28,18 +30,25 @@ const scopes: Record<KeysProviders, string> = {
   "facebook": 'email',
   "google": 'https://www.googleapis.com/auth/userinfo.email'
 };
-=======
-const Login: FC<Props> = ({ open }) => {
-  const [currentForm, setCurrentForm] = useState<string>('login')
->>>>>>> dev
 
-  const DynamicForm = () => {
-    if (currentForm === 'register') return <RegisterForm />
-    if (currentForm === 'recovery') return <RecoveryForm />
-    return <LoginForm setCurrentForm={setCurrentForm} />
+const Login = () => {
+  const [account, setAccount] = useState<Account>({email: "", passowrd: ""});
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const onFinish = async () => {
+    if(loading) return;
+
+    try {
+      setLoading(true);
+
+      await signInWithEmailAndPassword(auth, account.email, account.passowrd);
+    } catch (error) {
+      console.log(error);
+      message.error("Error, datos incorrectos.");
+      setLoading(false);
+    }
   }
 
-<<<<<<< HEAD
   const signInWithProvider = async (keyProvider: KeysProviders) => {
     try {
       const provider = providers[keyProvider];
@@ -68,11 +77,6 @@ const Login: FC<Props> = ({ open }) => {
       message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
     }
   }
-=======
-  React.useEffect(() => {
-    if (!open) setCurrentForm('login')
-  }, [open])
->>>>>>> dev
 
   return (
     <div className='app-login-wrapper'>
@@ -85,7 +89,6 @@ const Login: FC<Props> = ({ open }) => {
           padding: '0.5em'
         }}
       >
-<<<<<<< HEAD
         <div className="app-login-title">
           <span>Inicio de Sesión</span>
         </div>
@@ -189,9 +192,6 @@ const Login: FC<Props> = ({ open }) => {
           </div>
         </Form>
         <br/>
-=======
-        <DynamicForm />
->>>>>>> dev
         <Row gutter={[16, 0]} justify="space-evenly">
           <Col span={12}>
             <a href="#app-store">

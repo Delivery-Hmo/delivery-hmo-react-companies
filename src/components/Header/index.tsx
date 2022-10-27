@@ -1,15 +1,14 @@
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { Layout, Menu, Modal } from 'antd'
 import logo from '../../assets/logo-hmo2.png'
 import { IdcardOutlined, UserOutlined } from '@ant-design/icons'
 import Login from '../../views/Login'
 
-const { Header } = Layout
+const { Header } = Layout;
 
 interface MenuItems {
   key: string;
-  // eslint-disable-next-line no-undef
-  icon: JSX.Element;
+  icon: ReactNode;
   label: string;
   onClick?: () => void
 }
@@ -31,8 +30,6 @@ const HeaderComponent = () => {
       onClick: () => console.log('Registrarse')
     }
   ]
-
-  const Card = React.useCallback(() => (<Login open={open} />), [open])
 
   return (
     <>
@@ -57,7 +54,7 @@ const HeaderComponent = () => {
         onCancel={() => setOpen(false)}
         footer={null}
       >
-        <Card />
+        <Login />
       </Modal>
     </>
   )
