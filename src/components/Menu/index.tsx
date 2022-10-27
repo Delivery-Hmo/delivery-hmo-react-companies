@@ -13,6 +13,12 @@ const MenuComponent = () => {
 
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+<<<<<<< HEAD
+      <Menu 
+        theme="dark" 
+        selectedKeys={[location.pathname]} 
+        items={menuItems}
+=======
       <Menu
         mode="inline"
         theme="dark"
@@ -25,6 +31,7 @@ const MenuComponent = () => {
           children: item.childrens,
           onClick: () => item.onClick && item.onClick()
         }))}
+>>>>>>> dev
       />
     </Sider>
   )
