@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Form, Input, Button, Row, Col, message } from 'antd';
-import logoLogin from '../../assets/logo.jpeg';
+import { Form, Input, Button, Row, Col, message, Card } from 'antd';
+import imgSeller from '../../assets/seller.png';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { UserAdmin } from '../../interfaces/user';
 import DynamicContentForm from '../../components/DynamicContentForm';
 import "./index.css"
+import { Content } from 'antd/lib/layout/layout';
 
 const initUserAdmin: UserAdmin = {
   active: true,
@@ -18,7 +19,7 @@ const initUserAdmin: UserAdmin = {
   role: 'Administrador',
 }
 
-const Seller = () => {
+const SingUp = () => {
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState<boolean>(false);
   const sizes = {
@@ -26,6 +27,19 @@ const Seller = () => {
   }
 
   return (
+    <>
+    {/* <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50, marginBottom: 50 }}>
+
+    <Row justify="space-between" gutter={[48, 48]}>
+        <Col>
+        <Card style={{ padding: 12, borderRadius: 7 }} 
+        hoverable 
+        cover={<img alt="example" src={imgSeller} />}>
+        </Card>
+        </Col>
+      </Row>
+    </Content> */}
+
               <Row>
                 <Col md={8}>
                   <Form layout="vertical">
@@ -67,16 +81,7 @@ const Seller = () => {
                         rules: [{ required: true, message: 'Favor de ingresar un email.' }],
                         value: user.email,
                         onChange: (e) => setUser({ ...user, email: e.target.value })
-                      }, {
-                        ...sizes,
-                        type: "input",
-                        typeInput: "text",
-                        label: "Foto",
-                        name: "image",
-                        rules: [{ required: true, message: 'Favor de ingresar una image.' }],
-                        value: user.image,
-                        onChange: (e) => setUser({ ...user, image: e.target.value })
-                      }, {
+                      },{
                         ...sizes,
                         type: "input",
                         typeInput: "number",
@@ -97,10 +102,11 @@ const Seller = () => {
               </Row>
 
 
-    
-     
-    
+
+
+          </>
+
   )
 }
 
-export default Seller;
+export default SingUp;

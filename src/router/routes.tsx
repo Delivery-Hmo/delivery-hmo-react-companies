@@ -1,7 +1,7 @@
 import { PathRouteProps } from 'react-router-dom';
 import Branches from '../views/Branches';
 import LandingPage from '../views/LandingPage';
-import Seller from '../views/Seller';
+import SingUp from '../views/SingUp';
 
 const routes: PathRouteProps[] = [
   {
@@ -14,7 +14,7 @@ const routes: PathRouteProps[] = [
   },
   {
     path: '/registrarse',
-    element: <Seller />,
+    element: <SingUp />,
   },
   {
     path: '*',
