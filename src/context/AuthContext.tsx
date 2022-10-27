@@ -9,14 +9,14 @@ interface Auth {
   userAdmin: UserAdmin | null;
 }
 
+interface Props {
+  children: ReactNode;
+}
+
 const AuthContext = createContext<Auth>({
   user: null,
   userAdmin: null
 });
-
-interface Props {
-  children: ReactNode;
-}
 
 export const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
