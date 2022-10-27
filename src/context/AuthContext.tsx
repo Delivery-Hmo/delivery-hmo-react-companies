@@ -21,7 +21,6 @@ interface Props {
 export const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userAdmin, setUserAdmin] = useState<UserAdmin | null>(null);
-
   const [loading, setLoading] = useState<Boolean>(true);
 
   useEffect(() => {
@@ -52,9 +51,9 @@ export const AuthProvider: FC<Props> = ({ children }) => {
     };
   }, []);
 
-  if(loading) return <FullLoader />;
+  if (loading) return <FullLoader />
 
   return <AuthContext.Provider value={{user, userAdmin}}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext)
