@@ -1,6 +1,7 @@
 import { getCurrentToken } from "../utils";
 
-const baseUrl = "https://www.deliapihmo.xyz/";
+//const baseUrl = "https://www.deliapihmo.xyz/";
+const baseUrl = "http://localhost:3001/"
 
 export const get = async (url: string) => {
   const token = await getCurrentToken();

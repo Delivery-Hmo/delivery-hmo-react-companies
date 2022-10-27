@@ -60,7 +60,8 @@ const Login = () => {
         active: true,
         phone: user?.phoneNumber || '',
         description: '',
-        company: ''
+        company: '',
+        role: ''
       };
 
       await post("userAdmin/create", userInfo);

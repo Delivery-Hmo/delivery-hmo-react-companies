@@ -1,10 +1,15 @@
-export interface UserAdmin {
+export interface User {
   id?: string;
   uid: string;
   name: string;
   email: string;
-  phone:  string;
-  company: string;
+  phone: string; 
   description: string;
   active: boolean;
+  image?: string;
+  role: Roles;
+}
+
+export interface UserAdmin extends User {
+  company: string;
 }
