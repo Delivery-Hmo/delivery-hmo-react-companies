@@ -31,6 +31,8 @@ const HeaderComponent = () => {
     }
   ]
 
+  const Card = React.useCallback(() => (<Login open={open} />), [open])
+
   return (
     <>
       <Header>
@@ -54,7 +56,7 @@ const HeaderComponent = () => {
         onCancel={() => setOpen(false)}
         footer={null}
       >
-        <Login />
+        <Card />
       </Modal>
     </>
   )
