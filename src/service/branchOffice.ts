@@ -1,7 +1,7 @@
 import { getCurrentToken } from '../utils'
 
-//const baseUrl = "https://www.deliapihmo.xyz/";
-const baseUrl = "http://localhost:3001/"
+// const baseUrl = "https://www.deliapihmo.xyz/";
+const baseUrl = 'http://localhost:3001/'
 
 export const get = async (url: string) => {
   const token = await getCurrentToken()
@@ -9,18 +9,18 @@ export const get = async (url: string) => {
   const response = await fetch(
     baseUrl + url,
     {
-      method: "GET",
-      headers: token 
-        ? { Authorization: "Bearer " + token }
+      method: 'GET',
+      headers: token
+        ? { Authorization: 'Bearer ' + token }
         : undefined
     }
   )
 
-  if(!response.ok) {
-    throw new Error("Error request!");
+  if (!response.ok) {
+    throw new Error('Error request!')
   }
 
-  return response.json();
+  return response.json()
 }
 
 export const post = async (url: string, body: Record<string, any>) => {
@@ -31,15 +31,15 @@ export const post = async (url: string, body: Record<string, any>) => {
     {
       method: 'POST',
       body: JSON.stringify(body),
-      headers: token 
-        ? { Authorization: "Bearer " + token }
+      headers: token
+        ? { Authorization: 'Bearer ' + token }
         : undefined
     }
   )
 
-  if(!response.ok) {
-    throw new Error("Error request!");
+  if (!response.ok) {
+    throw new Error('Error request!')
   }
 
-  return response.json();
+  return response.json()
 }

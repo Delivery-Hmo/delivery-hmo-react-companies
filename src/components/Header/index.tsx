@@ -4,7 +4,7 @@ import logo from '../../assets/logo-hmo2.png'
 import { IdcardOutlined, UserOutlined } from '@ant-design/icons'
 import Login from '../../views/Login'
 
-const { Header } = Layout;
+const { Header } = Layout
 
 interface MenuItems {
   key: string;

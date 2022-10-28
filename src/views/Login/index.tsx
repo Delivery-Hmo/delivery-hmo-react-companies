@@ -1,80 +1,80 @@
-import { useState, FC } from 'react'
+import { useState } from 'react'
 import { Avatar, Button, Card, Col, Form, Input, message, Row } from 'antd'
 import '../../assets/styles/Login.css'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { UserAdmin } from '../../interfaces/userAdmin';
-import { post } from '../../service/branchOffice';
-import { 
-  FacebookAuthProvider, 
-  getAdditionalUserInfo, 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithEmailAndPassword, 
-  signInWithPopup 
-} from 'firebase/auth';
-import { auth } from '../../firebaseConfig';
+import { UserAdmin } from '../../interfaces/userAdmin'
+import { post } from '../../service/branchOffice'
+import {
+  FacebookAuthProvider,
+  getAdditionalUserInfo,
+  getAuth,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup
+} from 'firebase/auth'
+import { auth } from '../../firebaseConfig'
 
 interface Account {
   email: string;
   passowrd: string;
 }
 
-type KeysProviders = "facebook" | "google";
+type KeysProviders = 'facebook' | 'google';
 
 const providers: Record<KeysProviders, FacebookAuthProvider | GoogleAuthProvider> = {
-  "facebook": new FacebookAuthProvider(),
-  "google": new GoogleAuthProvider()
-};
+  facebook: new FacebookAuthProvider(),
+  google: new GoogleAuthProvider()
+}
 
 const scopes: Record<KeysProviders, string> = {
-  "facebook": 'email',
-  "google": 'https://www.googleapis.com/auth/userinfo.email'
-};
+  facebook: 'email',
+  google: 'https://www.googleapis.com/auth/userinfo.email'
+}
 
 const Login = () => {
-  const [account, setAccount] = useState<Account>({email: "", passowrd: ""});
-  const [loading, setLoading] = useState<boolean>(false);
+  const [account, setAccount] = useState<Account>({ email: '', passowrd: '' })
+  const [loading, setLoading] = useState<boolean>(false)
 
   const onFinish = async () => {
-    if(loading) return;
+    if (loading) return
 
     try {
-      setLoading(true);
+      setLoading(true)
 
-      await signInWithEmailAndPassword(auth, account.email, account.passowrd);
+      await signInWithEmailAndPassword(auth, account.email, account.passowrd)
     } catch (error) {
-      console.log(error);
-      message.error("Error, datos incorrectos.");
-      setLoading(false);
+      console.log(error)
+      message.error('Error, datos incorrectos.')
+      setLoading(false)
     }
   }
 
   const signInWithProvider = async (keyProvider: KeysProviders) => {
     try {
-      const provider = providers[keyProvider];
-      const scope = scopes[keyProvider];
-      provider.addScope(scope);
-      const result = await signInWithPopup(getAuth(), provider);
-      const user = result.user;
-      const additional = getAdditionalUserInfo(result);
+      const provider = providers[keyProvider]
+      const scope = scopes[keyProvider]
+      provider.addScope(scope)
+      const result = await signInWithPopup(getAuth(), provider)
+      const user = result.user
+      const additional = getAdditionalUserInfo(result)
 
-      if(!additional?.isNewUser) return;
+      if (!additional?.isNewUser) return
 
       const userInfo: UserAdmin = {
         uid: user.uid,
         name: user?.displayName || '',
-        email:  user?.email || '',
+        email: user?.email || '',
         active: true,
         phone: user?.phoneNumber || '',
         description: '',
         company: '',
         role: ''
-      };
+      }
 
-      await post("userAdmin/create", userInfo);
+      await post('userAdmin/create', userInfo)
     } catch (e) {
-      console.log(e);
-      message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
+      console.log(e)
+      message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`)
     }
   }
 
@@ -111,7 +111,7 @@ const Login = () => {
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               value={account.email}
-              onChange={(e) => setAccount({...account, email: e.target.value})}
+              onChange={(e) => setAccount({ ...account, email: e.target.value })}
               placeholder="Correo"
               size='large'
               autoComplete='username'
@@ -126,7 +126,7 @@ const Login = () => {
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
               value={account.passowrd}
-              onChange={(e) => setAccount({...account, passowrd: e.target.value})}
+              onChange={(e) => setAccount({ ...account, passowrd: e.target.value })}
               placeholder="Contraseña"
               size='large'
               autoComplete="current-password"
@@ -161,10 +161,10 @@ const Login = () => {
                   }}
                 />
               }
-              onClick={async () => await signInWithProvider("google")}
+              onClick={async () => await signInWithProvider('google')}
               shape="round"
               size="large"
-              style={{ backgroundColor: '#eeeeee'}}
+              style={{ backgroundColor: '#eeeeee' }}
               type='default'
             >
               Continuar con Google
@@ -180,10 +180,10 @@ const Login = () => {
                   style={{}}
                 />
               }
-              onClick={async () => await signInWithProvider("facebook")}
+              onClick={async () => await signInWithProvider('facebook')}
               shape="round"
               size="large"
-              style={{ backgroundColor: '#eeeeee'}}
+              style={{ backgroundColor: '#eeeeee' }}
               type='default'
 
             >
