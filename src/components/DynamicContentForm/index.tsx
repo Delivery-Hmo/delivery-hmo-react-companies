@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react'
+import { FC, ReactNode } from 'react'
 import { CustomInput, Option } from '../../interfaces'
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, Button, Upload } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'

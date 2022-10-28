@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button, Form, Input } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import '../../../assets/styles/Login.css'
