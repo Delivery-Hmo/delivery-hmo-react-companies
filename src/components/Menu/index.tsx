@@ -9,13 +9,13 @@ const MenuComponent = () => {
   const [collapsed, setCollapsed] = useState<boolean | undefined>(true)
   const location = useLocation()
 
-  const onCollapse = (collapsed: boolean | undefined) => setCollapsed(collapsed);
+  const onCollapse = (collapsed: boolean | undefined) => setCollapsed(collapsed)
 
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-      <Menu 
-        theme="dark" 
-        selectedKeys={[location.pathname]} 
+      <Menu
+        theme="dark"
+        selectedKeys={[location.pathname]}
         items={menuItems}
       />
     </Sider>
