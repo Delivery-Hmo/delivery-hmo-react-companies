@@ -1,5 +1,4 @@
 import { Button, Card, Col, Collapse, Divider, Layout, Row, Space, Tooltip, Typography } from 'antd'
-import React from 'react'
 import '../../assets/styles/LandingPage.css'
 import logo from '../../assets/logo-hmo2.png'
 import { FacebookOutlined, GoogleOutlined, InstagramOutlined } from '@ant-design/icons'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { PathRouteProps } from 'react-router-dom'
 import Branches from '../views/Branches'
 import LandingPage from '../views/LandingPage'
