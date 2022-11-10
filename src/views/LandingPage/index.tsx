@@ -1,17 +1,16 @@
-import { Button, Card, Col, Collapse, Divider, Layout, Row, Space, Tooltip, Typography } from 'antd'
-import '../../assets/styles/LandingPage.css'
-import logo from '../../assets/logo-hmo2.png'
-import { FacebookOutlined, GoogleOutlined, InstagramOutlined } from '@ant-design/icons'
-import image1 from '../../assets/delivery-bg.jpg'
-import image2 from '../../assets/landing-1.png'
-import image3 from '../../assets/image-3.jpg'
 
-const { Panel } = Collapse
-const { Content, Footer } = Layout
-const { Title, Link } = Typography
-const sizes = {
-  xs: 24, sm: 24, md: 8, lg: 8, xl: 8, xxl: 8
-}
+import '../../assets/styles/LandingPage.css';
+import { Button, Card, Col, Collapse, Divider, Layout, Row, Space, Tooltip, Typography } from 'antd';
+import logo from '../../assets/logo-hmo2.png';
+import { FacebookOutlined, GoogleOutlined, InstagramOutlined } from '@ant-design/icons';
+import image1 from '../../assets/delivery-bg.jpg';
+import image2 from '../../assets/landing-1.png';
+import image3 from '../../assets/image-3.jpg';
+
+const { Panel } = Collapse;
+const { Content, Footer } = Layout;
+const { Title, Link } = Typography;
+const sizes = { xs: 24, md: 8 };
 
 const LandingPage = () => {
   const CardContent = (title: string, description: string) => (
@@ -41,8 +40,6 @@ const LandingPage = () => {
 
   return (
     <Layout>
-
-      {/* MAIN CONTENT */}
       <Layout style={{ background: '#28355b' }}>
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50 }}>
           <div className="site-layout-background" style={{ padding: 24 }}>
@@ -56,8 +53,6 @@ const LandingPage = () => {
             </div>
           </div>
         </Content>
-
-        {/* CONTENT 1 */}
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50, marginBottom: 50 }}>
           <Row
             justify="space-between"
@@ -108,8 +103,6 @@ const LandingPage = () => {
           </Row>
         </Content>
       </Layout>
-
-      {/* Content Collapse */}
       <Layout style={{ background: '#d0d7df' }}>
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50, marginBottom: 50 }}>
           <Row
@@ -143,8 +136,6 @@ const LandingPage = () => {
           </Row>
         </Content>
       </Layout>
-
-      {/* FOOTER */}
       <Footer style={{ textAlign: 'center', color: '#fff' }}>
         <Divider />
         <Row gutter={[16, 0]}>
@@ -245,4 +236,4 @@ const LandingPage = () => {
   )
 }
 
-export default LandingPage
+export default LandingPage;

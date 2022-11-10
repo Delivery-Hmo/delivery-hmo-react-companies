@@ -1,16 +1,16 @@
-import React, { ReactNode, useState } from 'react'
-import { Layout, Menu, Modal } from 'antd'
-import logo from '../../assets/logo-hmo2.png'
-import { IdcardOutlined, UserOutlined } from '@ant-design/icons'
-import Login from '../../views/Login'
+import { ReactNode, useState } from 'react';
+import { Layout, Menu, Modal } from 'antd';
+import logo from '../../assets/logo-hmo2.png';
+import { IdcardOutlined, UserOutlined } from '@ant-design/icons';
+import Login from '../../views/Login';
 
-const { Header } = Layout
+const { Header } = Layout;
 
 interface MenuItems {
   key: string;
   icon: ReactNode;
   label: string;
-  onClick?: () => void
+  onClick?: () => void;
 }
 
 const HeaderComponent = () => {
@@ -29,9 +29,7 @@ const HeaderComponent = () => {
       label: 'Registrarse',
       onClick: () => console.log('Registrarse')
     }
-  ]
-
-  const Card = React.useCallback(() => (<Login open={open} />), [open])
+  ];
 
   return (
     <>
@@ -49,17 +47,15 @@ const HeaderComponent = () => {
           items={menuItems}
         />
       </Header>
-
-      {/* MODAL LOGIN */}
       <Modal
         open={open}
         onCancel={() => setOpen(false)}
         footer={null}
       >
-        <Card />
+        <Login open={open} />
       </Modal>
     </>
   )
 }
 
-export default HeaderComponent
+export default HeaderComponent;

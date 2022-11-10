@@ -1,24 +1,24 @@
-import React from 'react'
-import { Card, Col, Row } from 'antd'
-import '../../assets/styles/Login.css'
-import RecoveryForm from './Forms/RecoveryForm'
-import LoginForm from './Forms/LoginForm'
+import { FC, useEffect, useState } from 'react';
+import { Card, Col, Row } from 'antd';
+import '../../assets/styles/Login.css';
+import RecoveryForm from './Forms/RecoveryForm';
+import LoginForm from './Forms/LoginForm';
 
 interface Props {
   open: boolean;
 }
 
-const Login: React.FC<Props> = ({ open }) => {
-  const [currentForm, setCurrentForm] = React.useState<string>('login')
+const Login: FC<Props> = ({ open }) => {
+  const [currentForm, setCurrentForm] = useState<string>('login');
+
+  useEffect(() => {
+    if (!open) setCurrentForm('login');
+  }, [open])
 
   const DynamicForm = () => {
-    if (currentForm === 'recovery') return <RecoveryForm />
-    return <LoginForm setCurrentForm={setCurrentForm} />
+    if (currentForm === 'recovery') return <RecoveryForm />;
+    return <LoginForm setCurrentForm={setCurrentForm} />;
   }
-
-  React.useEffect(() => {
-    if (!open) setCurrentForm('login')
-  }, [open])
 
   return (
     <div className='app-login-wrapper'>
@@ -49,4 +49,4 @@ const Login: React.FC<Props> = ({ open }) => {
   )
 }
 
-export default Login
+export default Login;

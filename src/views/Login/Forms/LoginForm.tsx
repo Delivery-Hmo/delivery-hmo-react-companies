@@ -6,18 +6,9 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import '../../../assets/styles/Login.css'
 import { auth } from '../../../firebaseConfig'
 import { post } from '../../../service/branchOffice'
+import { UserAdmin } from '../../../interfaces/userAdmin'
 
 type KeysProviders = 'facebook' | 'google';
-
-const providers: Record<KeysProviders, FacebookAuthProvider | GoogleAuthProvider> = {
-  facebook: new FacebookAuthProvider(),
-  google: new GoogleAuthProvider()
-}
-
-const scopes: Record<KeysProviders, string> = {
-  facebook: 'email',
-  google: 'https://www.googleapis.com/auth/userinfo.email'
-}
 
 interface Props {
   setCurrentForm: Dispatch<SetStateAction<string>>;
@@ -27,47 +18,44 @@ interface Account {
   email: string;
   password: string;
 }
-
-interface UserAdmin {
-  uid?: string;
-  id?: string;
-  name: string;
-  email: string;
-  phone: string;
-  company: string;
-  description: string;
-  active: boolean;
-  role: string;
+const providers: Record<KeysProviders, FacebookAuthProvider | GoogleAuthProvider> = {
+  facebook: new FacebookAuthProvider(),
+  google: new GoogleAuthProvider()
 }
 
+const scopes: Record<KeysProviders, string> = {
+  facebook: 'email',
+  google: 'https://www.googleapis.com/auth/userinfo.email'
+};
+
 const LoginForm: FC<Props> = ({ setCurrentForm }) => {
-  const [account, setAccount] = useState<Account>({ email: '', password: '' })
-  const [loading, setLoading] = useState<boolean>(false)
+  const [account, setAccount] = useState<Account>({ email: '', password: '' });
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onFinish = async () => {
-    if (loading) return
+    if (loading) return;
 
     try {
-      setLoading(true)
+      setLoading(true);
 
-      await signInWithEmailAndPassword(auth, account.email, account.password)
+      await signInWithEmailAndPassword(auth, account.email, account.password);
     } catch (error) {
-      console.log(error)
-      message.error('Error, datos incorrectos.')
-      setLoading(false)
+      console.log(error);
+      message.error('Error, datos incorrectos.');
+      setLoading(false);
     }
   }
 
   const signInWithProvider = async (keyProvider: KeysProviders) => {
     try {
-      const provider = providers[keyProvider]
-      const scope = scopes[keyProvider]
-      provider.addScope(scope)
-      const result = await signInWithPopup(getAuth(), provider)
-      const user = result.user
-      const additional = getAdditionalUserInfo(result)
+      const provider = providers[keyProvider];
+      const scope = scopes[keyProvider];
+      provider.addScope(scope);
+      const result = await signInWithPopup(getAuth(), provider);
+      const user = result.user;
+      const additional = getAdditionalUserInfo(result);
 
-      if (!additional?.isNewUser) return
+      if (!additional?.isNewUser) return;
 
       const userInfo: UserAdmin = {
         uid: user.uid,
@@ -78,132 +66,129 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
         description: '',
         company: '',
         role: ''
-      }
+      };
 
-      await post('userAdmin/create', userInfo)
+      await post('userAdmin/create', userInfo);
     } catch (e) {
-      console.log(e)
-      message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`)
+      console.log(e);
+      message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
     }
   }
 
   return (
     <>
-        <div className="app-login-title">
-          <span>Inicio de Sesión</span>
-        </div>
-        <div className="app-login-subtitle">
-          <p>Bienvenido</p>
-        </div>
-        <Form
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          layout='vertical'
-          className='app-login-form'
+      <div className="app-login-title">
+        <span>Inicio de Sesión</span>
+      </div>
+      <div className="app-login-subtitle">
+        <p>Bienvenido</p>
+      </div>
+      <Form
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        layout='vertical'
+        className='app-login-form'
+      >
+        <Form.Item
+          name="email"
+          rules={[{ required: true, message: 'Favor de escribir el correo.' }]}
+          hasFeedback
+          style={{ marginBottom: '10px' }}
         >
-          <Form.Item
-            name="email"
-            rules={[{ required: true, message: 'Favor de escribir el correo.' }]}
-            hasFeedback
-            style={{ marginBottom: '10px' }}
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            value={account.email}
+            onChange={(e) => setAccount({ ...account, email: e.target.value })}
+            placeholder="Correo"
+            size='large'
+            autoComplete='username'
+          />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: 'Favor de escribir la contraseña.' }]}
+          hasFeedback
+          style={{ marginBottom: '10px' }}
+        >
+          <Input.Password
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            value={account.password}
+            onChange={(e) => setAccount({ ...account, password: e.target.value })}
+            placeholder="Contraseña"
+            size='large'
+            autoComplete="current-password"
+          />
+        </Form.Item>
+        <div
+          style={{
+            flexDirection: 'column',
+            padding: 0
+          }}
+        >
+          <Button
+            block
+            className="login-button"
+            htmlType="submit"
+            loading={loading}
+            shape="round"
+            size="large"
+            type="primary"
           >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              value={account.email}
-              onChange={(e) => setAccount({ ...account, email: e.target.value })}
-              placeholder="Correo"
-              size='large'
-              autoComplete='username'
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: 'Favor de escribir la contraseña.' }]}
-            hasFeedback
-            style={{ marginBottom: '10px' }}
-          >
-            <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              value={account.password}
-              onChange={(e) => setAccount({ ...account, password: e.target.value })}
-              placeholder="Contraseña"
-              size='large'
-              autoComplete="current-password"
-            />
-          </Form.Item>
-          <div
+            Entrar
+          </Button>
+          <p
+            onClick={() => setCurrentForm('recovery')}
             style={{
-              flexDirection: 'column',
-              padding: 0
+              textAlign: 'center',
+              textDecoration: 'underline',
+              cursor: 'pointer'
             }}
           >
-            <Button
-              block
-              className="login-button"
-              htmlType="submit"
-              loading={loading}
-              shape="round"
-              size="large"
-              type="primary"
-            >
-              Entrar
-            </Button>
-            <p
-              onClick={() => setCurrentForm('recovery')}
-              style={{
-                textAlign: 'center',
-                textDecoration: 'underline',
-                cursor: 'pointer'
-              }}
-            >
-            Recuperar contraseña
-            </p>
-            <Button
-              block
-              className="login-button"
-              icon={
-                <Avatar
-                  src='/google.png'
-                  size="small"
-                  className='icon-google'
-                  style={{
-                  }}
-                />
-              }
-              onClick={async () => await signInWithProvider('google')}
-              shape="round"
-              size="large"
-              style={{ backgroundColor: '#eeeeee' }}
-              type='default'
-            >
-              Continuar con Google
-            </Button>
-            <Button
-              block
-              className="login-button"
-              icon={
-                <Avatar
-                  src='/facebook.png'
-                  size="small"
-                  className='icon-facebook'
-                  style={{}}
-                />
-              }
-              onClick={async () => await signInWithProvider('facebook')}
-              shape="round"
-              size="large"
-              style={{ backgroundColor: '#eeeeee' }}
-              type='default'
+          Recuperar contraseña
+          </p>
+          <Button
+            block
+            className="login-button"
+            icon={
+              <Avatar
+                src='/google.png'
+                size="small"
+                className='icon-google'
+              />
+            }
+            onClick={async () => await signInWithProvider('google')}
+            shape="round"
+            size="large"
+            style={{ backgroundColor: '#eeeeee' }}
+            type='default'
+          >
+            Continuar con Google
+          </Button>
+          <Button
+            block
+            className="login-button"
+            icon={
+              <Avatar
+                src='/facebook.png'
+                size="small"
+                className='icon-facebook'
+              />
+            }
+            onClick={async () => await signInWithProvider('facebook')}
+            shape="round"
+            size="large"
+            style={{ backgroundColor: '#eeeeee' }}
+            type='default'
 
-            >
-              Continuar con Facebook
-            </Button>
-          </div>
-        </Form>
-        <br/>
+          >
+            Continuar con Facebook
+          </Button>
+        </div>
+      </Form>
+      <br/>
     </>
   )
 }
 
-export default LoginForm
+export default LoginForm;

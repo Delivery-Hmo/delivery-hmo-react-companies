@@ -1,9 +1,9 @@
-import { getCurrentToken } from '../utils'
+import { getCurrentToken } from '../utils';
 
 // const baseUrl = "https://www.deliapihmo.xyz/";
-const baseUrl = 'http://localhost:3001/'
+const baseUrl = 'http://localhost:3001/';
 
-export const get = async (url: string) => {
+export const get = async (url: string, controller?: AbortController) => {
   const token = await getCurrentToken()
 
   const response = await fetch(
@@ -12,15 +12,16 @@ export const get = async (url: string) => {
       method: 'GET',
       headers: token
         ? { Authorization: 'Bearer ' + token }
-        : undefined
+        : undefined,
+      signal: controller?.signal
     }
-  )
+  );
 
   if (!response.ok) {
-    throw new Error('Error request!')
+    throw new Error('Error request!');
   }
 
-  return response.json()
+  return response.json();
 }
 
 export const post = async (url: string, body: Record<string, any>) => {
