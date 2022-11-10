@@ -1,6 +1,5 @@
-import './App.css'
-import MyRouter from './router'
-import { AuthProvider } from './context/AuthContext'
+import MyRouter from './router';
+import { AuthProvider } from './context/AuthContext';
 
 const App = () => {
   return (
@@ -10,4 +9,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;

@@ -23,6 +23,17 @@ code {
     monospace;
 }
 
+/* input number */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+} 
+
+input[type=number] {
+  -moz-appearance:textfield !important;
+}
+
 .ant-menu {
   background-color: var(--primary) !important;
   font-size: 16px;
@@ -46,3 +57,5 @@ code {
   border-color: var(--secondary) !important;
   font-weight: bold;
 }
+
+

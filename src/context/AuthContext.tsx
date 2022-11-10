@@ -3,6 +3,7 @@ import FullLoader from '../components/FullLoader/FullLoader'
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth'
 import { get } from '../service/branchOffice'
 import { UserAdmin } from '../interfaces/userAdmin'
+import { auth } from '../firebaseConfig'
 
 interface Auth {
   user: User | null;
@@ -16,7 +17,7 @@ interface Props {
 const AuthContext = createContext<Auth>({
   user: null,
   userAdmin: null
-})
+});
 
 export const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
@@ -24,14 +25,12 @@ export const AuthProvider: FC<Props> = ({ children }) => {
   const [loading, setLoading] = useState<Boolean>(true)
 
   useEffect(() => {
-    let mounted = true
+    const controller = new AbortController();
 
-    const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {
+    const uns = onIdTokenChanged(auth, async (user: User | null) => {
       if (user) {
         try {
-          const userAdmin: UserAdmin = await get('userAdmin/getByUid?uid=' + user.uid)
-
-          if (!mounted) return
+          const userAdmin: UserAdmin = await get('userAdmin/getByUid?uid=' + user.uid, controller)
 
           setUserAdmin(userAdmin)
         } catch (error) {
@@ -39,21 +38,19 @@ export const AuthProvider: FC<Props> = ({ children }) => {
         }
       }
 
-      if (!mounted) return
-
-      setUser(user)
-      setLoading(false)
+      setUser(user);
+      setLoading(false);
     })
 
     return () => {
-      uns()
-      mounted = false
+      uns();
+      controller.abort();
     }
   }, [])
 
-  if (loading) return <FullLoader />
+  if (loading) return <FullLoader />;
 
-  return <AuthContext.Provider value={{ user, userAdmin }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, userAdmin }}>{children}</AuthContext.Provider>;
 }
 
-export const useAuth = () => useContext(AuthContext)
+export const useAuth = () => useContext(AuthContext);

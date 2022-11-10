@@ -1,7 +1,7 @@
-import { Spin } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
-const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const FullLoader = () => {
   return <div style={{
@@ -15,4 +15,4 @@ const FullLoader = () => {
   </div>
 }
 
-export default FullLoader
+export default FullLoader;
