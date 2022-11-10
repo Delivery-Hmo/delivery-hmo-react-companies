@@ -9,7 +9,7 @@ export interface User {
   image?: string;
   role: Roles;
 }
-
+//asdasd
 export interface UserAdmin extends User {
   company: string;
 }
