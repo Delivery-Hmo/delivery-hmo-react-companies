@@ -8,8 +8,10 @@ export interface User {
   active: boolean;
   image?: string;
   role: Roles;
+  password: string;
+  repeatPassword: string;
 }
-//asdasd
+
 export interface UserAdmin extends User {
   company: string;
 }
