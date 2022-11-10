@@ -15,6 +15,7 @@ const Branches = () => {
     const init = async () => {
       try {
         const branches = await get("branchOffice/", controller);
+        console.log(branches);
       } catch (error) {
         message.error("Error al obtener las sucursales");
         console.log(error);
@@ -50,6 +51,7 @@ const Branches = () => {
       <br />
       <br />
       <Table
+        loading={staring}
         locale={{
           emptyText: <div style={{ fontSize: 18 }}>
             Sin sucursales

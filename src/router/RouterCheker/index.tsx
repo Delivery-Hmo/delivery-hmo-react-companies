@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import MenuComponent from '../../components/Menu';
-import HeaderComponent from '../../components/Header';
+//import HeaderComponent from '../../components/Header';
 
 const RoterChecker = () => {
   const { user } = useAuth();

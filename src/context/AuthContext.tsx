@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, createContext, FC, ReactNode } from 'react'
 import FullLoader from '../components/FullLoader/FullLoader'
-import { User, onIdTokenChanged, getAuth } from 'firebase/auth'
+import { User, onIdTokenChanged } from 'firebase/auth'
 import { get } from '../service/branchOffice'
 import { UserAdmin } from '../interfaces/userAdmin'
 import { auth } from '../firebaseConfig'
