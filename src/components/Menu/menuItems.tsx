@@ -29,6 +29,12 @@ const menuItems: ItemType[] = [
     label: 'Configuración',
     children: [
       {
+        key: '/perfil',
+        title: '',
+        icon: <UserOutlined style={styleIcon} />,
+        label: <Link to="/perfil">Perfil</Link>,
+      },
+      {
         key: '/signOut',
         title: '',
         icon: <UserOutlined style={styleIcon} />,

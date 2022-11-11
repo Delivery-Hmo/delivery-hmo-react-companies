@@ -26,11 +26,15 @@ const Perfil = () => {
     xs: 24, sm: 24, md: 24, lg: 6, xl: 6, xxl: 6
   }
 
+  const onFinishProfile = async () => {
+    console.log("click")
+    setLoading(true)
+  }
+
   const onFinish = async () => {
     if (user.password !== user.repeatPassword) {
       message.error('Las contraseñas no coinciden.', 4)
     }
-    setLoading(true)
   }
 
   return (
@@ -71,78 +75,101 @@ const Perfil = () => {
         </Col>
         <Col xs={24} md={17}>
           <Card title="Editar: Datos Mi Perfil" bordered={false}>
-          <Form
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 14 }}
-            layout="horizontal"
-          >
-             <Tabs defaultActiveKey="1">
-              <Tabs.TabPane tab="Actualizar Perfil" key="1">
-              <Row>
-                <Col md={8}>
-                  <Form layout="vertical" onFinish={onFinish}>
-                    <DynamicContentForm inputs={[
-                      {
-                        ...sizes,
-                        type: 'input',
-                        typeInput: 'text',
-                        label: 'Nombre Vendedor',
-                        name: 'name',
-                        rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
-                        value: user.name,
-                        onChange: (value) => setUser({ ...user, name: value })
-                      }, {
-                        ...sizes,
-                        type: 'input',
-                        typeInput: 'text',
-                        label: 'Compañia',
-                        name: 'company',
-                        rules: [{ required: true, message: 'Favor de escribir la company.' }],
-                        value: user.company,
-                        onChange: (value) => setUser({ ...user, company: value })
-                      }, {
-                        ...sizes,
-                        type: 'input',
-                        typeInput: 'text',
-                        label: 'Descripcion',
-                        name: 'description',
-                        rules: [{ required: true, message: 'Favor de seleccionar su description.' }],
-                        value: user.description,
-                        onChange: (value) => setUser({ ...user, description: value })
-                      }, {
-                        ...sizes,
-                        type: 'input',
-                        typeInput: 'email',
-                        label: 'Email',
-                        name: 'email',
-                        rules: [{ required: true, message: 'Favor de ingresar un email.' }],
-                        value: user.email,
-                        onChange: (value) => setUser({ ...user, email: value })
-                      }, {
-                        ...sizes,
-                        type: 'input',
-                        typeInput: 'number',
-                        label: 'Telefono',
-                        name: 'phone',
-                        rules: [{ required: true, message: 'Favor de ingresar un telefono.' }],
-                        value: user.phone,
-                        onChange: (value) => setUser({ ...user, phone: value })
-                      }
-                    ]} />
-                  </Form>
-                  <div style={{ textAlign: 'right' }}>
-                    <Button style={{ background: '#f0a818' }} htmlType="submit" loading={loading}>
-                      Guardar
-                    </Button>
-                  </div>
-                </Col>
-              </Row>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Cambiar Contraseña" key="2">
-                C
-              </Tabs.TabPane>
-            </Tabs>
-          </Form>
+         
+             <Tabs
+              defaultActiveKey="1"
+              items={[
+                {
+                  label: 'Actualizar Perfil',
+                  key: '1',
+                  children: 
+                  <>
+                    <Row>
+                      <Col md={12}>
+                        <Form layout="vertical" onFinish={onFinishProfile}>
+                        <DynamicContentForm inputs={[
+                                {
+                                  ...sizes,
+                                  type: 'input',
+                                  typeInput: 'text',
+                                  label: 'Nombre Vendedor',
+                                  name: 'name',
+                                  rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
+                                  value: user.name,
+                                  onChange: (value) => setUser({ ...user, name: value })
+                                }, {
+                                  ...sizes,
+                                  type: 'input',
+                                  typeInput: 'text',
+                                  label: 'Compañia',
+                                  name: 'company',
+                                  rules: [{ required: true, message: 'Favor de escribir la company.' }],
+                                  value: user.company,
+                                  onChange: (value) => setUser({ ...user, company: value })
+                                }, {
+                                  ...sizes,
+                                  type: 'input',
+                                  typeInput: 'email',
+                                  label: 'Email',
+                                  name: 'email',
+                                  rules: [{ required: true, message: 'Favor de ingresar un email.' }],
+                                  value: user.email,
+                                  onChange: (value) => setUser({ ...user, email: value })
+                                }, {
+                                  ...sizes,
+                                  type: 'input',
+                                  typeInput: 'text',
+                                  label: 'Telefono',
+                                  name: 'phone',
+                                  rules: [
+                                    { required: true, message: 'Favor de ingresar un telefono.' }, 
+                                    {pattern: /^(?:\d*)$/,message: "Solo caracteres numericos.",},
+                                    { max: 2, message: 'Maximo 10 numeros' },  
+                                  ],
+                                  value: user.phone,
+                                  onChange: (value) => setUser({ ...user, phone: value })
+                                }, {
+                                  ...sizes,
+                                  type: 'textarea',
+                                  typeInput: 'text',
+                                  label: 'Descripciòn',
+                                  name: 'description',
+                                  rules: [{ required: true, message: 'Favor de seleccionar su description.' }],
+                                  value: user.description,
+                                  onChange: (value) => setUser({ ...user, description: value })
+                                }
+                              ]} />
+                          <Form.Item >
+                              <Button style={{ background: '#f0a818' }} htmlType="submit" loading={loading}>
+                                Guardar
+                              </Button>
+                          </Form.Item>
+                        
+                        </Form>
+                      </Col>
+                    </Row>
+                  </>,
+                },
+                {
+                  label: 'Cambiar Contraseña',
+                  key: '2',
+                  children: <>
+                  <Row>
+                    <Col md={12}>
+                      {/* <Form layout="vertical" onFinish={onFinish}>
+                       
+                      </Form> */}
+                      <div style={{ textAlign: 'right' }}>
+                        <Button style={{ background: '#f0a818' }} htmlType="submit" loading={loading}>
+                          Guardar
+                        </Button>
+                      </div>
+                    </Col>
+                  </Row>
+                  </>,
+                },
+              ]}
+            />
           </Card>
         </Col>
         </Row>
