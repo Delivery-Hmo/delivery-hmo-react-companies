@@ -2,10 +2,13 @@ import { Button, Col, message, Row, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { get } from '../../service/branchOffice';
+import { useNavigate } from 'react-router-dom';
+import RegisterButton from '../../components/RegisterButton';
 
 const Branches = () => {
   const { userAdmin } = useAuth();
   const [staring, setStaring] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if(!userAdmin) return;
@@ -40,12 +43,9 @@ const Branches = () => {
           </h1>
         </Col>
         <Col>
-          <Button
-            type="primary"
-            onClick={() => {}}
-          >
+          <RegisterButton onClick={() => navigate("/sucursales/crear")}>
             Registar sucursal
-          </Button>
+          </RegisterButton>
         </Col>
       </Row>
       <br />
@@ -61,4 +61,4 @@ const Branches = () => {
   )
 }
 
-export default Branches
+export default Branches;

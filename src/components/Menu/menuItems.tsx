@@ -1,7 +1,6 @@
-import { UserOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons'
-import { getAuth } from 'firebase/auth'
-import { Link } from 'react-router-dom'
-import { ItemType } from 'antd/lib/menu/hooks/useItems'
+import { UserOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons';
+import { getAuth } from 'firebase/auth';
+import { Link } from 'react-router-dom';
 
 const signOut = () => getAuth().signOut();
 
@@ -9,7 +8,7 @@ const styleIcon = {
   fontSize: 20
 };
 
-const menuItems: ItemType[] = [
+export const menuItems = [
   {
     key: '/sucursales',
     title: '',

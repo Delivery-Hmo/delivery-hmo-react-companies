@@ -13,7 +13,7 @@ const MenuComponent = () => {
   const { userAdmin } = useAuth();
 
   const onCollapse = (collapsed: boolean | undefined) => setCollapsed(collapsed);
-
+  
   return (
     <Sider 
       collapsible 
@@ -39,7 +39,7 @@ const MenuComponent = () => {
       </Row>
       <Menu
         theme="dark"
-        selectedKeys={[location.pathname]}
+        selectedKeys={["/" + location.pathname.split("/")[1]]}
         items={menuItems}
       />
     </Sider>

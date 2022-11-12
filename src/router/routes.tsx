@@ -1,5 +1,6 @@
 import { PathRouteProps } from 'react-router-dom';
 import Branches from '../views/Branches';
+import CreateBranch from '../views/Branches/CreateBranch';
 import LandingPage from '../views/LandingPage';
 
 const routes: PathRouteProps[] = [
@@ -10,6 +11,10 @@ const routes: PathRouteProps[] = [
   {
     path: '/sucursales',
     element: <Branches />
+  },
+  {
+    path: '/sucursales/crear',
+    element: <CreateBranch />
   },
   {
     path: '*',
