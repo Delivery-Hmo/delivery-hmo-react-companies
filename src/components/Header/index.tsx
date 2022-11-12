@@ -3,6 +3,7 @@ import { Layout, Menu, Modal } from 'antd';
 import logo from '../../assets/logo-hmo2.png';
 import { IdcardOutlined, UserOutlined } from '@ant-design/icons';
 import Login from '../../views/Login';
+import { useNavigate } from 'react-router-dom'
 
 const { Header } = Layout;
 
@@ -15,6 +16,7 @@ interface MenuItems {
 
 const HeaderComponent = () => {
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
 
   const menuItems: MenuItems[] = [
     {
@@ -27,7 +29,7 @@ const HeaderComponent = () => {
       key: '1',
       icon: <IdcardOutlined />,
       label: 'Registrarse',
-      onClick: () => console.log('Registrarse')
+      onClick: () => navigate('/registrarse')
     }
   ];
 
