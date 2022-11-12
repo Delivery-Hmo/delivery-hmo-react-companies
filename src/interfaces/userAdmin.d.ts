@@ -1,3 +1,5 @@
+import { Roles } from "../types";
+
 export interface User {
   id?: string;
   uid: string;
