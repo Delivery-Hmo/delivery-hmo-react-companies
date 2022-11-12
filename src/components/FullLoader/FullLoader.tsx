@@ -11,7 +11,7 @@ const FullLoader = () => {
     WebkitTransform: 'translate(-50%, -50%)',
     transform: 'translate(-50%, -50%)'
   }}>
-    <Spin indicator={antIcon} style={{ color: '#9a2c31' }}/>
+    <Spin indicator={antIcon} style={{color: "#304878"}} />
   </div>
 }
 

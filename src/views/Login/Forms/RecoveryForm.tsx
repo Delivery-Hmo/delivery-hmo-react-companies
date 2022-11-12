@@ -23,47 +23,46 @@ const RecoveryForm = () => {
   }
 
   return (
-  <>
-    <div className="app-login-title">
-      <span>Recuperar contraseña</span>
-    </div>
-    <Form>
-      <Form.Item
-        name="email"
-        rules={[{ required: true, message: 'Favor de escribir el correo.' }]}
-        hasFeedback
-        style={{ marginBottom: '10px' }}
-      >
-        <Input
-          prefix={<UserOutlined className="site-form-item-icon" />}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Correo"
-          size='large'
-        />
-      </Form.Item>
-      <div
-        style={{
-          flexDirection: 'column',
-          padding: 0
-        }}
-      >
-        <Button
-          block
-          className="login-button"
-          htmlType="submit"
-          loading={loading}
-          shape="round"
-          size="large"
-          type="primary"
-          onClick={onRecoverPassword}
-        >
-            Recuperar contraseña
-        </Button>
+    <>
+      <div className="app-login-title">
+        <span>Recuperar contraseña</span>
       </div>
-    </Form>
-    <br />
-  </>
+      <Form onFinish={onRecoverPassword}>
+        <Form.Item
+          name="email"
+          rules={[{ required: true, message: 'Favor de escribir el correo.' }]}
+          hasFeedback
+          style={{ marginBottom: '10px' }}
+        >
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Correo"
+            size='large'
+          />
+        </Form.Item>
+        <Form.Item
+          style={{
+            flexDirection: 'column',
+            padding: 0
+          }}
+        >
+          <Button
+            block
+            className="login-button"
+            htmlType="submit"
+            loading={loading}
+            shape="round"
+            size="large"
+            type="primary"
+          >
+            Recuperar contraseña
+          </Button>
+        </Form.Item>
+      </Form>
+      <br />
+    </>
   )
 }
 
