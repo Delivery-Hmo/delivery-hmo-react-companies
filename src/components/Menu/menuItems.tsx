@@ -3,11 +3,11 @@ import { getAuth } from 'firebase/auth'
 import { Link } from 'react-router-dom'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 
-const signOut = () => getAuth().signOut()
+const signOut = () => getAuth().signOut();
 
 const styleIcon = {
   fontSize: 20
-}
+};
 
 const menuItems: ItemType[] = [
   {
@@ -39,4 +39,4 @@ const menuItems: ItemType[] = [
   }
 ]
 
-export default menuItems
+export default menuItems;

@@ -14,7 +14,7 @@ const Branches = () => {
 
     const init = async () => {
       try {
-        const branches = await get("branchOffice/", controller);
+        const branches = await get("branchOffice/listByUserAdmin", controller);
         console.log(branches);
       } catch (error) {
         message.error("Error al obtener las sucursales");
@@ -33,8 +33,8 @@ const Branches = () => {
 
   return (
     <div>
-      <Row>
-        <Col md={5}>
+      <Row justify='space-between'>
+        <Col>
           <h1>
             Mis sucursales
           </h1>
@@ -48,7 +48,6 @@ const Branches = () => {
           </Button>
         </Col>
       </Row>
-      <br />
       <br />
       <Table
         loading={staring}
