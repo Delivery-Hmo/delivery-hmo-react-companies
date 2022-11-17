@@ -1,4 +1,4 @@
-import { UserOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons';
+import { UserOutlined, SettingOutlined, ShopOutlined, LoginOutlined, SolutionOutlined } from '@ant-design/icons';
 import { getAuth } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 
@@ -30,13 +30,13 @@ export const menuItems = [
       {
         key: '/perfil',
         title: '',
-        icon: <UserOutlined style={styleIcon} />,
+        icon: <SolutionOutlined style={styleIcon} />,
         label: <Link to="/perfil">Perfil</Link>,
       },
       {
         key: '/signOut',
         title: '',
-        icon: <UserOutlined style={styleIcon} />,
+        icon: <LoginOutlined style={styleIcon} />,
         label: 'Cerrar sesión',
         onClick: async () => await signOut()
       }

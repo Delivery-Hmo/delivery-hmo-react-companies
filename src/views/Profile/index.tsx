@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Card, Col, Row, Avatar, Divider, Form, Tabs, message, Button
 } from 'antd'
-import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons'
+import { UserOutlined, AliwangwangOutlined, SettingOutlined } from '@ant-design/icons'
 import DynamicContentForm from '../../components/DynamicContentForm'
 import { UserAdmin } from '../../interfaces/userAdmin'
+import { put } from '../../service'
+import {useAuth} from '../../context/AuthContext'
 
 const initUserAdmin: UserAdmin = {
   uid: '',
@@ -20,15 +22,25 @@ const initUserAdmin: UserAdmin = {
 }
 
 const Perfil = () => {
+  const {userAdmin} = useAuth()
+
   const [user, setUser] = useState<UserAdmin>(initUserAdmin)
   const [loading, setLoading] = useState<boolean>(false)
   const sizes = {
     xs: 24, sm: 24, md: 24, lg: 6, xl: 6, xxl: 6
   }
 
-  const onFinishProfile = async () => {
-    console.log("click")
-    setLoading(true)
+  const onEditProfile = async () => {
+    try {
+      const responce = await put("userAdmin/update", user);
+      console.log(responce);
+    } catch (error) {
+      message.error("Error al editar los datos.");
+      console.log(error);
+    } finally {
+      setLoading(true)
+    }
+ 
   }
 
   const onFinish = async () => {
@@ -37,18 +49,23 @@ const Perfil = () => {
     }
   }
 
+  useEffect(() => {
+    console.log(userAdmin)
+  }, [userAdmin])
+  
+
   return (
     <>
     <Row gutter={15}>
         <Col xs={24} md={6} >
           <Card title="Mi Perfil" bordered={false} style={{ textAlign: 'center' }}>
             <Row >
-              <Col>
+              <Col xs={24}>
                 <Avatar style={{ backgroundColor: '#87d068' }} size={64} icon={<UserOutlined />} />
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col xs={24}>
                 <span style={{ fontSize: '1.3em' }}>David German</span>
               </Col>
 
@@ -86,7 +103,7 @@ const Perfil = () => {
                   <>
                     <Row>
                       <Col md={12}>
-                        <Form layout="vertical" onFinish={onFinishProfile}>
+                        <Form layout="vertical" onFinish={onEditProfile}>
                         <DynamicContentForm inputs={[
                                 {
                                   ...sizes,
