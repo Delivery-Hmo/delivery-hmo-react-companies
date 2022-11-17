@@ -5,6 +5,8 @@ import { useAuth } from '../../context/AuthContext';
 import MenuComponent from '../../components/Menu';
 import HeaderComponent from '../../components/Header';
 
+const blockedPathsWithoAuthentication = ["/registrarse", "/"]
+
 const RoterChecker = () => {
   const { user } = useAuth();
   const { pathname } = useLocation();
@@ -16,7 +18,7 @@ const RoterChecker = () => {
       return;
     }
 
-    if(user && pathname === '/') {
+    if(user && blockedPathsWithoAuthentication.includes(pathname)) {
       navigate('/sucursales');
     }
   }, [user, pathname, navigate]);
