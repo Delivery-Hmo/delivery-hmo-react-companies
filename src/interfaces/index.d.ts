@@ -1,7 +1,9 @@
-export interface CustomInput {
+import { OptionsValue } from "../types"
+
+export interface CustomInput<T extends ValueOptions> {
   type: 'input' | 'select' | 'date' | 'checkbox' | 'radio' | 'autocomplete' | 'textarea' | 'file';
   typeInput?: 'text' | 'number' | 'password' | 'email';
-  value: any;
+  value: T;
   name: string;
   md: number;
   label?: string;
@@ -10,7 +12,8 @@ export interface CustomInput {
   disabled?: boolean;
   readonly?: boolean;
   rules?: Rule[];
-  onChange: (value: any) => void;
+  onChange: (value: T) => void;
+  styleFI?: React.CSSProperties;
 }
 
 export interface Option {

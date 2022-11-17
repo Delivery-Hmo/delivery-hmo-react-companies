@@ -1,73 +1,31 @@
-import { FC, ReactNode } from 'react'
-import { CustomInput, Option } from '../../interfaces'
-import { Input, Row, Col, Select, Form, Checkbox, DatePicker, Button, Upload } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
+import { FC, ReactNode } from 'react';
+import { CustomInput, Option } from '../../interfaces';
+import { Row, Col, Select, Form, Checkbox, DatePicker, Button, Upload, } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import Input, { ValueOptionsInput } from "../Generics/Input";
 
-interface Props {
-  inputs: CustomInput[];
+interface Props<T extends ValueOptionsInput> {
+  inputs: Array<CustomInput<T>>;
 }
 
-const DynamicContentForm: FC<Props> = ({ inputs }) => {
-  const getInpunt = (input: CustomInput): ReactNode | null => {
-    const { type, typeInput, value, label, name, rules, options, onChange } = input
+const controls: Record<string, <T extends ValueOptionsInput>(value: T, onChange: (value: T) => void) => JSX.Element> = {
+  input: <T extends ValueOptionsInput>(value: T, onChange: (value: T) => void) => <Input value={value} onChange={onChange} />,
+}
 
-    switch (type) {
-      case 'input':
-        return <Form.Item
-          label={label}
-          name={name}
-          rules={rules}
-        >
-          <Input type={typeInput || 'text'} value={value} onChange={(e) => onChange(e.target.value)}/>
-        </Form.Item>
-      case 'select':
-        return <Form.Item
-          label={label}
-          name={name}
-          rules={rules}
-        >
-          <Select value={value} onChange={onChange}>
-            {options?.map((option: Option) => <Select.Option key={option.value} value={option.value}>{option.text}</Select.Option>)}
-          </Select>
-        </Form.Item>
-      case 'textarea':
-        return <Form.Item
-          label={label}
-          name={name}
-          rules={rules}
-        >
-          <Input.TextArea value={value} onChange={(e) => onChange(e.target.value)} />
-        </Form.Item>
-      case 'checkbox':
-        return <Form.Item
-          label={label}
-          name={name}
-        >
-          <Checkbox checked={value} onChange={(e) => onChange(e.target.checked)} />
-        </Form.Item>
-      case 'date':
-        return <Form.Item
-          label={label}
-          name={name}
-          rules={rules}
-        >
-          <DatePicker style={{ width: '100%' }} value={value} onChange={(date) => onChange(date)} />
-        </Form.Item>
-      case 'file':
-        return <Upload>
-          <Button icon={<UploadOutlined />}>Upload</Button>
-        </Upload>
-      default:
-        return null
-    }
-  }
-
+const DynamicContentForm = <T extends ValueOptionsInput>({ inputs } : Props<T> ) => {
   return (
     <Row gutter={10}>
     {
-      inputs.map(input =>
-        <Col xs={24} sm={24} md={input.md} key={input.name}>
-          { getInpunt(input) }
+      inputs.map(({label, name, rules, type, value, onChange, styleFI}) =>
+        <Col xs={24} sm={24}>
+          <Form.Item
+            label={label}
+            name={name}
+            rules={rules}
+            style={styleFI}
+          >
+            { controls[type](value, onChange) }
+          </Form.Item>
         </Col>
       )
     }
@@ -75,4 +33,7 @@ const DynamicContentForm: FC<Props> = ({ inputs }) => {
   )
 }
 
-export default DynamicContentForm
+export default DynamicContentForm;
+
+
+
