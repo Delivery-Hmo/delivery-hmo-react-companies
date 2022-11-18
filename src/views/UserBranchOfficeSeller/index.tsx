@@ -29,7 +29,7 @@ const UserBranchOfficeSeller = () => {
           icon={<EditOutlined />}
           shape="circle"
           onClick={() => navigate('/vendedores/editar', { state: {
-            id: record.id, type: 'update'
+            data: record, type: 'update'
           }})}
           size="middle"
           style={{ color: '#fff', backgroundColor: '#ec9822'}}

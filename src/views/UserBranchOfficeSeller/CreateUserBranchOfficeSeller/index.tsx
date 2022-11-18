@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import DynamicContentForm from '../../../components/DynamicContentForm'
-import { Col, Form, message, Row, Spin } from 'antd'
+import { Col, Form, message, Row } from 'antd'
 import SaveButton from '../../../components/SaveButton';
-import { get, put } from '../../../service';
+import { put } from '../../../service';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { initUserBranchOfficeSeller } from '../../../constants'
 
 interface User {
   uid?: string;
@@ -23,28 +24,16 @@ export interface UserBranchOfficeSeller extends User {
   branchOffice?: string
 }
 
-const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
-  active: true,
-  description: '',
-  email: '',
-  name: '',
-  phone: '',
-  role: 'Vendedor',
-  password: '',
-  confirmPassword: ''
-}
-
 const CreateUserBranchOfficeSeller = () => {
   const { userAdmin } = useAuth();
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
-  const { id, type } = state;
-  const editing = !!id;
+  const { data, type } = state;
+  const editing = !!data?.id;
   const title = editing ? 'Editar' : 'Registrar';
 
-  const [infoLoading, setInfoLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
 
@@ -70,47 +59,15 @@ const CreateUserBranchOfficeSeller = () => {
     }
   }
 
-  // cambiar
   useEffect(() => {
     if(!userAdmin) return;
 
-    const controller = new AbortController();
     if(editing) {
-      const getInfo = async () => {
-        try {
-          setInfoLoading(true);
-          const info = await get(`userBranchOfficeSeller/getById?id=${id}`, controller);
-          const _seller = info as UserBranchOfficeSeller
-          setSeller(_seller);
-          form.setFieldsValue({..._seller})
-        } catch (error) {
-          console.log(error);
-          message.error("Error al obtener la información del vendedor.");
-        } finally {
-          setInfoLoading(false);
-        }
+        const _seller = data as UserBranchOfficeSeller
+        setSeller(_seller);
+        form.setFieldsValue({..._seller})
       }
-      getInfo();
-    }
-
-    return () => {
-      controller.abort();
-    }
-  }, [editing, form, id, userAdmin])
-
-  if (infoLoading) {
-    return <div
-    style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '90vh',
-      background: '#fff',
-    }}
-  >
-    <Spin tip="Cargando información..." size="large" />
-  </div>
-  }
+  }, [data, editing, form, userAdmin])
 
   return (
     <>
