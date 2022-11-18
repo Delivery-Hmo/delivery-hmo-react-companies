@@ -10,6 +10,6 @@ export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
       return;
     }
 
-    reject(new Error('Error al obtener el token.'));
+    reject("");
   }, reject);
 });
