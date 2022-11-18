@@ -33,7 +33,11 @@ export const post = async (url: string, body: Record<string, any>) => {
       method: 'POST',
       body: JSON.stringify(body),
       headers: token
-        ? { Authorization: 'Bearer ' + token, ContentType: 'application/x-www-form-urlencoded' }
+        ? { 
+            Authorization: 'Bearer ' + token, 
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          }
         : undefined
     }
   )
@@ -54,7 +58,7 @@ export const put = async (url: string, body: Record<string, any>) => {
       method: 'PUT',
       body: JSON.stringify(body),
       headers: token
-        ? { Authorization: 'Bearer ' + token, ContentType: 'application/x-www-form-urlencoded' }
+        ? { Authorization: 'Bearer ' + token}
         : undefined
     }
   )

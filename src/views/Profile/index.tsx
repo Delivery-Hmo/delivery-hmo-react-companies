@@ -5,7 +5,7 @@ import {
 import { UserOutlined, AliwangwangOutlined, SettingOutlined } from '@ant-design/icons'
 import DynamicContentForm from '../../components/DynamicContentForm'
 import { UserAdmin } from '../../interfaces/userAdmin'
-import { put } from '../../service'
+import { post } from '../../service'
 import {useAuth} from '../../context/AuthContext'
 
 const initUserAdmin: UserAdmin = {
@@ -34,11 +34,11 @@ const Perfil = () => {
 
   const onEditProfile = async () => {
     try {
-      const responce = await put("userAdmin/update", user);
+      const responce = await post("userAdmin/update", user);
       console.log(responce);
+      message.error("Datos modificados con éxito.");
     } catch (error) {
-      message.error("Error al editar los datos.");
-      console.log(error);
+      message.error("Error al editar los datos." + error);
     } finally {
       setLoading(true)
     }
