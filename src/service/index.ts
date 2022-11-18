@@ -44,3 +44,24 @@ export const post = async (url: string, body: Record<string, any>) => {
 
   return response.json()
 }
+
+export const put = async (url: string, body: Record<string, any>) => {
+  const token = await getCurrentToken()
+
+  const response = await fetch(
+    baseUrl + url,
+    {
+      method: 'PUT',
+      body: JSON.stringify(body),
+      headers: token
+        ? { Authorization: 'Bearer ' + token, "Content-Type": "application/json" }
+        : undefined
+    }
+  )
+
+  if (!response.ok) {
+    throw new Error('Error request!')
+  }
+
+  return response.json()
+}
