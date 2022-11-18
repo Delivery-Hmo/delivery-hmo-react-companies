@@ -1,39 +1,45 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { CustomInput, Option } from '../../interfaces';
-import { Row, Col, Select, Form, Checkbox, DatePicker, Button, Upload, } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import Input, { ValueOptionsInput } from "../Generics/Input";
+import { Input, Row, Col, Select, Form, Checkbox, DatePicker } from 'antd';
 
-interface Props<T extends ValueOptionsInput> {
-  inputs: Array<CustomInput<T>>;
+interface Props {
+  inputs: CustomInput[];
 }
 
-const controls: Record<string, <T extends ValueOptionsInput>(value: T, onChange: (value: T) => void) => JSX.Element> = {
-  input: <T extends ValueOptionsInput>(value: T, onChange: (value: T) => void) => <Input value={value} onChange={onChange} />,
+const typeInputs: Record<string, (input: CustomInput) => JSX.Element> = {
+  input: ({value, onChange, typeInput}: CustomInput) => <Input type={typeInput || 'text'} value={value} onChange={(e) => onChange(e.target.value)}/>,
+  select: ({value, onChange, options}: CustomInput) => <Select value={value} onChange={onChange}>,
+    {options?.map((option: Option) => <Select.Option key={option.value} value={option.value}>{option.text}</Select.Option>)}
+  </Select>,
+  textarea: ({value, onChange}: CustomInput) => <Input.TextArea value={value} onChange={(e) => onChange(e.target.value)} />,
+  checkbox: ({value, onChange}: CustomInput) => <Checkbox checked={value} onChange={(e) => onChange(e.target.checked)} />,
+  date: ({value, onChange}: CustomInput) => <DatePicker style={{ width: '100%' }} value={value} onChange={(date) => onChange(date)} />,
+  //file: ({value, onChange}: CustomInput) => <Upload> <Button icon={<UploadOutlined />}>Upload</Button> </Upload>
 }
 
-const DynamicContentForm = <T extends ValueOptionsInput>({ inputs } : Props<T> ) => {
+const DynamicContentForm: FC<Props> = ({ inputs }) => {
   return (
     <Row gutter={10}>
     {
-      inputs.map(({label, name, rules, type, value, onChange, styleFI}) =>
-        <Col xs={24} sm={24}>
-          <Form.Item
-            label={label}
-            name={name}
-            rules={rules}
-            style={styleFI}
-          >
-            { controls[type](value, onChange) }
-          </Form.Item>
-        </Col>
-      )
+      inputs.map((input) => {
+        const { label, name, md, rules, type, styleFI } = input;
+
+        return ( 
+          <Col xs={24} md={md} key={name}>
+            <Form.Item
+              label={label}
+              name={name}
+              rules={rules}
+              style={styleFI}
+            >
+            { typeInputs[type](input) }
+            </Form.Item>
+          </Col>
+        )
+      })
     }
     </Row>
   )
 }
 
 export default DynamicContentForm;
-
-
-
