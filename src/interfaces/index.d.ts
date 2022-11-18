@@ -1,3 +1,5 @@
+import { OptionsValue } from "../types"
+
 export interface CustomInput {
   type: 'input' | 'select' | 'date' | 'checkbox' | 'radio' | 'autocomplete' | 'textarea' | 'file';
   typeInput?: 'text' | 'number' | 'password' | 'email';
@@ -11,6 +13,7 @@ export interface CustomInput {
   readonly?: boolean;
   rules?: Rule[];
   onChange: (value: any) => void;
+  styleFI?: React.CSSProperties;
 }
 
 export interface Option {

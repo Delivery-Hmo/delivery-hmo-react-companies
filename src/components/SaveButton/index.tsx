@@ -1,5 +1,5 @@
+import  { FC } from 'react';
 import { Button as ButtonAnt, ButtonProps } from 'antd';
-import  { FC } from 'react'
 import { SaveOutlined } from "@ant-design/icons";
 
 const SaveButton: FC<ButtonProps> = ({...rest}) => {

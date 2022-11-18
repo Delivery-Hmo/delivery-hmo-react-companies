@@ -3,6 +3,12 @@ import { getCurrentToken } from '../utils';
 // const baseUrl = "https://www.deliapihmo.xyz/";
 const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_LOCAL: process.env.REACT_APP_SERVER;
 
+const getHeaders = (token: string) => ({
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+  Authorization: "Bearer " + token
+});
+
 export const get = async (url: string, controller?: AbortController) => {
   const token = await getCurrentToken()
 
@@ -10,9 +16,7 @@ export const get = async (url: string, controller?: AbortController) => {
     baseUrl + url,
     {
       method: 'GET',
-      headers: token
-        ? { Authorization: 'Bearer ' + token,  }
-        : undefined,
+      headers: getHeaders(token),
       signal: controller?.signal
     }
   );
@@ -32,13 +36,7 @@ export const post = async (url: string, body: Record<string, any>) => {
     {
       method: 'POST',
       body: JSON.stringify(body),
-      headers: token
-        ? { 
-            Authorization: 'Bearer ' + token, 
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-          }
-        : undefined
+      headers: getHeaders(token)
     }
   )
 
@@ -57,9 +55,7 @@ export const put = async (url: string, body: Record<string, any>) => {
     {
       method: 'PUT',
       body: JSON.stringify(body),
-      headers: token
-        ? { Authorization: 'Bearer ' + token}
-        : undefined
+      headers: getHeaders(token)
     }
   )
 
