@@ -1,7 +1,7 @@
 import { getCurrentToken } from '../utils';
 
 // const baseUrl = "https://www.deliapihmo.xyz/";
-const baseUrl = process.env.NODE_ENV === 'production' ? 'http://localhost:3001/': 'https://trpae4fija.execute-api.us-east-1.amazonaws.com/Delivery-Elastic/';
+const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_LOCAL: process.env.REACT_APP_SERVER;
 
 export const get = async (url: string, controller?: AbortController) => {
   const token = await getCurrentToken()
@@ -11,7 +11,7 @@ export const get = async (url: string, controller?: AbortController) => {
     {
       method: 'GET',
       headers: token
-        ? { Authorization: 'Bearer ' + token }
+        ? { Authorization: 'Bearer ' + token,  }
         : undefined,
       signal: controller?.signal
     }
@@ -33,7 +33,7 @@ export const post = async (url: string, body: Record<string, any>) => {
       method: 'POST',
       body: JSON.stringify(body),
       headers: token
-        ? { Authorization: 'Bearer ' + token }
+        ? { Authorization: 'Bearer ' + token, ContentType: 'application/x-www-form-urlencoded' }
         : undefined
     }
   )
@@ -54,7 +54,7 @@ export const put = async (url: string, body: Record<string, any>) => {
       method: 'PUT',
       body: JSON.stringify(body),
       headers: token
-        ? { Authorization: 'Bearer ' + token }
+        ? { Authorization: 'Bearer ' + token, ContentType: 'application/x-www-form-urlencoded' }
         : undefined
     }
   )

@@ -9,6 +9,7 @@ import { put } from '../../service'
 import {useAuth} from '../../context/AuthContext'
 
 const initUserAdmin: UserAdmin = {
+  id: '',
   uid: '',
   active: true,
   company: '',
@@ -25,6 +26,7 @@ const Perfil = () => {
   const {userAdmin} = useAuth()
 
   const [user, setUser] = useState<UserAdmin>(initUserAdmin)
+  user.id = userAdmin?.id
   const [loading, setLoading] = useState<boolean>(false)
   const sizes = {
     xs: 24, sm: 24, md: 24, lg: 6, xl: 6, xxl: 6
@@ -48,11 +50,6 @@ const Perfil = () => {
       message.error('Las contraseñas no coinciden.', 4)
     }
   }
-
-  useEffect(() => {
-    console.log(userAdmin)
-  }, [userAdmin])
-  
 
   return (
     <>

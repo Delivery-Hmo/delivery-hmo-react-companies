@@ -5,7 +5,7 @@ import { getAuth, signInWithEmailAndPassword, signInWithPopup, getAdditionalUser
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import '../../../assets/styles/Login.css'
 import { auth } from '../../../firebaseConfig'
-import { post } from '../../../service/index'
+import { post } from '../../../service'
 import { UserAdmin } from '../../../interfaces/userAdmin'
 
 type KeysProviders = 'facebook' | 'google';
