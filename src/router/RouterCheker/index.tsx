@@ -1,10 +1,10 @@
 import { Layout } from 'antd';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import MenuComponent from '../../components/Menu';
-import Breadcrumb from '../../components/Breadcrumb';
-import HeaderComponent from '../../components/Header';
+import { useAuth } from '../../context/authContext';
+import MenuComponent from '../../components/menu';
+import Breadcrumb from '../../components/breadcrumb';
+import HeaderComponent from '../../components/header';
 
 const RoterChecker = () => {
   const { user } = useAuth();

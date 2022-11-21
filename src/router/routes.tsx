@@ -1,7 +1,7 @@
 import { PathRouteProps } from 'react-router-dom';
-import Branches from '../views/Branches';
-import CreateBranch from '../views/Branches/CreateBranch';
-import LandingPage from '../views/LandingPage';
+import Branches from '../views/branches';
+import CreateBranch from '../views/branches/createBranch';
+import LandingPage from '../views/landingPage';
 
 const routes: PathRouteProps[] = [
   {

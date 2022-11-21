@@ -1,3 +1,4 @@
+import moment from "moment";
 import { BranchOffice } from "../interfaces/branchOffice";
 
 export const initBranch: BranchOffice = {
@@ -5,9 +6,9 @@ export const initBranch: BranchOffice = {
   name: "",
   address: "",
   geopoint: "",
-  phones: [],
+  phones: [0, 0, 0, 0, 0, 0],
   active: true,
-  horario: "",
+  schedule: [[moment(), moment()], [moment(), moment()], [moment(), moment()], [moment(), moment()], [moment(), moment()], [moment(), moment()], [moment(), moment()]],
   logo: "",
   comments: [],
   totolSales: 0,

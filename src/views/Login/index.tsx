@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { Card, Col, Row } from 'antd';
-import '../../assets/styles/Login.css';
-import RecoveryForm from './Forms/RecoveryForm';
-import LoginForm from './Forms/LoginForm';
+import '../../assets/styles/login.css';
+import RecoveryForm from './forms/recoveryForm';
+import LoginForm from './forms/loginForm';
 
 interface Props {
   open: boolean;

@@ -1,5 +1,5 @@
 
-import '../../assets/styles/LandingPage.css';
+import '../../assets/styles/landingPage.css';
 import { Button, Card, Col, Collapse, Divider, Layout, Row, Space, Tooltip, Typography } from 'antd';
 import logo from '../../assets/logo-hmo2.png';
 import { FacebookOutlined, GoogleOutlined, InstagramOutlined } from '@ant-design/icons';
@@ -60,6 +60,7 @@ const LandingPage = () => {
           >
             <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
               <Card
+                className='card'
                 style={{ padding: 12, borderRadius: 7 }}
                 hoverable
                 cover={<img alt="example" src={image1} />}
@@ -74,6 +75,7 @@ const LandingPage = () => {
             </Col>
             <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
               <Card
+                className='card'
                 style={{ padding: 12, borderRadius: 7 }}
                 hoverable
                 cover={<img alt="example" src={image2} width={100} />}
@@ -88,6 +90,7 @@ const LandingPage = () => {
             </Col>
             <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
               <Card
+                className='card'
                 style={{ padding: 12, borderRadius: 7 }}
                 hoverable
                 cover={<img alt="example" src={image3} />}
