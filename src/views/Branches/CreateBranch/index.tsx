@@ -8,7 +8,7 @@ import { CustomInput } from '../../../interfaces';
 
 const CreateBranch = () => {
   const [branch, setBranch] = useState<BranchOffice>(initBranch);
-  const [saving, setSaving] = useState(false);
+  const [saving] = useState(false);
 
   const { name, email, facebook, website, salesGoalByMonth, phones, schedule } = branch;
 
