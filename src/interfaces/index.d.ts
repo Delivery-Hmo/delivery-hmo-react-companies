@@ -1,15 +1,8 @@
-export interface User {
-  id?: number;
-  name?: string;
-  email?: string;
-  password?: string;
-  created_at?: string;
-  updated_at?: string;
-}
+import { OptionsValue } from "../types"
 
 export interface CustomInput {
-  type: "input" | "select" | "date" | "checkbox" | "radio" | "autocomplete" | "textarea" | "file";
-  typeInput?: "text" | "number" | "password" | "email";
+  type: 'input' | 'select' | 'date' | 'checkbox' | 'radio' | 'autocomplete' | 'textarea' | 'file';
+  typeInput?: 'text' | 'number' | 'password' | 'email';
   value: any;
   name: string;
   md: number;
@@ -20,6 +13,7 @@ export interface CustomInput {
   readonly?: boolean;
   rules?: Rule[];
   onChange: (value: any) => void;
+  styleFI?: React.CSSProperties;
 }
 
 export interface Option {

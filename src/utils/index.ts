@@ -1,4 +1,4 @@
-import { User, onIdTokenChanged, getAuth } from "firebase/auth";
+import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
 
 export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
   const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {

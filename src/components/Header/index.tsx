@@ -1,21 +1,22 @@
-import React, { useState } from 'react'
-import { Layout, Menu, Modal } from 'antd'
+import { ReactNode, useState } from 'react';
+import { Layout, Menu, Modal } from 'antd';
 import logo from '../../assets/logo-hmo2.png';
-import { IdcardOutlined, UserOutlined } from '@ant-design/icons'
+import { IdcardOutlined, UserOutlined } from '@ant-design/icons';
 import Login from '../../views/Login';
+import { useNavigate } from 'react-router-dom'
 
-
-const { Header } = Layout
+const { Header } = Layout;
 
 interface MenuItems {
   key: string;
-  icon: JSX.Element;
+  icon: ReactNode;
   label: string;
-  onClick?: () => void
+  onClick?: () => void;
 }
 
 const HeaderComponent = () => {
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
 
   const menuItems: MenuItems[] = [
     {
@@ -28,9 +29,9 @@ const HeaderComponent = () => {
       key: '1',
       icon: <IdcardOutlined />,
       label: 'Registrarse',
-      onClick: () => console.log('Registrarse')
-    },
-  ]
+      onClick: () => navigate('/registrarse')
+    }
+  ];
 
   return (
     <>
@@ -48,17 +49,15 @@ const HeaderComponent = () => {
           items={menuItems}
         />
       </Header>
-
-      {/* MODAL LOGIN */}
       <Modal
         open={open}
         onCancel={() => setOpen(false)}
         footer={null}
       >
-        <Login />
+        <Login open={open} />
       </Modal>
     </>
   )
 }
 
-export default HeaderComponent
+export default HeaderComponent;

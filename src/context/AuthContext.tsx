@@ -1,33 +1,56 @@
-import { useEffect, useState, useContext, createContext, FC, ReactNode } from "react";
-import FullLoader from "../components/FullLoader/FullLoader";
-import { User, onIdTokenChanged, getAuth } from "firebase/auth";
+import { useEffect, useState, useContext, createContext, FC, ReactNode } from 'react';
+import FullLoader from '../components/fullLoader/FullLoader';
+import { User, onIdTokenChanged } from 'firebase/auth';
+import { get } from '../service';
+import { UserAdmin } from '../interfaces/userAdmin';
+import { auth } from '../firebaseConfig';
 
-const AuthContext = createContext<{ user: User | null }>({
-  user: null
-});
+interface Auth {
+  user: User | null;
+  userAdmin: UserAdmin | null;
+}
 
 interface Props {
   children: ReactNode;
 }
 
+const AuthContext = createContext<Auth>({
+  user: null,
+  userAdmin: null
+});
+
 export const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [userAdmin, setUserAdmin] = useState<UserAdmin | null>(null);
   const [loading, setLoading] = useState<Boolean>(true);
 
   useEffect(() => {
-    const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {
+    const controller = new AbortController();
+
+    const uns = onIdTokenChanged(auth, async (user: User | null) => {
+      if (user) {
+        try {
+          const userAdmin: UserAdmin = await get('userAdmin/getByUid?uid=' + user.uid, controller);
+
+          setUserAdmin(userAdmin);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
       setUser(user);
       setLoading(false);
-    });
+    })
 
     return () => {
       uns();
-    };
-  }, []);
+      controller.abort();
+    }
+  }, [])
 
-  if(loading) return <FullLoader />;
+  if (loading) return <FullLoader />;
 
-  return <AuthContext.Provider value={{user}}>{children}</AuthContext.Provider>;
-};
+  return <AuthContext.Provider value={{ user, userAdmin }}>{children}</AuthContext.Provider>;
+}
 
 export const useAuth = () => useContext(AuthContext);

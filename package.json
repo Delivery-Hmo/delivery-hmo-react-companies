@@ -17,8 +17,7 @@
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1",
-    "typescript": "^4.8.3",
-    "web-vitals": "^3.0.1"
+    "typescript": "^4.8.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -43,5 +42,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.40.1",
+    "@typescript-eslint/parser": "^5.40.1",
+    "eslint": "^8.25.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }

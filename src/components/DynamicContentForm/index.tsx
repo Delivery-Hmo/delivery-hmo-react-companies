@@ -1,77 +1,44 @@
-import { FC, ReactNode } from "react";
-import { CustomInput, Option } from "../../interfaces";
-import { Input, Row, Col, Select, Form, Checkbox, DatePicker, Button, Upload } from "antd";
-import { UploadOutlined } from '@ant-design/icons';
+import { FC } from 'react';
+import { CustomInput, Option } from '../../interfaces';
+import { Input, Row, Col, Select, Form, Checkbox, DatePicker } from 'antd';
 
 interface Props {
   inputs: CustomInput[];
 }
 
-const DynamicContentForm: FC<Props> = ({inputs}) => {
-  const getInpunt = (input: CustomInput): ReactNode | null => {
-    let { type, typeInput, value, label, name, rules, options, onChange } = input;
+const typeInputs: Record<string, (input: CustomInput) => JSX.Element> = {
+  input: ({value, onChange, typeInput}: CustomInput) => <Input type={typeInput || 'text'} value={value} onChange={(e) => onChange(e.target.value)}/>,
+  select: ({value, onChange, options}: CustomInput) => <Select value={value} onChange={onChange}>,
+    {options?.map((option: Option) => <Select.Option key={option.value} value={option.value}>{option.text}</Select.Option>)}
+  </Select>,
+  textarea: ({value, onChange}: CustomInput) => <Input.TextArea value={value} onChange={(e) => onChange(e.target.value)} />,
+  checkbox: ({value, onChange}: CustomInput) => <Checkbox checked={value} onChange={(e) => onChange(e.target.checked)} />,
+  date: ({value, onChange}: CustomInput) => <DatePicker style={{ width: '100%' }} value={value} onChange={(date) => onChange(date)} />,
+  //file: ({value, onChange}: CustomInput) => <Upload> <Button icon={<UploadOutlined />}>Upload</Button> </Upload>
+}
 
-    switch (type) {
-      case "input":
-        return <Form.Item
-          label={label}
-          name={name}
-          rules={rules}
-        >
-          <Input type={typeInput || "text"} value={value} onChange={(e) => onChange(e.target.value)}/>
-        </Form.Item>
-      case "select":
-        return <Form.Item
-          label={label}
-          name={name}
-          rules={rules}
-        >
-          <Select value={value} onChange={onChange}>
-            {options?.map((option: Option) => <Select.Option key={option.value} value={option.value}>{option.text}</Select.Option>)}
-          </Select>
-        </Form.Item>
-      case "textarea": 
-        return <Form.Item
-          label={label}
-          name={name}
-          rules={rules}
-        >
-          <Input.TextArea value={value} onChange={(e) => onChange(e.target.value)} />
-        </Form.Item>
-      case "checkbox":
-        return <Form.Item
-          label={label}
-          name={name}
-        >
-          <Checkbox checked={value} onChange={(e) => onChange(e.target.checked)} />
-        </Form.Item>
-      case "date":
-        return <Form.Item
-          label={label}
-          name={name}
-          rules={rules}
-        >
-          <DatePicker style={{width: "100%"}} value={value} onChange={(date) => onChange(date)} />
-        </Form.Item>
-      case "file":
-        return <Upload>
-          <Button icon={<UploadOutlined />}>Upload</Button>
-        </Upload>
-      default:
-        return null;
-    }
-  }
-
+const DynamicContentForm: FC<Props> = ({ inputs }) => {
   return (
     <Row gutter={10}>
     {
-      inputs.map(input => 
-        <Col xs={24} sm={24} md={input.md} key={input.name}>
-          { getInpunt(input) }
-        </Col>
-      )
+      inputs.map((input) => {
+        const { label, name, md, rules, type, styleFI } = input;
+
+        return ( 
+          <Col xs={24} md={md} key={name}>
+            <Form.Item
+              label={label}
+              name={name}
+              rules={rules}
+              style={styleFI}
+            >
+            { typeInputs[type](input) }
+            </Form.Item>
+          </Col>
+        )
+      })
     }
-    </Row>  
+    </Row>
   )
 }
 

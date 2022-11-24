@@ -130,10 +130,6 @@
   margin: 0 5px
 }
 
-.ant-col {
-  margin: 0 auto;
-}
-
 .main-col {
   margin-top: 15vh;
 }
@@ -153,10 +149,6 @@
 
   .ant-row-center {
     margin: auto !important;
-  }
-
-  .ant-col {
-    margin: auto;
   }
 
   .main-col {

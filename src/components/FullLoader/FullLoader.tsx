@@ -5,14 +5,14 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const FullLoader = () => {
   return <div style={{
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    WebkitTransform: "translate(-50%, -50%)",
-    transform: "translate(-50%, -50%)"
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    WebkitTransform: 'translate(-50%, -50%)',
+    transform: 'translate(-50%, -50%)'
   }}>
-    <Spin indicator={antIcon} style={{color: "#9a2c31"}}/>
-  </div>;
-};
+    <Spin indicator={antIcon} style={{color: "#304878"}} />
+  </div>
+}
 
 export default FullLoader;

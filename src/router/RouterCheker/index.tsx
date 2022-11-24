@@ -2,10 +2,11 @@ import { Layout } from 'antd';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import MenuComponent from '../../components/Menu';
-import HeaderComponent from '../../components/Header';
+import MenuComponent from '../../components/menu';
+import Breadcrumb from '../../components/breadcrumb';
+import HeaderComponent from '../../components/header';
 
-const blockedPathsWithoAuthentication = ["/registrarse", "/"]
+const blockedPathsWithoAuthentication = ["/registrarse", "/"];
 
 const RoterChecker = () => {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ const RoterChecker = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!user && (pathname !== "/" && pathname !== "/registrarse")) { // regresar login para poder loguearse
+    if(!user && (pathname !== "/" && pathname !== "/registrarse")) {
       navigate('/');
       return;
     }
@@ -21,12 +22,13 @@ const RoterChecker = () => {
     if(user && blockedPathsWithoAuthentication.includes(pathname)) {
       navigate('/sucursales');
     }
-  }, [user, pathname, navigate]);
-  
+  }, [user, pathname, navigate])
+
   return (
-    <Layout style={{minHeight: "100vh"}}>
-      { user ? <MenuComponent /> : <HeaderComponent />}
-      <Layout.Content style={{padding: user ? 80 : 0}}>
+    <Layout style={{ minHeight: '100vh' }}>
+      { user ? <MenuComponent /> : <HeaderComponent /> }
+      <Layout.Content style={{ padding: user ? "5vh" : 0 }}>
+        <Breadcrumb />
         <Outlet />
       </Layout.Content>
     </Layout>

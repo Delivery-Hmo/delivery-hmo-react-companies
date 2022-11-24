@@ -1,30 +1,46 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Layout, Menu } from "antd";
-import menuItems from "./menuItems";
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Avatar, Layout, Menu, Row } from 'antd';
+import menuItems from './menuItems';
+import { UserOutlined } from '@ant-design/icons'
+import { useAuth } from '../../context/AuthContext';
 
 const { Sider } = Layout;
 
 const MenuComponent = () => {
-  const [collapsed, setCollapsed] = useState<boolean | undefined>(true);
-  const location = useLocation()
+  const [collapsed, setCollapsed] = useState<boolean | undefined>(false);
+  const location = useLocation();
+  const { userAdmin } = useAuth();
 
   const onCollapse = (collapsed: boolean | undefined) => setCollapsed(collapsed);
   
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-      <Menu 
-        mode="inline"
-        theme="dark" 
-        selectedKeys={[location.pathname]} 
-        items={menuItems.map(item => ({
-          key: item.key,
-          title: item.title,
-          label: item.label,
-          icon: item.icon,
-          children: item.childrens,
-          onClick: () => item.onClick && item.onClick()
-        }))}
+    <Sider 
+      collapsible 
+      collapsed={collapsed} 
+      onCollapse={onCollapse}
+    >
+      <br />
+      <Row 
+        justify="center" 
+        style={{margin: 15, textAlign: "center"}}
+      >
+        <Avatar size={collapsed ? 48 : 64} icon={<UserOutlined />} />
+        { 
+          !collapsed && <div style={{color: "white"}}>
+            <div style={{marginTop: 20}}>
+              { userAdmin?.email }
+            </div>
+            <div>
+              { userAdmin?.role }
+            </div>
+          </div>
+        }
+      </Row>
+      <Menu
+        theme="dark"
+        selectedKeys={["/" + location.pathname.split("/")[1]]}
+        items={menuItems}
       />
     </Sider>
   )

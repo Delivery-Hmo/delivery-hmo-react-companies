@@ -1,16 +1,35 @@
 import { PathRouteProps } from 'react-router-dom';
-import Branches from '../views/Branches';
-import LandingPage from '../views/LandingPage';
-import SingUp from '../views/SingUp';
+import Branches from '../views/branches';
+import CreateBranch from '../views/branches/createBranch';
+import LandingPage from '../views/landingPage';
+import SingUp from '../views/singUp';
+import UserBranchOfficeSeller from '../views/userBranchOfficeSeller';
+import CreateUserBranchOfficeSeller from '../views/userBranchOfficeSeller/createUserBranchOfficeSeller';
 
 const routes: PathRouteProps[] = [
   {
     path: '/',
-    element: <LandingPage />,
+    element: <LandingPage />
   },
   {
     path: '/sucursales',
-    element: <Branches />,
+    element: <Branches />
+  },
+  {
+    path: '/sucursales/crear',
+    element: <CreateBranch />
+  },
+  {
+    path: '/vendedores',
+    element: <UserBranchOfficeSeller />
+  },
+  {
+    path: '/vendedores/crear',
+    element: <CreateUserBranchOfficeSeller />
+  },
+  {
+    path: '/vendedores/editar',
+    element: <CreateUserBranchOfficeSeller />
   },
   {
     path: '/registrarse',
@@ -18,8 +37,8 @@ const routes: PathRouteProps[] = [
   },
   {
     path: '*',
-    element: <div>404 not found</div>,
+    element: <div>404 not found</div>
   }
-];
+]
 
 export default routes;

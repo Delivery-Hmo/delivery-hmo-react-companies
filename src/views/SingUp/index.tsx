@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Form, Button, Row, Col, message } from 'antd';
 import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAdmin } from '../../interfaces/user';
-import DynamicContentForm from '../../components/DynamicContentForm';
-import { post } from '../../service/branchOffice';
+import { post } from '../../service';
+import DynamicContentForm from '../../components/dynamicContentForm';
 
 const initUserAdmin: UserAdmin = {
   active: true,
