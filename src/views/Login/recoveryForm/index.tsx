@@ -66,4 +66,4 @@ const RecoveryForm = () => {
   )
 }
 
-export default RecoveryForm
+export default RecoveryForm;

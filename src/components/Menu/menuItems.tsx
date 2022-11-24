@@ -1,4 +1,4 @@
-import { UserOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons';
+import { DollarCircleOutlined, UserOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons';
 import { getAuth } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 
@@ -14,6 +14,12 @@ const menuItems = [
     title: '',
     label: <Link to="/sucursales">Sucursales</Link>,
     icon: <ShopOutlined style={styleIcon} />
+  },
+  {
+    key: '/vendedores',
+    title: '',
+    label: <Link to="/vendedores">Vendedores</Link>,
+    icon: <DollarCircleOutlined style={styleIcon} />
   },
   {
     key: '/usuarios',

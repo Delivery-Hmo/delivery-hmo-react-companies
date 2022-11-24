@@ -6,25 +6,27 @@ import MenuComponent from '../../components/menu';
 import Breadcrumb from '../../components/breadcrumb';
 import HeaderComponent from '../../components/header';
 
+const blockedPathsWithoAuthentication = ["/registrarse", "/"];
+
 const RoterChecker = () => {
   const { user } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user && pathname !== '/') {
+    if(!user && (pathname !== "/" && pathname !== "/registrarse")) {
       navigate('/');
       return;
     }
 
-    if (user && pathname === '/') {
+    if(user && blockedPathsWithoAuthentication.includes(pathname)) {
       navigate('/sucursales');
     }
   }, [user, pathname, navigate])
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      { user ? <MenuComponent /> :<HeaderComponent /> }
+      { user ? <MenuComponent /> : <HeaderComponent /> }
       <Layout.Content style={{ padding: user ? "5vh" : 0 }}>
         <Breadcrumb />
         <Outlet />
