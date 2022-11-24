@@ -8,7 +8,7 @@ import { BranchOffice } from '../../../interfaces/branchOffice';
 
 const CreateBranch = () => {
   const [branch, setBranch] = useState<BranchOffice>(initBranch);
-  const [saving, setSaving] = useState(false);
+  const [saving] = useState(false);
 
   return (
     <div>

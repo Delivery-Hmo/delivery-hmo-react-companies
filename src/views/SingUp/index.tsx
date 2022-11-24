@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Form, Button, Row, Col, message } from 'antd';
 import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAdmin } from '../../interfaces/user';
-import { post } from '../../service';
+import { post } from '../../services';
 import DynamicContentForm from '../../components/dynamicContentForm';
 
 const initUserAdmin: UserAdmin = {

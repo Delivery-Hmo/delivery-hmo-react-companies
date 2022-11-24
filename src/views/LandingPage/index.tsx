@@ -1,5 +1,5 @@
 
-import '../../assets/styles/LandingPage.css';
+import '../../assets/styles/landingPage.css';
 import { Button, Card, Col, Collapse, Divider, Layout, Row, Space, Tooltip, Typography } from 'antd';
 import logo from '../../assets/logo-hmo2.png';
 import { FacebookOutlined, GoogleOutlined, InstagramOutlined } from '@ant-design/icons';

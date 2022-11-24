@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import DynamicContentForm from '../../../components/dynamicContentForm'
 import { Col, Form, message, Row, Spin } from 'antd'
 import SaveButton from '../../../components/saveButton';
-import { get, put } from '../../../service';
+import { get, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '../../../context/authContext';
 
 interface User {
   uid?: string;

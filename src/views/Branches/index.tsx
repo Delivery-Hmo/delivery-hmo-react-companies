@@ -1,7 +1,7 @@
-import { Button, Col, message, Row, Table } from 'antd';
+import { Col, message, Row, Table } from 'antd';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { get } from '../../service';
+import { useAuth } from '../../context/authContext';
+import { get } from '../../services';
 import { useNavigate } from 'react-router-dom';
 import RegisterButton from '../../components/registerButton';
 
