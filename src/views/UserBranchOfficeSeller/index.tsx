@@ -4,7 +4,7 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router-dom';
 import RegisterButton from '../../components/registerButton';
-import { UserBranchOfficeSeller as InterfaceSeller } from './createUserBranchOfficeSeller';
+import { UserBranchOfficeSeller as InterfaceSeller } from './create';
 import { useAuth } from '../../context/authContext';
 import { get } from '../../services';
 
