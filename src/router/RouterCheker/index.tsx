@@ -1,10 +1,12 @@
 import { Layout } from 'antd';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import MenuComponent from '../../components/Menu';
-import Breadcrumb from '../../components/Breadcrumb';
-import HeaderComponent from '../../components/Header';
+import { useAuth } from '../../context/authContext';
+import MenuComponent from '../../components/menu';
+import Breadcrumb from '../../components/breadcrumb';
+import HeaderComponent from '../../components/header';
+
+const blockedPathsWithoAuthentication = ["/registrarse", "/"];
 
 const RoterChecker = () => {
   const { user } = useAuth();
@@ -12,19 +14,19 @@ const RoterChecker = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user && pathname !== '/') {
+    if(!user && (pathname !== "/" && pathname !== "/registrarse")) {
       navigate('/');
       return;
     }
 
-    if (user && pathname === '/') {
+    if(user && blockedPathsWithoAuthentication.includes(pathname)) {
       navigate('/sucursales');
     }
   }, [user, pathname, navigate])
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      { user ? <MenuComponent /> :<HeaderComponent /> }
+      { user ? <MenuComponent /> : <HeaderComponent /> }
       <Layout.Content style={{ padding: user ? "5vh" : 0 }}>
         <Breadcrumb />
         <Outlet />

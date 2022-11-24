@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button, Form, Input } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-import '../../../assets/styles/Login.css'
+import '../../../assets/styles/login.css'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '../../../firebaseConfig'
 
@@ -66,4 +66,4 @@ const RecoveryForm = () => {
   )
 }
 
-export default RecoveryForm
+export default RecoveryForm;

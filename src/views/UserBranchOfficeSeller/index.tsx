@@ -3,10 +3,10 @@ import { Button, Col, Empty, message, Row, Space, Table, Tooltip } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router-dom';
-import RegisterButton from '../../components/RegisterButton';
-import { UserBranchOfficeSeller as InterfaceSeller } from './CreateUserBranchOfficeSeller';
-import { useAuth } from '../../context/AuthContext';
-import { get } from '../../service';
+import RegisterButton from '../../components/registerButton';
+import { UserBranchOfficeSeller as InterfaceSeller } from './createUserBranchOfficeSeller';
+import { useAuth } from '../../context/authContext';
+import { get } from '../../services';
 
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 

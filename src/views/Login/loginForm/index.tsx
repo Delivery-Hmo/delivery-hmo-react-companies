@@ -1,12 +1,11 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react'
-import { Avatar, Button, Form, Input, message } from 'antd'
-
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, getAdditionalUserInfo, FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth'
+import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Avatar, Button, Form, Input, message } from 'antd';
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, getAdditionalUserInfo, FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import '../../../assets/styles/Login.css'
-import { auth } from '../../../firebaseConfig'
-import { post } from '../../../service'
-import { UserAdmin } from '../../../interfaces/userAdmin'
+import '../../../assets/styles/login.css';
+import { auth } from '../../../firebaseConfig';
+import { post } from '../../../services';
+import { UserAdmin } from '../../../interfaces/userAdmin';
 
 type KeysProviders = 'facebook' | 'google';
 
