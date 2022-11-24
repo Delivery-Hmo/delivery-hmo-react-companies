@@ -8,7 +8,7 @@ const styleIcon = {
   fontSize: 20
 };
 
-export const menuItems = [
+const menuItems = [
   {
     key: '/sucursales',
     title: '',
