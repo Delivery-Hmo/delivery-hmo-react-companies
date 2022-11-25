@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import DynamicContentForm from '../../../components/DynamicContentForm'
 import { Col, Form, message, Row } from 'antd'
 import SaveButton from '../../../components/SaveButton';
-import { put } from '../../../service';
+import { post, put } from '../../../service';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { initUserBranchOfficeSeller } from '../../../constants'
@@ -40,15 +40,24 @@ const CreateUserBranchOfficeSeller = () => {
   const onFinish = async () => {
     try {
       setSaveLoading(true);
-      const { id, uid, name, email, phone, description, password, confirmPassword } = seller
-      if (confirmPassword !== password) {
-        message.error('Las contraseñas no coinciden.')
-        return false;
+      const { id, uid, name, email, phone, description, password, confirmPassword, active } = seller
+      if (editing) {
+        if(password?.length > 0 && confirmPassword !== password) {
+          message.error('Las contraseñas no coinciden.')
+          return false;
+        }
+        await put(`userBranchOfficeSeller/${type}`, {
+          id, uid, name, email, phone, description, password, active
+        });
+      }else{
+        if (confirmPassword !== password) {
+          message.error('Las contraseñas no coinciden.')
+          return false;
+        }
+        await post(`userBranchOfficeSeller/${type}`, {
+          id, uid, name, email, phone, description, password, active
+        })
       }
-
-      await put(`userBranchOfficeSeller/${type}`, {
-        id, uid, name, email, phone, description, password
-      })
       message.success('Información guardada con éxito.')
       navigate('/vendedores')
     } catch (error) {
@@ -80,10 +89,6 @@ const CreateUserBranchOfficeSeller = () => {
             form={form}
             layout='vertical'
             onFinish={onFinish}
-            style={{
-              backgroundColor: '#fff',
-              padding: '15px',
-            }}
           >
             <DynamicContentForm inputs={[
               {
@@ -151,12 +156,14 @@ const CreateUserBranchOfficeSeller = () => {
                 md: 8
               }
             ]}/>
-            <SaveButton
-              htmlType='submit'
-              loading={saveLoading}
-            >
-              Guardar vendedor
-            </SaveButton>
+            <Form.Item>
+              <SaveButton
+                htmlType='submit'
+                loading={saveLoading}
+              >
+                Guardar vendedor
+              </SaveButton>
+            </Form.Item>
           </Form>
         </Col>
       </Row>
