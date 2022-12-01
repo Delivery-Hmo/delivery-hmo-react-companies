@@ -5,7 +5,7 @@ import {
 import { UserOutlined, AliwangwangOutlined, SettingOutlined } from '@ant-design/icons'
 import DynamicContentForm from '../../components/dynamicContentForm'
 import { UserAdmin } from '../../interfaces/userAdmin'
-import { post } from '../../services'
+import { put } from '../../services'
 import {useAuth} from '../../context/authContext'
 
 const initUserAdmin: UserAdmin = {
@@ -34,7 +34,7 @@ const Perfil = () => {
 
   const onEditProfile = async () => {
     try {
-      const responce = await post("userAdmin/update", user);
+      const responce = await put("userAdmin/update", user);
       console.log(responce);
       message.error("Datos modificados con éxito.");
     } catch (error) {
@@ -45,11 +45,11 @@ const Perfil = () => {
  
   }
 
-  const onFinish = async () => {
-    if (user.password !== user.repeatPassword) {
-      message.error('Las contraseñas no coinciden.', 4)
-    }
-  }
+  // const onFinish = async () => {
+  //   if (user.password !== user.repeatPassword) {
+  //     message.error('Las contraseñas no coinciden.', 4)
+  //   }
+  // }
 
   return (
     <>

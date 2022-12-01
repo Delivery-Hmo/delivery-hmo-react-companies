@@ -65,3 +65,22 @@ export const put = async (url: string, body: Record<string, any>) => {
 
   return response.json()
 }
+
+export const patch = async (url: string, body: Record<string, any>) => {
+  const token = await getCurrentToken()
+
+  const response = await fetch(
+    baseUrl + url,
+    {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      headers: getHeaders(token)
+    }
+  )
+
+  if (!response.ok) {
+    throw new Error('Error request!')
+  }
+
+  return response.json()
+}
