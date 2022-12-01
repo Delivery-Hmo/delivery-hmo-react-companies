@@ -1,4 +1,5 @@
 import { BranchOffice } from "../interfaces/branchOffice";
+import { UserBranchOfficeSeller } from "../views/UserBranchOfficeSeller/CreateUserBranchOfficeSeller"
 
 export const initBranch: BranchOffice = {
   userAdmin: "",
@@ -15,4 +16,15 @@ export const initBranch: BranchOffice = {
   email: "",
   website: "",
   facebook: ""
+}
+
+export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
+  active: true,
+  description: '',
+  email: '',
+  name: '',
+  phone: '',
+  role: 'Vendedor',
+  password: '',
+  confirmPassword: ''
 }
