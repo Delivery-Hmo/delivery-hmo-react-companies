@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Card, Col, Row } from 'antd';
-import '../../assets/styles/Login.css';
+import '../../assets/styles/login.css';
 import RecoveryForm from './Forms/RecoveryForm';
 import LoginForm from './Forms/LoginForm';
 
