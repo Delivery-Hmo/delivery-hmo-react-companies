@@ -1,7 +1,7 @@
 import { getCurrentToken } from '../utils';
 
-// const baseUrl = "https://www.deliapihmo.xyz/";
-const baseUrl = 'http://localhost:3001/';
+const baseUrl = process.env.REACT_APP_SERVER_ELASTIC;
+//const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
 
 const getHeaders = (token: string) => ({
   Accept: 'application/json',

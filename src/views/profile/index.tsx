@@ -51,6 +51,11 @@ const Perfil = () => {
   //   }
   // }
 
+useEffect(() => {
+ console.log(user.id)
+}, [user.id])
+
+
   return (
     <>
     <Row gutter={15}>
