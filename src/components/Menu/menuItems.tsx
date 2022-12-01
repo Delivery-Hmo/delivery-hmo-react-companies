@@ -1,8 +1,12 @@
+<<<<<<< .merge_file_txwgTq
 <<<<<<< .merge_file_NBbpbW
 import { UserOutlined, SettingOutlined, ShopOutlined, LoginOutlined, SolutionOutlined } from '@ant-design/icons';
 =======
 import { DollarCircleOutlined, UserOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons';
 >>>>>>> .merge_file_BK3KgW
+=======
+import { DollarCircleOutlined, UserOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons';
+>>>>>>> .merge_file_gLzuZq
 import { getAuth } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 

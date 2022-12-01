@@ -2,12 +2,17 @@ import { PathRouteProps } from 'react-router-dom';
 import Branches from '../views/Branches';
 import CreateBranch from '../views/Branches/CreateBranch';
 import LandingPage from '../views/LandingPage';
+<<<<<<< .merge_file_Gc3ycv
 <<<<<<< .merge_file_W5oALV
 import Profile from '../views/Profile';
 =======
 import UserBranchOfficeSeller from '../views/UserBranchOfficeSeller';
 import CreateUserBranchOfficeSeller from '../views/UserBranchOfficeSeller/CreateUserBranchOfficeSeller';
 >>>>>>> .merge_file_BVw6QV
+=======
+import UserBranchOfficeSeller from '../views/UserBranchOfficeSeller';
+import CreateUserBranchOfficeSeller from '../views/UserBranchOfficeSeller/CreateUserBranchOfficeSeller';
+>>>>>>> .merge_file_iL2N9u
 
 const routes: PathRouteProps[] = [
   {
