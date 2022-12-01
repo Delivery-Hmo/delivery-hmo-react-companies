@@ -15,12 +15,12 @@ const UserBranchOfficeSeller = () => {
   const { userAdmin } = useAuth();
   const [limit, setLimit] = useState(20);
   const [page, setPage] = useState(1);
-  const [sellers, setSellers] = useState<InterfaceSeller[]>([])
-  const [loading, setLoading] = useState(false)
+  const [sellers, setSellers] = useState<InterfaceSeller[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const headerStyle = {
     fontWeight: 'bold',
-  }
+  };
 
   const ActionsButtons = ({ record }: { record: InterfaceSeller }) => (
     <Space>
