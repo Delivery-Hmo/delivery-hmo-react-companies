@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import DynamicContentForm from '../../../components/DynamicContentForm'
+import DynamicContentForm from '../../../components/dynamicContentForm'
 import { Col, Form, message, Row } from 'antd'
-import SaveButton from '../../../components/SaveButton';
+import SaveButton from '../../../components/saveButton';
 import { post, put } from '../../../service';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '../../../context/authContext';
 import { initUserBranchOfficeSeller } from '../../../constants'
 
 interface User {

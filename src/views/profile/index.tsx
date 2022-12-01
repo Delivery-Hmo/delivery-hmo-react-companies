@@ -3,10 +3,10 @@ import {
   Card, Col, Row, Avatar, Divider, Form, Tabs, message, Button
 } from 'antd'
 import { UserOutlined, AliwangwangOutlined, SettingOutlined } from '@ant-design/icons'
-import DynamicContentForm from '../../components/DynamicContentForm'
+import DynamicContentForm from '../../components/dynamicContentForm'
 import { UserAdmin } from '../../interfaces/userAdmin'
 import { post } from '../../service'
-import {useAuth} from '../../context/AuthContext'
+import {useAuth} from '../../context/authContext'
 
 const initUserAdmin: UserAdmin = {
   id: '',

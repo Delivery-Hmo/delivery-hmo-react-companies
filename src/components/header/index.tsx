@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react';
 import { Layout, Menu, Modal } from 'antd';
 import logo from '../../assets/logo-hmo2.png';
 import { IdcardOutlined, UserOutlined } from '@ant-design/icons';
-import Login from '../../views/Login';
+import Login from '../../views/login';
 import { useNavigate } from 'react-router-dom'
 //
 const { Header } = Layout;

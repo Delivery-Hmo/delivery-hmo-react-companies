@@ -1,5 +1,5 @@
 import { BranchOffice } from "../interfaces/branchOffice";
-import { UserBranchOfficeSeller } from "../views/UserBranchOfficeSeller/CreateUserBranchOfficeSeller"
+import { UserBranchOfficeSeller } from "../views/userBranchOfficeSeller/createUserBranchOfficeSeller"
 
 export const initBranch: BranchOffice = {
   userAdmin: "",

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Col, Form, Row } from 'antd';
-import SaveButton from '../../../components/SaveButton';
-import DynamicContentForm from '../../../components/DynamicContentForm';
+import SaveButton from '../../../components/saveButton';
+import DynamicContentForm from '../../../components/dynamicContentForm';
 import { initBranch } from '../../../constants';
 import { BranchOffice } from '../../../interfaces/branchOffice';
 

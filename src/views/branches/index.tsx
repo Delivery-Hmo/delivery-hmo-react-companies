@@ -1,9 +1,9 @@
 import { Button, Col, message, Row, Table } from 'antd';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/authContext';
 import { get } from '../../service';
 import { useNavigate } from 'react-router-dom';
-import RegisterButton from '../../components/RegisterButton';
+import RegisterButton from '../../components/registerButton';
 
 const Branches = () => {
   const { userAdmin } = useAuth();
