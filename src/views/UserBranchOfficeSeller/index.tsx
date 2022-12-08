@@ -7,6 +7,7 @@ import RegisterButton from '../../components/RegisterButton';
 import { UserBranchOfficeSeller as InterfaceSeller } from './CreateUserBranchOfficeSeller';
 import { useAuth } from '../../context/AuthContext';
 import { get, patch } from '../../service';
+import { dialogDelete } from '../../utils';
 
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 const { Search } = Input
@@ -26,27 +27,15 @@ const UserBranchOfficeSeller = () => {
     fontWeight: 'bold',
   }
 
-  const deleteSeller = ( record: InterfaceSeller) => {
-    const { name, id } = record
-    Modal.confirm({
-      title: "Eliminar",
-      icon: <CloseCircleOutlined style={{ color: "red" }} />,
-      content: `¿Desea eliminar al Vendedor "${name}"?`,
-      okText: "Sí",
-      cancelText: "No",
-      okButtonProps: { style: { backgroundColor: 'red', color: 'white' } },
-      closable: true,
-      onOk: async () => {
-        try {
-          await patch(`userBranchOfficeSeller/disable`, { id, active: false });
-          message.success(`El vendedor: ${name}, ha sido eliminado con éxito.`)
-          setStaring(true);
-        } catch (error) {
-          console.log(error);
-          message.error('Ocurrió un problema al eliminar al vendedor: ' + name)
-        }
-      },
-    });
+  const deleteSeller = async ( record: InterfaceSeller) => {
+    try {
+      const { id } = record
+    const fun = ()=> patch(`userBranchOfficeSeller/disable`, { id, active: false });
+    await dialogDelete(fun, "Vendedor eliminado con éxito.")
+    setStaring(true)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const ActionsButtons = ({ record }: { record: InterfaceSeller }) => (

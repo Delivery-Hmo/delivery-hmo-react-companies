@@ -69,13 +69,10 @@ const CreateUserBranchOfficeSeller = () => {
   }
 
   useEffect(() => {
-    if(!userAdmin) return;
-
-    if(editing) {
-        const _seller = data as UserBranchOfficeSeller
-        setSeller(_seller);
-        form.setFieldsValue({..._seller})
-      }
+    if(!userAdmin || !editing) return;
+      const _seller = data as UserBranchOfficeSeller
+      setSeller(_seller);
+      form.setFieldsValue(_seller)
   }, [data, editing, form, userAdmin])
 
   return (
