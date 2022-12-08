@@ -55,39 +55,16 @@ const Map: FC<Props> = ({ branch }) => {
     </div>
   )
 
-  const { CIRCLE, MARKER } = window.google.maps.drawing?.OverlayType;
+  //const { CIRCLE, MARKER } = window.google.maps.drawing?.OverlayType;
 
   const onCircleComplete = (_circle: google.maps.Circle) => {
-    const dms = options?.drawingControlOptions?.drawingModes;
-
+    circle?.setMap(null);
     setCircle(_circle);
-    setDraginModeS(dms?.some(dm => dm === MARKER) ? MARKER : undefined);
-    setOptions({
-      ...options,
-      drawingControlOptions: {
-        ...options?.drawingControlOptions,
-        drawingModes: dms?.filter(dm => dm !== CIRCLE),
-      },
-    });
   }
 
   const onMarkerComplete = (_marker: google.maps.Marker) => {
+    marker?.setMap(null)
     setMarker(_marker);
-  }
-
-  const clearCircle = () => {
-    if (!circle) return;
-
-    circle.setMap(null);
-
-    setCircle(undefined);
-    setOptions({
-      drawingControl: true,
-      drawingControlOptions: {
-        ...options?.drawingControlOptions,
-        drawingModes: [MARKER, CIRCLE],
-      },
-    })
   }
 
   const { latLang, radius } = branch;
@@ -95,33 +72,9 @@ const Map: FC<Props> = ({ branch }) => {
   return (
     <Card>
       <Row 
-        justify="space-between" 
         style={{ marginBottom: 8 }}
       >
-        <Col>
-          <h3>Ubicación y radio de entrega</h3>
-        </Col>
-        <Col>
-          <Row gutter={10}>
-            <Col>
-              <Button 
-                type="primary" 
-                icon={<ReloadOutlined />} 
-                onClick={clearCircle}
-                children="Ubicación"
-              />
-            </Col>
-            <Col>
-              <Button 
-                type="primary" 
-                icon={<ReloadOutlined />} 
-                onClick={clearCircle}
-                children="Radio"
-              />
-            </Col>
-          </Row>
-        </Col>
-     
+        <h3>Ubicación y radio de entrega</h3>
       </Row>
       <GoogleMap
         mapContainerStyle={containerStyle}
