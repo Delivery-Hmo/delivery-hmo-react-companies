@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Button, Col, Empty, Form, Input, Modal, message, Row, Space, Table, Tooltip } from 'antd';
-import { CloseCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { Button, Col, Empty, Form, Input, message, Row, Space, Table, Tooltip } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router-dom';
 import RegisterButton from '../../components/RegisterButton';
@@ -15,8 +15,7 @@ const { Search } = Input
 const UserBranchOfficeSeller = () => {
   const navigate = useNavigate();
   const { userAdmin } = useAuth();
-  const [searchForm] = Form.useForm();
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [sellers, setSellers] = useState<InterfaceSeller[]>([])
@@ -106,6 +105,7 @@ const UserBranchOfficeSeller = () => {
       return {
         total,
         pageSize: limit,
+        onShowSizeChange: (_: any, size:number) => setLimit(size),
         onChange: (page: number) => {
             setStaring(true)
             setPage(page);
