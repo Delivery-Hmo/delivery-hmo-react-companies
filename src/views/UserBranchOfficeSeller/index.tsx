@@ -15,7 +15,7 @@ const UserBranchOfficeSeller = () => {
   const navigate = useNavigate();
   const { userAdmin } = useAuth();
   const [searchForm] = Form.useForm();
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [sellers, setSellers] = useState<InterfaceSeller[]>([])
@@ -90,7 +90,7 @@ const UserBranchOfficeSeller = () => {
   ]
 
   useEffect(() => {
-    if(!userAdmin) return;
+    if(!userAdmin || !staring) return;
 
     const controller = new AbortController();
     const init = async () => {
@@ -106,7 +106,7 @@ const UserBranchOfficeSeller = () => {
       }
     }
 
-    if (staring) init();
+    init();
 
     return () => {
       controller.abort();
@@ -114,32 +114,18 @@ const UserBranchOfficeSeller = () => {
   }, [limit, page, search, staring, userAdmin])
 
   const pagination = useMemo(() => {
-    if( sellers.length > 0) {
-      let size = limit;
       return {
         total,
         pageSize: limit,
-        onShowSizeChange: ( _: number, newSize: number)  => ( size = newSize ),
-        onChange: async (page: number) => {
-          try {
-            const {list, total} = await get(`userBranchOfficeSeller/listByUserAdmin?page=${page}&limit=${limit}`);
-            setSellers(list);
-            setTotal(total);
-            setLimit(size);
+        onChange: (page: number) => {
+            setStaring(true)
             setPage(page);
-          } catch (error) {
-            console.log(error);
-            message.error("Error al obtener los vendedores");
-          } finally {
-            setStaring(false);
-          }
         },
         showTotal: (total: number, range: number[]) => `${range[0]}-${range[1]} de ${total} registros.`,
         locale: { items_per_page: '/ página' },
         showSizeChanger: true
       }
-    }
-  }, [limit, sellers.length, total])
+  }, [limit, total])
 
   return (
     <>
