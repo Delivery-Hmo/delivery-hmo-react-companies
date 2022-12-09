@@ -75,7 +75,7 @@ const CreateUserBranchOfficeSeller = () => {
     setType(data.id  ? "update" : "create");
     setSeller(data);
     form.setFieldsValue(data);
-  }, [state,, form, userAdmin])
+  }, [state, form, userAdmin, navigate])
 
   return (
     <>
