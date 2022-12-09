@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import RoterChecker from './RouterCheker';
+import RoterChecker from './routerCheker';
 import routes from './routes';
 
 const MyRouter = () => {

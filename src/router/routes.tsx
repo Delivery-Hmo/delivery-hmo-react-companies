@@ -1,9 +1,10 @@
 import { PathRouteProps } from 'react-router-dom';
-import Branches from '../views/Branches';
-import CreateBranch from '../views/Branches/CreateBranch';
-import LandingPage from '../views/LandingPage';
-import UserBranchOfficeSeller from '../views/UserBranchOfficeSeller';
-import CreateUserBranchOfficeSeller from '../views/UserBranchOfficeSeller/CreateUserBranchOfficeSeller';
+import Branches from '../views/branches';
+import CreateBranch from '../views/branches/create';
+import LandingPage from '../views/landingPage';
+import SingUp from '../views/singUp';
+import UserBranchOfficeSeller from '../views/userBranchOfficeSeller';
+import CreateUserBranchOfficeSeller from '../views/userBranchOfficeSeller/create';
 
 const routes: PathRouteProps[] = [
   {
@@ -29,6 +30,10 @@ const routes: PathRouteProps[] = [
   {
     path: '/vendedores/editar',
     element: <CreateUserBranchOfficeSeller />
+  },
+  {
+    path: '/registrarse',
+    element: <SingUp />,
   },
   {
     path: '*',
