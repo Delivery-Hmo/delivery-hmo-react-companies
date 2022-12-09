@@ -28,7 +28,7 @@ const RoterChecker = () => {
     <Layout style={{ minHeight: '100vh' }}>
       { user ? <MenuComponent /> : <HeaderComponent /> }
       <Layout.Content style={{ padding: user ? "5vh" : 0 }}>
-        <Breadcrumb />
+      { user && <Breadcrumb /> }
         <Outlet />
       </Layout.Content>
     </Layout>

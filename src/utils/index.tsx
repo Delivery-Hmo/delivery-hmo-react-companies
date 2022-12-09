@@ -2,7 +2,7 @@ import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { message, Modal } from "antd";
 
-export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
+export const getCurrentToken = () => new Promise<string>((resolve) => {
   const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {
     uns();
 
@@ -12,8 +12,8 @@ export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
       return;
     }
 
-    reject("");
-  }, reject);
+    resolve("");
+  });
 });
  
 export const dialogDelete = (fun: () => Promise<any>, messageError: string) =>
