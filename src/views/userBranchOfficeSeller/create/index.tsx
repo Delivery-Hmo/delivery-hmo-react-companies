@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import DynamicContentForm from '../../../components/dynamicContentForm'
-import { Col, Form, message, Row } from 'antd'
+import { Card, Col, Form, message, Row } from 'antd'
 import SaveButton from '../../../components/saveButton';
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -10,13 +10,9 @@ import { UserBranchOfficeSeller } from '../../../interfaces/user';
 
 type TypeRute = "create" | "update";
 
-interface State {
-  data: UserBranchOfficeSeller;
-}
-
 const title: Record<TypeRute, string> = {
-  "create": "Registrar",
-  "update": "Editar"
+  create: "Registrar",
+  update: "Editar"
 };
 
 const CreateUserBranchOfficeSeller = () => {
@@ -35,7 +31,7 @@ const CreateUserBranchOfficeSeller = () => {
       setSaveLoading(true);
 
       const { id, uid, name, email, phone, description, password, confirmPassword, active } = seller
-      
+
       if (type === "update") {
         if((password || confirmPassword) && confirmPassword !== password) {
           message.error('Las contraseñas no coinciden.')
@@ -70,11 +66,11 @@ const CreateUserBranchOfficeSeller = () => {
       return;
     }
 
-    const { data } = state as State;
+    const _seller = state as UserBranchOfficeSeller;
 
-    setType(data.id  ? "update" : "create");
-    setSeller(data);
-    form.setFieldsValue(data);
+    setType(_seller.id  ? "update" : "create");
+    setSeller(_seller);
+    form.setFieldsValue(_seller);
   }, [state, form, userAdmin, navigate])
 
   return (
@@ -89,6 +85,7 @@ const CreateUserBranchOfficeSeller = () => {
             layout='vertical'
             onFinish={onFinish}
           >
+            <Card>
             <DynamicContentForm inputs={[
               {
                 type: 'input',
@@ -159,6 +156,7 @@ const CreateUserBranchOfficeSeller = () => {
                 Guardar vendedor
               </SaveButton>
             </Form.Item>
+            </Card>
           </Form>
         </Col>
       </Row>
