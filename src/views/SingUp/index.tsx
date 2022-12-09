@@ -30,19 +30,16 @@ const SingUp = () => {
     }
     if (loading) return;
 
-    
-
+    setLoading(true);
 
     try {
-      setLoading(true);
-      //falta test magig con el encbezado y inputs en 2 columnas en pantalla grande 1 en android
-      //validar que el usuario que no este registrado verificando con el back-end
-
       const userAdminRegistered: boolean = await get("userAdmin/verifyEmail?email=" + userAdmin.email)
+
       if (userAdminRegistered) {
         message.error('El usuario ya esta registrado.', 4)
         return
       }
+
       const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email, userAdmin.password as string)
       const user = result.user
       const additional = getAdditionalUserInfo(result)
@@ -65,18 +62,6 @@ const SingUp = () => {
 
   return (
     <div style={{ padding: "10vh" }}>
-      {/* <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50, marginBottom: 50 }}>
-
-    <Row justify="space-between" gutter={[48, 48]}>
-        <Col>
-        <Card style={{ padding: 12, borderRadius: 7 }} 
-        hoverable 
-        cover={<img alt="example" src={imgSeller} />}>
-        </Card>
-        </Col>
-      </Row>
-    </Content> */}
-
       <Row>
         <Col>
           <h1>
@@ -85,7 +70,6 @@ const SingUp = () => {
         </Col>
       </Row>
       <br />
-
       <Form layout="vertical" onFinish={onFinish}>
         <DynamicContentForm inputs={[
           {
@@ -155,7 +139,7 @@ const SingUp = () => {
         ]} />
 
         <Form.Item>
-        <SaveButton
+          <SaveButton
             htmlType="submit"
             loading={loading}
           >
@@ -163,9 +147,7 @@ const SingUp = () => {
           </SaveButton>
         </Form.Item>
       </Form>
-
     </div>
-
   )
 }
 
