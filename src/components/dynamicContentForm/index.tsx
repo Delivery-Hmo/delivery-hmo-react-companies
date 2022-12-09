@@ -11,7 +11,7 @@ const typeInputs: Record<string, (input: CustomInput) => JSX.Element> = {
     <Input 
       type={typeInput || 'text'} 
       value={value} 
-      onKeyDown={(e) => typeInput === "number" && ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
+      onKeyDown={(e) => typeInput === "number" && ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()}
       onChange={(e) => onChange(e.target.value)}
     />,
   select: ({value, onChange, options}: CustomInput) => <Select value={value} onChange={onChange}>,
