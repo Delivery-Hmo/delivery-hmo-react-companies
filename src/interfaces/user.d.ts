@@ -9,10 +9,15 @@ export interface User {
     description: string;
     active: boolean;
     image?: string;
-    role?: Rols;
+    role: Rols;
     password?: string;
     repeatPassword?: string;
+  }
 
+  export interface UserBranchOfficeSeller extends User {
+    branchOffice?: string;
+    password?: string;
+    confirmPassword:? string;
   }
   
   export interface UserAdmin extends User {

@@ -15,6 +15,7 @@ const initUserAdmin: UserAdmin = {
   phone: '',
   password: '',
   repeatPassword: '',
+  role: ''
 }
 
 const SingUp = () => {
@@ -49,6 +50,13 @@ const SingUp = () => {
       const userInfo: UserAdmin = {
         ...userAdmin,
         uid: user.uid,
+        name: user?.displayName || '',
+        email: user?.email || '',
+        active: true,
+        phone: user?.phoneNumber || '',
+        description: '',
+        company: '',
+        role: ''
       }
 
       await post('userAdmin/create', userInfo);

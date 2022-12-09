@@ -3,6 +3,7 @@
 :root {
   --primary: #CF9F29;
   --secondary: #304878;
+  --borderRadius: 6px;
 }
 
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
@@ -34,6 +35,10 @@ input[type=number] {
   -moz-appearance:textfield !important;
 }
 
+.ant-input {
+  border-radius: var(--borderRadius);
+}
+
 .ant-menu {
   background-color: var(--primary) !important;
   font-size: 16px;
@@ -58,4 +63,7 @@ input[type=number] {
   font-weight: bold;
 }
 
+.ant-card {
+  border-radius: var(--borderRadius);
+}
 
