@@ -10,20 +10,12 @@ import { useAuth } from '../../context/authContext'
 import { UserAdmin } from '../../interfaces/user';
 import { initUserAdmin, rulesPhoneInput } from '../../constants';
 
-const sizes = {
-  xs: 24, lg: 6
-};
-
 const Perfil = () => {
   const { user: userFirebase, userAdmin, setUserAdmin } = useAuth()
   const [form] = Form.useForm()
   const [user, setUser] = useState<UserAdmin>(initUserAdmin)
   const [loading, setLoading] = useState<boolean>(false)
-<<<<<<< Updated upstream
   
-=======
- 
->>>>>>> Stashed changes
   const onEditProfile = async () => {
     try {
       const _userAdmin = await put("userAdmin/update", user);
@@ -31,11 +23,7 @@ const Perfil = () => {
       //el res hay que setearlo al context userAdmin
     } catch (error) {
       console.log(error);
-<<<<<<< Updated upstream
       message.error("Error al editar los datos.");
-=======
-      message.error("Error al editar los datos." + error);
->>>>>>> Stashed changes
     } finally {
       setLoading(false)
     }
