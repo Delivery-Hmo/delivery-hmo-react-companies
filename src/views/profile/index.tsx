@@ -24,6 +24,10 @@ const initUserAdmin: UserAdmin = {
   role: ''
 }
 
+const sizes = {
+  xs: 24, lg: 6
+};
+
 const Perfil = () => {
   const { user: userFirebase, userAdmin, setUserAdmin } = useAuth()
   const [form] = Form.useForm()
@@ -31,9 +35,7 @@ const Perfil = () => {
   const [user, setUser] = useState<UserAdmin>(initUserAdmin)
   const [isUpdate, setIsUpdate] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const sizes = {
-    xs: 24, sm: 24, md: 24, lg: 6, xl: 6, xxl: 6
-  }
+  
   const onEditProfile = async () => {
     try {
       if (user.email !== userAdmin?.email) {
@@ -44,7 +46,8 @@ const Perfil = () => {
       await put("userAdmin/update", user)
       message.success("Datos modificados con éxito.");
     } catch (error) {
-      message.error("Error al editar los datos." + error);
+      console.log(error);
+      message.error("Error al editar los datos.");
     } finally {
       setLoading(false)
       setIsUpdate(false)
