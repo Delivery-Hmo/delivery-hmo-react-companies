@@ -19,8 +19,8 @@ const Perfil = () => {
   const onEditProfile = async () => {
     try {
       const _userAdmin = await put("userAdmin/update", user);
+      setUserAdmin(_userAdmin)
       message.success("Datos modificados con éxito.");
-      //el res hay que setearlo al context userAdmin
     } catch (error) {
       console.log(error);
       message.error("Error al editar los datos.");
