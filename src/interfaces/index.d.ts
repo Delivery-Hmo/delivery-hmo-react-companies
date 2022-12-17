@@ -15,7 +15,7 @@ export interface CustomInput {
   label?: string;
   options?: Option[];
   required?: boolean;
-  hidden?: boolean;
+  show?: boolean;
   disabled?: boolean;
   readonly?: boolean;
   rules?: FormRule[];

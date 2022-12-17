@@ -29,11 +29,11 @@ const DynamicContentForm: FC<Props> = ({ inputs }) => {
     <Row gutter={10}>
       {
         inputs.map((input) => {
-          const { label, name, md, rules, type, styleFI, hidden = true } = input;
+          const { label, name, md, rules, type, styleFI, show = true } = input;
 
           return (
             <Col xs={24} md={md} key={name}>
-              {hidden && (<Form.Item
+              {show && (<Form.Item
                 label={label}
                 name={name}
                 rules={rules}
