@@ -5,11 +5,16 @@ import LandingPage from '../views/landingPage';
 import SingUp from '../views/singUp';
 import UserBranchOfficeSeller from '../views/userBranchOfficeSeller';
 import CreateUserBranchOfficeSeller from '../views/userBranchOfficeSeller/create';
+import Profile from '../views/profile';
 
 const routes: PathRouteProps[] = [
   {
     path: '/',
     element: <LandingPage />
+  },
+  {
+    path: '/configuracion/perfil',
+    element: <Profile />
   },
   {
     path: '/sucursales',
