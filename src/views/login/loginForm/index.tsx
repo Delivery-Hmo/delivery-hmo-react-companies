@@ -5,7 +5,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import '../../../assets/styles/login.css';
 import { auth } from '../../../firebaseConfig';
 import { post } from '../../../services';
-import { UserAdmin } from '../../../interfaces/userAdmin';
+import { UserAdmin } from '../../../interfaces/user';
 
 type KeysProviders = 'facebook' | 'google';
 

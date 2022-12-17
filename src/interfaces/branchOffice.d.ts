@@ -1,14 +1,16 @@
 import { UserAdmin } from "./userAdmin";
+import { LatLng } from "./";
 
 export interface BranchOffice {
   id?: string; //
   userAdmin: string | UserAdmin; //
   name: string; //
   address: string; 
-  geopoint: string;
+  latLang: LatLng;
+  radius: number;
   phones: number[]; //
   active: boolean; //
-  schedule: moment.Moment[][];
+  showingInApp: boolean;//
   logo: string;
   comments: CommentsBranchOffice[]; //
   totolSales: number; // 

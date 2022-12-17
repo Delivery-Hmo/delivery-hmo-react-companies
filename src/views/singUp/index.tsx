@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Form, Button, Row, Col, message } from 'antd';
+import { Form, Row, Col, message } from 'antd';
 import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAdmin } from '../../interfaces/user';
-import { post } from '../../services';
+import { get, post } from '../../services';
 import DynamicContentForm from '../../components/dynamicContentForm';
+import SaveButton from '../../components/saveButton';
 
 const initUserAdmin: UserAdmin = {
   active: true,
@@ -14,6 +15,7 @@ const initUserAdmin: UserAdmin = {
   phone: '',
   password: '',
   repeatPassword: '',
+  role: ''
 }
 
 const SingUp = () => {
@@ -29,15 +31,16 @@ const SingUp = () => {
     }
     if (loading) return;
 
-    // if(userAdmin.uid !== ""){
-    //   message.error('El usuario ya existe', 4)
-    //   return
-    // }
+    setLoading(true);
 
     try {
-      setLoading(true);
-      //falta test magig con el encbezado y inputs en 2 columnas en pantalla grande 1 en android
-      //validar que el usuario que no este registrado verificando con el back-end
+      const userAdminRegistered: boolean = await get("userAdmin/verifyEmail?email=" + userAdmin.email)
+
+      if (userAdminRegistered) {
+        message.error('El usuario ya esta registrado.', 4)
+        return
+      }
+
       const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email, userAdmin.password as string)
       const user = result.user
       const additional = getAdditionalUserInfo(result)
@@ -45,6 +48,7 @@ const SingUp = () => {
       if (!additional?.isNewUser) return
 
       const userInfo: UserAdmin = {
+        ...userAdmin,
         uid: user.uid,
         name: user?.displayName || '',
         email: user?.email || '',
@@ -52,6 +56,7 @@ const SingUp = () => {
         phone: user?.phoneNumber || '',
         description: '',
         company: '',
+        role: ''
       }
 
       await post('userAdmin/create', userInfo);
@@ -65,18 +70,6 @@ const SingUp = () => {
 
   return (
     <div style={{ padding: "10vh" }}>
-      {/* <Content className="site-layout" style={{ padding: '0 50px', marginTop: 50, marginBottom: 50 }}>
-
-    <Row justify="space-between" gutter={[48, 48]}>
-        <Col>
-        <Card style={{ padding: 12, borderRadius: 7 }} 
-        hoverable 
-        cover={<img alt="example" src={imgSeller} />}>
-        </Card>
-        </Col>
-      </Row>
-    </Content> */}
-
       <Row>
         <Col>
           <h1>
@@ -85,7 +78,6 @@ const SingUp = () => {
         </Col>
       </Row>
       <br />
-
       <Form layout="vertical" onFinish={onFinish}>
         <DynamicContentForm inputs={[
           {
@@ -116,7 +108,7 @@ const SingUp = () => {
             value: userAdmin.description,
             onChange: (value) => setUserAdmin({ ...userAdmin, description: value })
           }, {
-            ...sizes,
+            md: 6,
             type: "input",
             typeInput: "email",
             label: "Email",
@@ -125,7 +117,7 @@ const SingUp = () => {
             value: userAdmin.email,
             onChange: (value) => setUserAdmin({ ...userAdmin, email: value })
           }, {
-            ...sizes,
+            md: 2,
             type: "input",
             typeInput: "number",
             label: "Telefono",
@@ -134,7 +126,7 @@ const SingUp = () => {
             value: userAdmin.phone,
             onChange: (value) => setUserAdmin({ ...userAdmin, phone: value })
           }, {
-            ...sizes,
+            md: 8,
             type: "input",
             typeInput: "password",
             label: "Contraseña",
@@ -143,7 +135,7 @@ const SingUp = () => {
             value: userAdmin.password,
             onChange: (value) => setUserAdmin({ ...userAdmin, password: value })
           }, {
-            ...sizes,
+            md: 8,
             type: "input",
             typeInput: "password",
             label: "Repetir Contraseña",
@@ -155,14 +147,15 @@ const SingUp = () => {
         ]} />
 
         <Form.Item>
-          <Button htmlType="submit" loading={loading}>
+          <SaveButton
+            htmlType="submit"
+            loading={loading}
+          >
             Guardar
-          </Button>
+          </SaveButton>
         </Form.Item>
       </Form>
-
     </div>
-
   )
 }
 

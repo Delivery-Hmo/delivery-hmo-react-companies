@@ -1,6 +1,11 @@
 import { OptionsValue, TypesInputs } from "../types"
 import { FormRule } from 'antd';
 
+export interface LatLng {
+  lat: number;
+  lng: number;
+}
+
 export interface CustomInput {
   type: TypesInputs;
   typeInput?: 'text' | 'number' | 'password' | 'email';

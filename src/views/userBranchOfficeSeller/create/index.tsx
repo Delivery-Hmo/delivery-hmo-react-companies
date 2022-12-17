@@ -1,38 +1,23 @@
 import { useEffect, useState } from 'react'
 import DynamicContentForm from '../../../components/dynamicContentForm'
-import { Col, Form, message, Row, Spin } from 'antd'
+import { Col, Form, message, Row } from 'antd'
 import SaveButton from '../../../components/saveButton';
-import { get, put } from '../../../services';
+import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
+import { initUserBranchOfficeSeller, rulesPhoneInput } from '../../../constants';
+import { UserBranchOfficeSeller } from '../../../interfaces/user';
 
-interface User {
-  uid?: string;
-  id?: string;
-  name: string;
-  email: string;
-  phone: string;
-  description: string;
-  active: boolean;
-  role: 'Vendedor';
-  password: string;
-  confirmPassword: string;
+type TypeRute = "create" | "update";
+
+interface State {
+  data: UserBranchOfficeSeller;
 }
 
-export interface UserBranchOfficeSeller extends User {
-  branchOffice?: string
-}
-
-const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
-  active: true,
-  description: '',
-  email: '',
-  name: '',
-  phone: '',
-  role: 'Vendedor',
-  password: '',
-  confirmPassword: ''
-}
+const title: Record<TypeRute, string> = {
+  "create": "Registrar",
+  "update": "Editar"
+};
 
 const CreateUserBranchOfficeSeller = () => {
   const { userAdmin } = useAuth();
@@ -40,26 +25,35 @@ const CreateUserBranchOfficeSeller = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
-  const { id, type } = state;
-  const editing = !!id;
-  const title = editing ? 'Editar' : 'Registrar';
+  const [type, setType] = useState<TypeRute>("create");
 
-  const [infoLoading, setInfoLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
 
   const onFinish = async () => {
     try {
       setSaveLoading(true);
-      const { id, uid, name, email, phone, description, password, confirmPassword } = seller
-      if (confirmPassword !== password) {
-        message.error('Las contraseñas no coinciden.')
-        return false;
+
+      const { id, uid, name, email, phone, description, password, confirmPassword, active } = seller
+      
+      if (type === "update") {
+        if((password || confirmPassword) && confirmPassword !== password) {
+          message.error('Las contraseñas no coinciden.')
+          return false;
+        }
+        await put(`userBranchOfficeSeller/${type}`, {
+          id, uid, name, email, phone, description, password, active
+        });
+      } else{
+        if (confirmPassword !== password) {
+          message.error('Las contraseñas no coinciden.')
+          return false;
+        }
+        await post(`userBranchOfficeSeller/${type}`, {
+          id, uid, name, email, phone, description, password, active
+        });
       }
 
-      await put(`userBranchOfficeSeller/${type}`, {
-        id, uid, name, email, phone, description, password
-      })
       message.success('Información guardada con éxito.')
       navigate('/vendedores')
     } catch (error) {
@@ -70,63 +64,30 @@ const CreateUserBranchOfficeSeller = () => {
     }
   }
 
-  // cambiar
   useEffect(() => {
-    if(!userAdmin) return;
-
-    const controller = new AbortController();
-    if(editing) {
-      const getInfo = async () => {
-        try {
-          setInfoLoading(true);
-          const info = await get(`userBranchOfficeSeller/getById?id=${id}`, controller);
-          const _seller = info as UserBranchOfficeSeller
-          setSeller(_seller);
-          form.setFieldsValue({..._seller})
-        } catch (error) {
-          console.log(error);
-          message.error("Error al obtener la información del vendedor.");
-        } finally {
-          setInfoLoading(false);
-        }
-      }
-      getInfo();
+    if(!state) {
+      navigate("/vendedores")
+      return;
     }
 
-    return () => {
-      controller.abort();
-    }
-  }, [editing, form, id, userAdmin])
+    const { data } = state as State;
 
-  if (infoLoading) {
-    return <div
-    style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '90vh',
-      background: '#fff',
-    }}
-  >
-    <Spin tip="Cargando información..." size="large" />
-  </div>
-  }
+    setType(data.id  ? "update" : "create");
+    setSeller(data);
+    form.setFieldsValue(data);
+  }, [state, form, userAdmin, navigate])
 
   return (
     <>
       <Row>
         <Col md={24}>
-          <h1>{ title } Vendedor</h1>
+          <h1>{ title[type] } Vendedor</h1>
         </Col>
         <Col md={24}>
           <Form
             form={form}
             layout='vertical'
             onFinish={onFinish}
-            style={{
-              backgroundColor: '#fff',
-              padding: '15px',
-            }}
           >
             <DynamicContentForm inputs={[
               {
@@ -154,7 +115,7 @@ const CreateUserBranchOfficeSeller = () => {
                 typeInput: 'password',
                 label: 'Contraseña',
                 name: 'password',
-                rules: [{ required: !editing, message: 'Favor de escribir la contraseña del vendedor.' }],
+                rules: [{ required: type === "update", message: 'Favor de escribir la contraseña del vendedor.' }],
                 value: seller.password,
                 onChange: (value: string) => setSeller({ ...seller, password: value }),
                 md: 8
@@ -164,7 +125,7 @@ const CreateUserBranchOfficeSeller = () => {
                 typeInput: 'password',
                 label: 'Confirmar Contraseña',
                 name: 'confirmPassword',
-                rules: [{ required: !editing, message: 'Favor de confirmar la contraseña del vendedor.' }],
+                rules: [{ required: type === "update", message: 'Favor de confirmar la contraseña del vendedor.' }],
                 value: seller.confirmPassword,
                 onChange: (value: string) => setSeller({ ...seller, confirmPassword: value }),
                 md: 8
@@ -174,11 +135,7 @@ const CreateUserBranchOfficeSeller = () => {
                 typeInput: 'number',
                 label: 'Teléfono',
                 name: 'phone',
-                rules: [
-                  { required: true, message: 'Favor de escribir el teléfono del vendedor.' },
-                  { min: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
-                  { max: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
-                ],
+                rules: rulesPhoneInput,
                 value: seller.phone,
                 onChange: (value: string) => setSeller({ ...seller, phone: value }),
                 md: 8
@@ -194,12 +151,14 @@ const CreateUserBranchOfficeSeller = () => {
                 md: 8
               }
             ]}/>
-            <SaveButton
-              htmlType='submit'
-              loading={saveLoading}
-            >
-              Guardar vendedor
-            </SaveButton>
+            <Form.Item>
+              <SaveButton
+                htmlType='submit'
+                loading={saveLoading}
+              >
+                Guardar vendedor
+              </SaveButton>
+            </Form.Item>
           </Form>
         </Col>
       </Row>

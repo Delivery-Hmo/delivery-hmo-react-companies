@@ -7,10 +7,10 @@ interface Props {
 }
 
 const typeInputs: Record<string, (input: CustomInput) => JSX.Element> = {
-  input: ({ value, onChange, typeInput }: CustomInput) =>
-    <Input
-      type={typeInput || 'text'}
-      value={value}
+  input: ({value, onChange, typeInput}: CustomInput) => 
+    <Input 
+      type={typeInput || 'text'} 
+      value={value} 
       onKeyDown={(e) => typeInput === "number" && ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
       onChange={(e) => onChange(e.target.value)}
     />,
