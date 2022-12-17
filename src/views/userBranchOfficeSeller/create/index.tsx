@@ -26,6 +26,8 @@ const CreateUserBranchOfficeSeller = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
 
+  console.log("typeeeeeeee", type)
+
   const onFinish = async () => {
     try {
       setSaveLoading(true);
@@ -33,7 +35,7 @@ const CreateUserBranchOfficeSeller = () => {
       const { id, uid, name, email, phone, description, password, confirmPassword, active } = seller
 
       if (type === "update") {
-        if((password || confirmPassword) && confirmPassword !== password) {
+        if(password !== "" && confirmPassword !== "" && confirmPassword !== password) {
           message.error('Las contraseñas no coinciden.')
           return false;
         }
@@ -112,7 +114,7 @@ const CreateUserBranchOfficeSeller = () => {
                 typeInput: 'password',
                 label: 'Contraseña',
                 name: 'password',
-                rules: [{ required: type === "update", message: 'Favor de escribir la contraseña del vendedor.' }],
+                rules: [{ required: type === "create", message: 'Favor de escribir la contraseña del vendedor.' }],
                 value: seller.password,
                 onChange: (value: string) => setSeller({ ...seller, password: value }),
                 md: 8
@@ -122,7 +124,7 @@ const CreateUserBranchOfficeSeller = () => {
                 typeInput: 'password',
                 label: 'Confirmar Contraseña',
                 name: 'confirmPassword',
-                rules: [{ required: type === "update", message: 'Favor de confirmar la contraseña del vendedor.' }],
+                rules: [{ required: type === "create", message: 'Favor de confirmar la contraseña del vendedor.' }],
                 value: seller.confirmPassword,
                 onChange: (value: string) => setSeller({ ...seller, confirmPassword: value }),
                 md: 8

@@ -79,7 +79,7 @@ const UserBranchOfficeSellerView = () => {
           </h1>
         </Col>
         <Col>
-          <RegisterButton onClick={() => navigate("/vendedores/crear", { state: { type: 'create'}})}>
+          <RegisterButton onClick={() => navigate("/vendedores/crear")}>
             Registrar vendedor
           </RegisterButton>
         </Col>
