@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, createContext, FC, ReactNode } from 'react';
+import { useEffect, useState, useContext, createContext, FC, ReactNode, Dispatch } from 'react';
 import FullLoader from '../components/fullLoader';
 import { User, onIdTokenChanged } from 'firebase/auth';
 import { get } from '../services';
@@ -8,6 +8,7 @@ import { UserAdmin } from '../interfaces/user';
 interface Auth {
   user: User | null;
   userAdmin: UserAdmin | null;
+  setUserAdmin: Dispatch<React.SetStateAction<UserAdmin | null>>
 }
 
 interface Props {
@@ -16,7 +17,8 @@ interface Props {
 
 const AuthContext = createContext<Auth>({
   user: null,
-  userAdmin: null
+  userAdmin: null,
+  setUserAdmin: () => {},
 });
 
 export const AuthProvider: FC<Props> = ({ children }) => {
@@ -50,7 +52,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
   if (loading) return <FullLoader />;
 
-  return <AuthContext.Provider value={{ user, userAdmin }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, userAdmin, setUserAdmin }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);

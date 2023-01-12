@@ -11,10 +11,11 @@ export interface CustomInput {
   typeInput?: 'text' | 'number' | 'password' | 'email';
   value: any;
   name: string;
-  md: number;
+  md?: number;
   label?: string;
   options?: Option[];
   required?: boolean;
+  show?: boolean;
   disabled?: boolean;
   readonly?: boolean;
   rules?: FormRule[];
