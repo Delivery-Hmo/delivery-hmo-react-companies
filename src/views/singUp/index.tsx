@@ -50,12 +50,7 @@ const SingUp = () => {
       const userInfo: UserAdmin = {
         ...userAdmin,
         uid: user.uid,
-        name: user?.displayName || '',
-        email: user?.email || '',
         active: true,
-        phone: user?.phoneNumber || '',
-        description: '',
-        company: '',
         role: ''
       }
 
@@ -68,6 +63,7 @@ const SingUp = () => {
     }
   }
 
+  console.log(userAdmin)
   return (
     <div style={{ padding: "10vh" }}>
       <Row>
