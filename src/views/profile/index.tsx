@@ -9,6 +9,8 @@ import { put } from '../../services'
 import { useAuth } from '../../context/authContext'
 import { UserAdmin } from '../../interfaces/user';
 import { initUserAdmin, rulesPhoneInput } from '../../constants';
+import { updateEmail, User, getAuth, updatePassword } from 'firebase/auth';
+const signOut = () => getAuth().signOut();
 
 const Perfil = () => {
   const { user: userFirebase, userAdmin, setUserAdmin } = useAuth()
@@ -16,26 +18,51 @@ const Perfil = () => {
   const [user, setUser] = useState<UserAdmin>(initUserAdmin)
   const [loading, setLoading] = useState<boolean>(false)
   
-  const onEditProfile = async () => {
-    try {
-      const _userAdmin = await put("userAdmin/update", user);
-      setUserAdmin(_userAdmin)
-      message.success("Datos modificados con éxito.");
-    } catch (error) {
-      console.log(error);
-      message.error("Error al editar los datos.");
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const onFinish = async () => {
-    if (user.password !== user.repeatPassword) {
-      message.error('Las contraseñas no coinciden.', 4)
-    }
-  }
-
   const items = useMemo(() => {
+
+    const onEditProfile = async () => {
+      try {
+        const _userAdmin = await put("userAdmin/update", user);
+        setUserAdmin(_userAdmin)
+        message.success("Datos modificados con éxito.");
+      } catch (error) {
+        console.log(error);
+        message.error("Error al editar los datos.");
+      } finally {
+        setLoading(false)
+      }
+    }
+  
+    const onFinish = async () => {
+      
+      try {
+        setLoading(true);
+        if(userFirebase?.email !== user.email){
+          await updateEmail(userFirebase as User, user.email);
+          const _userAdmin = await put("userAdmin/update", user);
+          setUserAdmin(_userAdmin)
+          message.success("Email modificado con éxito.");
+        }
+      
+        if(user.password !== user.repeatPassword){
+          message.error('Las contraseñas no coinciden.', 4)
+        }
+
+        if((user.password && user.repeatPassword) && (user.password === user.repeatPassword)){
+          await updatePassword(userFirebase as User, user.password)
+          message.success("Contraseña modificada con éxito.");
+        }
+
+      } catch (error) {
+        console.log(error);
+        message.error('Error, datos incorrectos.');
+        setLoading(false);
+      } finally {
+        setLoading(false)
+      }
+     
+    }
+    
     const istPassword = [
       {
         label: 'Actualizar Perfil',
@@ -113,8 +140,8 @@ const Perfil = () => {
               typeInput: 'password',
               label: 'Contraseña',
               name: 'password',
-              rules: [{ required: true, message: 'Favor de escribir la contraseña del vendedor.' }],
-              value: user.password,
+              rules: [{ required: (user.password ? true : false), message: 'Favor de escribir la contraseña del vendedor.' }],
+              value: user.password? true : false,
               onChange: (value: string) => setUser({ ...user, password: value }),
               md: 6,
             },
@@ -123,8 +150,8 @@ const Perfil = () => {
               typeInput: 'password',
               label: 'Confirmar Contraseña',
               name: 'confirmPassword',
-              rules: [{ required: true, message: 'Favor de confirmar la contraseña del vendedor.' }],
-              value: user.repeatPassword,
+              rules: [{ required: (user.password ? true : false), message: 'Favor de confirmar la contraseña del vendedor.' }],
+              value: user.password ? true : false,
               onChange: (value: string) => setUser({ ...user, repeatPassword: value }),
               md: 6,
             },
@@ -143,14 +170,13 @@ const Perfil = () => {
     }
 
     return istPassword
-  }, [userFirebase])
+  }, [userFirebase, user, setUser, form, loading, setUserAdmin])
 
   useEffect(() => {
     if(!userAdmin) return;
-
     setUser(userAdmin);
     form.setFieldsValue(userAdmin)
-  }, [userAdmin])
+  }, [userAdmin,form])
 
   return (
     <>
