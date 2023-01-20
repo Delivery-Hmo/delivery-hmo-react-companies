@@ -2,8 +2,8 @@ import { useEffect, useState, useContext, createContext, FC, ReactNode, Dispatch
 import FullLoader from '../components/fullLoader';
 import { User, onIdTokenChanged } from 'firebase/auth';
 import { get } from '../services';
-import { UserAdmin } from '../interfaces/userAdmin';
 import { auth } from '../firebaseConfig';
+import { UserAdmin } from '../interfaces/user';
 
 interface Auth {
   user: User | null;

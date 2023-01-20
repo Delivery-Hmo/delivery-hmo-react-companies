@@ -1,7 +1,7 @@
 import { getCurrentToken } from '../utils';
 
-// const baseUrl = "https://www.deliapihmo.xyz/";
-const baseUrl = 'http://localhost:3001/';
+const baseUrl = process.env.REACT_APP_SERVER_ELASTIC;
+//const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
 
 const getHeaders = (token: string) => ({
   Accept: 'application/json',
@@ -54,6 +54,25 @@ export const put = async (url: string, body: Record<string, any>) => {
     baseUrl + url,
     {
       method: 'PUT',
+      body: JSON.stringify(body),
+      headers: getHeaders(token)
+    }
+  )
+
+  if (!response.ok) {
+    throw new Error('Error request!')
+  }
+
+  return response.json()
+}
+
+export const patch = async (url: string, body: Record<string, any>) => {
+  const token = await getCurrentToken()
+
+  const response = await fetch(
+    baseUrl + url,
+    {
+      method: 'PATCH',
       body: JSON.stringify(body),
       headers: getHeaders(token)
     }

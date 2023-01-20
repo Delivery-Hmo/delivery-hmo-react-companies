@@ -1,5 +1,5 @@
 import { StringMappingType } from 'typescript';
-import {Rols} from '../types/roles'
+import { Rols } from '../types/roles'
 export interface User {
     uid?: string;
     id?: string;
@@ -9,10 +9,15 @@ export interface User {
     description: string;
     active: boolean;
     image?: string;
-    role?: Rols;
+    role: Rols;
     password?: string;
     repeatPassword?: string;
+  }
 
+  export interface UserBranchOfficeSeller extends User {
+    branchOffice?: string;
+    password?: string;
+    confirmPassword:? string;
   }
   
   export interface UserAdmin extends User {

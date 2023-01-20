@@ -1,4 +1,4 @@
-import { DollarCircleOutlined, UserOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons';
+import { DollarCircleOutlined, UserOutlined, SettingOutlined, ShopOutlined, LogoutOutlined, AuditOutlined} from '@ant-design/icons';
 import { getAuth } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 
@@ -28,15 +28,21 @@ const menuItems = [
     icon: <UserOutlined style={styleIcon} />
   },
   {
-    key: '/sub1',
+    key: '/configuracion',
     title: '',
     icon: <SettingOutlined style={styleIcon} />,
     label: 'Configuración',
     children: [
       {
+        key: '/configuracion/perfil',
+        title: '',
+        icon: <AuditOutlined style={styleIcon} />,
+        label: <Link to="/configuracion/perfil">Perfil</Link>,
+      },
+      {
         key: '/signOut',
         title: '',
-        icon: <UserOutlined style={styleIcon} />,
+        icon: <LogoutOutlined style={styleIcon} />,
         label: 'Cerrar sesión',
         onClick: async () => await signOut()
       }

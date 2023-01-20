@@ -1,35 +1,78 @@
-import { useState, useEffect, useMemo } from 'react'
-import { Button, Col, Empty, message, Row, Space, Table, Tooltip } from 'antd';
+import { useState, useEffect } from 'react'
+import { Button, Col, Empty, Form, Input, message, Row, Space, Table, Tooltip } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router-dom';
 import RegisterButton from '../../components/registerButton';
-import { UserBranchOfficeSeller as InterfaceSeller } from './create';
 import { useAuth } from '../../context/authContext';
-import { get } from '../../services';
+import { get, patch } from '../../services';
+import { dialogDelete } from '../../utils';
+import { UserBranchOfficeSeller } from '../../interfaces/user';
 
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
+const { Search } = Input
+const headerStyle = {
+  fontWeight: 'bold',
+};
 
-const UserBranchOfficeSeller = () => {
+const UserBranchOfficeSellerView = () => {
   const navigate = useNavigate();
   const { userAdmin } = useAuth();
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-  const [sellers, setSellers] = useState<InterfaceSeller[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [sellers, setSellers] = useState<UserBranchOfficeSeller[]>([])
+  const [staring, setStaring] = useState(true)
+  const [search, setSearch] = useState("")
 
-  const headerStyle = {
-    fontWeight: 'bold',
-  };
+  useEffect(() => {
+    if(!userAdmin || !staring) return;
 
-  const ActionsButtons = ({ record }: { record: InterfaceSeller }) => (
+    const controller = new AbortController();
+    const init = async () => {
+      try {
+        const {list, total} = await get(`userBranchOfficeSeller/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
+        
+        setSellers(list);
+        setTotal(total);
+      } catch (error) {
+        console.log(error);
+        message.error("Error al obtener los vendedores");
+      } finally {
+        setStaring(false);
+      }
+    }
+
+    init();
+
+    return () => {
+      controller.abort();
+    }
+  }, [limit, page, search, staring, userAdmin])
+
+  const deleteSeller = async ( record: UserBranchOfficeSeller) => {
+    try {
+      const { id } = record
+      const fun = () => patch(`userBranchOfficeSeller/disable`, { id, active: false });
+
+      await dialogDelete(fun, "Vendedor eliminado con éxito.")
+      
+      setStaring(true);
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
+  //hacer esto componente global deleteUSer hacerlo prop callback tableActions buttons
+  const ActionsButtons = ({ record }: { record: UserBranchOfficeSeller }) => (
     <Space>
       <Tooltip title="Editar">
         <Button
           icon={<EditOutlined />}
           shape="circle"
           onClick={() => navigate('/vendedores/editar', { state: {
-            id: record.id, type: 'update'
+            data: record, type: 'update'
           }})}
           size="middle"
           style={{ color: '#fff', backgroundColor: '#ec9822'}}
@@ -39,7 +82,7 @@ const UserBranchOfficeSeller = () => {
         <Button
           icon={<DeleteOutlined />}
           shape="circle"
-          onClick={() => console.log("Eliminar...", record)}
+          onClick={() => deleteSeller(record)}
           size="middle"
           style={{ color: '#fff', backgroundColor: '#d34745'}}
         />
@@ -47,7 +90,7 @@ const UserBranchOfficeSeller = () => {
     </Space>
   )
 
-  const columns: ColumnsType<InterfaceSeller> = [
+  const columns: ColumnsType<UserBranchOfficeSeller> = [
     {
       title: 'Nombre', dataIndex: 'name', key: 'name',
       onHeaderCell: () => ({ style: headerStyle})
@@ -57,51 +100,10 @@ const UserBranchOfficeSeller = () => {
     { title: 'Descripción', dataIndex: 'description', key: 'description', onHeaderCell: () => ({ style: headerStyle})},
     {
       title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
-      render: (_, record: InterfaceSeller) => (<ActionsButtons record={record}/>),
+      render: (_, record: UserBranchOfficeSeller) => (<ActionsButtons record={record}/>),
       onHeaderCell: () => ({ style: headerStyle})
     },
   ]
-
-  useEffect(() => {
-    if(!userAdmin) return;
-
-    const controller = new AbortController();
-    const init = async () => {
-      try {
-        const list = await get(`userBranchOfficeSeller/list?page=${page}&limit=${limit}`, controller);
-        setSellers(list);
-      } catch (error) {
-        console.log(error);
-        message.error("Error al obtener los vendedores");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    init();
-
-    return () => {
-      controller.abort();
-    }
-  }, [limit, page, userAdmin])
-
-  const pagination = useMemo(() => {
-    if( sellers.length > 0) {
-      let size = page, total = 10; // ? preguntar por info para paginación
-      return {
-        total,
-        pageSize: limit,
-        onShowSizeChange: ( _: number, newSize: number)  => ( size = newSize ),
-        onChange: (page: number) => {
-          setLimit(size);
-          setPage(page);
-        },
-        showTotal: (total: number, range: number[]) => `${range[0]}-${range[1]} de ${total} registros.`,
-        locale: { items_per_page: '/ página' },
-        showSizeChanger: true
-      }
-    }
-  }, [limit, page, sellers.length])
 
   return (
     <>
@@ -118,6 +120,22 @@ const UserBranchOfficeSeller = () => {
         </Col>
       </Row>
       <br />
+      <Form
+        layout='vertical'
+      >
+        <Form.Item
+          name='search'
+          style={{marginBottom: '5px'}}
+        >
+          <Search
+            enterButton
+            onSearch={()=> setStaring(true)}
+            onChange={(e)=> setSearch(e.target.value)}
+            placeholder='Buscar por Nombre, Correo ó Teléfono...'
+            style={{ width: '100%' }}
+          />
+        </Form.Item>
+      </Form>
       <Table
         bordered
         columns={columns}
@@ -126,10 +144,21 @@ const UserBranchOfficeSeller = () => {
           emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores'/>
         }}
         loading={{
-          spinning: loading,
+          spinning: staring,
           tip: 'Cargando información...',
         }}
-        pagination={pagination}
+        pagination={{
+          total,
+          pageSize: limit,
+          onShowSizeChange: (_: any, size:number) => setLimit(size),
+          onChange: (page: number) => {
+            setStaring(true)
+            setPage(page);
+          },
+          showTotal: (total: number, range: number[]) => `${range[0]}-${range[1]} de ${total} registros.`,
+          locale: { items_per_page: '/ página' },
+          showSizeChanger: true
+        }}
         rowKey='id'
         scroll={{ x: 1000 }}
         size='small'
@@ -138,4 +167,4 @@ const UserBranchOfficeSeller = () => {
   )
 }
 
-export default UserBranchOfficeSeller
+export default UserBranchOfficeSellerView
