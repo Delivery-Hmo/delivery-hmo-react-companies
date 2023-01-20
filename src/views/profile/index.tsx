@@ -140,7 +140,9 @@ const Perfil = () => {
               typeInput: 'password',
               label: 'Contraseña',
               name: 'password',
-              rules: [{ required: (user.password ? true : false), message: 'Favor de escribir la contraseña del vendedor.' }],
+              rules: [{ required: (user.password ? true : false), message: 'Favor de escribir la contraseña del vendedor.' },
+              { min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
+             ],
               value: user.password? true : false,
               onChange: (value: string) => setUser({ ...user, password: value }),
               md: 6,
@@ -150,7 +152,11 @@ const Perfil = () => {
               typeInput: 'password',
               label: 'Confirmar Contraseña',
               name: 'confirmPassword',
-              rules: [{ required: (user.password ? true : false), message: 'Favor de confirmar la contraseña del vendedor.' }],
+              rules: [
+                { required: (user.password ? true : false), 
+                  message: 'Favor de confirmar la contraseña del vendedor.' },
+                { min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
+                ],
               value: user.password ? true : false,
               onChange: (value: string) => setUser({ ...user, repeatPassword: value }),
               md: 6,
