@@ -1,3 +1,4 @@
+import { FormRule } from "antd";
 import { BranchOffice } from "../interfaces/branchOffice";
 
 export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns";
@@ -23,3 +24,8 @@ export const initBranch: BranchOffice = {
 };
 
 export const namesDaysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+export const rulesPhoneInput: FormRule[]  = [
+  { required: true, message: 'Favor de escribir el teléfono del vendedor.' },
+  { min: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
+  { max: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
+];
