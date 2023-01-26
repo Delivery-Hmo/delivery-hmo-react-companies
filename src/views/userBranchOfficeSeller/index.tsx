@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Button, Col, Empty, Form, Input, message, Row, Space, Table, Tooltip } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { Col, Empty, Form, Input, message, Row, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router-dom';
 import RegisterButton from '../../components/registerButton';
 import { useAuth } from '../../context/authContext';
 import { get, patch } from '../../services';
-import { dialogDelete } from '../../utils';
 import { UserBranchOfficeSeller } from '../../interfaces/user';
+import TableActionsButtons from '../../components/tableActionsButtons';
 
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 const { Search } = Input
