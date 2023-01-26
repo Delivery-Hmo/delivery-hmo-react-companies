@@ -9,11 +9,13 @@ import HeaderComponent from '../../components/header';
 const blockedPathsWithoAuthentication = ["/registrarse", "/"];
 
 const RoterChecker = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if(loading) return;
+
     if(!user && (pathname !== "/" && pathname !== "/registrarse")) {
       navigate('/');
       return;
@@ -22,7 +24,7 @@ const RoterChecker = () => {
     if(user && blockedPathsWithoAuthentication.includes(pathname)) {
       navigate('/sucursales');
     }
-  }, [user, pathname, navigate])
+  }, [user, pathname, navigate, loading])
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
