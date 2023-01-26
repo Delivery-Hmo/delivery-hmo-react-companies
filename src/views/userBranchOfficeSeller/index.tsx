@@ -11,9 +11,6 @@ import { UserBranchOfficeSeller } from '../../interfaces/user';
 
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 const { Search } = Input
-const headerStyle = {
-  fontWeight: 'bold',
-};
 
 const UserBranchOfficeSellerView = () => {
   const navigate = useNavigate();
@@ -21,18 +18,19 @@ const UserBranchOfficeSellerView = () => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [sellers, setSellers] = useState<UserBranchOfficeSeller[]>([])
-  const [staring, setStaring] = useState(true)
-  const [search, setSearch] = useState("")
+  const [sellers, setSellers] = useState<UserBranchOfficeSeller[]>([]);
+  const [staring, setStaring] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if(!userAdmin || !staring) return;
+    if (!userAdmin || !staring) return;
 
     const controller = new AbortController();
+
     const init = async () => {
       try {
-        const {list, total} = await get(`userBranchOfficeSeller/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
-        
+        const { list, total } = await get(`userBranchOfficeSeller/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
+
         setSellers(list);
         setTotal(total);
       } catch (error) {
@@ -50,19 +48,18 @@ const UserBranchOfficeSellerView = () => {
     }
   }, [limit, page, search, staring, userAdmin])
 
-  const deleteSeller = async ( record: UserBranchOfficeSeller) => {
+  const deleteSeller = async (record: UserBranchOfficeSeller) => {
     try {
       const { id } = record
       const fun = () => patch(`userBranchOfficeSeller/disable`, { id, active: false });
 
       await dialogDelete(fun, "Vendedor eliminado con éxito.")
-      
+
       setStaring(true);
     } catch (error) {
       console.error(error)
     }
   }
-
 
   //hacer esto componente global deleteUSer hacerlo prop callback tableActions buttons
   const ActionsButtons = ({ record }: { record: UserBranchOfficeSeller }) => (
@@ -71,11 +68,14 @@ const UserBranchOfficeSellerView = () => {
         <Button
           icon={<EditOutlined />}
           shape="circle"
-          onClick={() => navigate('/vendedores/editar', { state: {
-            data: record, type: 'update'
-          }})}
+          onClick={() => navigate('/vendedores/editar', {
+            state: {
+              data: record, 
+              type: 'update'
+            }
+          })}
           size="middle"
-          style={{ color: '#fff', backgroundColor: '#ec9822'}}
+          style={{ color: '#fff', backgroundColor: '#ec9822' }}
         />
       </Tooltip>
       <Tooltip title="Eliminar">
@@ -84,24 +84,20 @@ const UserBranchOfficeSellerView = () => {
           shape="circle"
           onClick={() => deleteSeller(record)}
           size="middle"
-          style={{ color: '#fff', backgroundColor: '#d34745'}}
+          style={{ color: '#fff', backgroundColor: '#d34745' }}
         />
       </Tooltip>
     </Space>
   )
 
   const columns: ColumnsType<UserBranchOfficeSeller> = [
-    {
-      title: 'Nombre', dataIndex: 'name', key: 'name',
-      onHeaderCell: () => ({ style: headerStyle})
-    },
-    { title: 'Correo', dataIndex: 'email', key: 'email', onHeaderCell: () => ({ style: headerStyle})},
-    { title: 'Teléfono', dataIndex: 'phone', key: 'phone', onHeaderCell: () => ({ style: headerStyle})},
-    { title: 'Descripción', dataIndex: 'description', key: 'description', onHeaderCell: () => ({ style: headerStyle})},
+    { title: 'Nombre', dataIndex: 'name', key: 'name' },
+    { title: 'Correo', dataIndex: 'email', key: 'email' },
+    { title: 'Teléfono', dataIndex: 'phone', key: 'phone' },
+    { title: 'Descripción', dataIndex: 'description', key: 'description' },
     {
       title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
-      render: (_, record: UserBranchOfficeSeller) => (<ActionsButtons record={record}/>),
-      onHeaderCell: () => ({ style: headerStyle})
+      render: (_, record: UserBranchOfficeSeller) => (<ActionsButtons record={record} />),
     },
   ];
 
@@ -114,7 +110,7 @@ const UserBranchOfficeSellerView = () => {
           </h1>
         </Col>
         <Col>
-          <RegisterButton onClick={() => navigate("/vendedores/crear", { state: { type: 'create'}})}>
+          <RegisterButton onClick={() => navigate("/vendedores/crear", { state: { type: 'create' } })}>
             Registrar vendedor
           </RegisterButton>
         </Col>
@@ -125,12 +121,12 @@ const UserBranchOfficeSellerView = () => {
       >
         <Form.Item
           name='search'
-          style={{marginBottom: '5px'}}
+          style={{ marginBottom: '5px' }}
         >
           <Search
             enterButton
-            onSearch={()=> setStaring(true)}
-            onChange={(e)=> setSearch(e.target.value)}
+            onSearch={() => setStaring(true)}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder='Buscar por Nombre, Correo ó Teléfono...'
             style={{ width: '100%' }}
           />
@@ -141,7 +137,7 @@ const UserBranchOfficeSellerView = () => {
         columns={columns}
         dataSource={sellers}
         locale={{
-          emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores'/>
+          emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores' />
         }}
         loading={{
           spinning: staring,
@@ -150,7 +146,7 @@ const UserBranchOfficeSellerView = () => {
         pagination={{
           total,
           pageSize: limit,
-          onShowSizeChange: (_: any, size:number) => setLimit(size),
+          onShowSizeChange: (_: any, size: number) => setLimit(size),
           onChange: (page: number) => {
             setStaring(true)
             setPage(page);
