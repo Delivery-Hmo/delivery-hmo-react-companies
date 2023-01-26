@@ -103,7 +103,7 @@ const UserBranchOfficeSellerView = () => {
       render: (_, record: UserBranchOfficeSeller) => (<ActionsButtons record={record}/>),
       onHeaderCell: () => ({ style: headerStyle})
     },
-  ]
+  ];
 
   return (
     <>

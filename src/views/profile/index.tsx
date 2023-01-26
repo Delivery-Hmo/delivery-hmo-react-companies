@@ -150,7 +150,7 @@ const Perfil = () => {
 
     setUser(userAdmin);
     form.setFieldsValue(userAdmin)
-  }, [userAdmin])
+  }, [userAdmin, form])
 
   return (
     <>
