@@ -34,7 +34,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
     const uns = onIdTokenChanged(auth, async (user: User | null) => {
       if (user) {
         try {
-          const userAdmin: UserAdmin = await get('userAdmin/getByUid?uid=' + user.uid, controller);
+          const userAdmin = await get<UserAdmin>('userAdmin/getByUid?uid=' + user.uid, controller);
 
           setUserAdmin(userAdmin);
         } catch (error) {

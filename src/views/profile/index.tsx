@@ -18,7 +18,7 @@ const Perfil = () => {
   
   const onEditProfile = async () => {
     try {
-      const _userAdmin = await put("userAdmin/update", user);
+      const _userAdmin = await put<UserAdmin>("userAdmin/update", user);
       setUserAdmin(_userAdmin)
       message.success("Datos modificados con éxito.");
     } catch (error) {

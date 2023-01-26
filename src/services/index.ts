@@ -9,7 +9,7 @@ const getHeaders = (token: string) => ({
   Authorization: "Bearer " + token
 });
 
-export const get = async (url: string, controller?: AbortController) => {
+export const get = async <T>(url: string, controller?: AbortController) => {
   const token = await getCurrentToken()
 
   const response = await fetch(
@@ -25,10 +25,10 @@ export const get = async (url: string, controller?: AbortController) => {
     throw new Error('Error request!');
   }
 
-  return response.json();
+  return response.json() as T;
 }
 
-export const post = async (url: string, body: Record<string, any>) => {
+export const post = async <T>(url: string, body: Record<string, any>) => {
   const token = await getCurrentToken()
 
   const response = await fetch(
@@ -44,10 +44,10 @@ export const post = async (url: string, body: Record<string, any>) => {
     throw new Error('Error request!')
   }
 
-  return response.json()
+  return response.json() as T
 }
 
-export const put = async (url: string, body: Record<string, any>) => {
+export const put = async <T>(url: string, body: Record<string, any>) => {
   const token = await getCurrentToken()
 
   const response = await fetch(
@@ -63,7 +63,7 @@ export const put = async (url: string, body: Record<string, any>) => {
     throw new Error('Error request!')
   }
 
-  return response.json()
+  return response.json() as T
 }
 
 export const patch = async (url: string, body: Record<string, any>) => {

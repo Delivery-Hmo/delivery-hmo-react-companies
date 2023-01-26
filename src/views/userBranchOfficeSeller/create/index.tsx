@@ -22,11 +22,8 @@ const CreateUserBranchOfficeSeller = () => {
   const navigate = useNavigate();
   const { state } = location;
   const [type, setType] = useState<TypeRute>("create");
-
   const [saveLoading, setSaveLoading] = useState(false);
   const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
-
-  console.log("typeeeeeeee", type)
 
   const onFinish = async () => {
     try {
@@ -34,19 +31,16 @@ const CreateUserBranchOfficeSeller = () => {
 
       const { id, uid, name, email, phone, description, password, confirmPassword, active } = seller
 
+      if (confirmPassword !== password) {
+        message.error('Las contraseñas no coinciden.')
+        return;
+      }
+
       if (type === "update") {
-        if(password !== "" && confirmPassword !== "" && confirmPassword !== password) {
-          message.error('Las contraseñas no coinciden.')
-          return false;
-        }
         await put(`userBranchOfficeSeller/${type}`, {
           id, uid, name, email, phone, description, password, active
         });
       } else{
-        if (confirmPassword !== password) {
-          message.error('Las contraseñas no coinciden.')
-          return false;
-        }
         await post(`userBranchOfficeSeller/${type}`, {
           id, uid, name, email, phone, description, password, active
         });

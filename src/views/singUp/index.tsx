@@ -34,7 +34,7 @@ const SingUp = () => {
     setLoading(true);
 
     try {
-      const userAdminRegistered: boolean = await get("userAdmin/verifyEmail?email=" + userAdmin.email)
+      const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + userAdmin.email);
 
       if (userAdminRegistered) {
         message.error('El usuario ya esta registrado.', 4)
