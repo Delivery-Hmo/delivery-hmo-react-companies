@@ -63,7 +63,6 @@ const SingUp = () => {
     }
   }
 
-  console.log(userAdmin)
   return (
     <div style={{ padding: "10vh" }}>
       <Row>

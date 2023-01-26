@@ -1,7 +1,7 @@
 import { getCurrentToken } from '../utils';
 
-const baseUrl = process.env.REACT_APP_SERVER_ELASTIC;
-//const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
+//const baseUrl = process.env.REACT_APP_SERVER_ELASTIC;
+const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
 
 const getHeaders = (token: string) => ({
   Accept: 'application/json',
