@@ -36,6 +36,7 @@ const UserBranchOfficeSellerView = () => {
     const init = async () => {
       try {
         const { list, total } = await get<Get>(`userBranchOfficeSeller/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
+      
         setSellers(list);
         setTotal(total);
       } catch (error) {

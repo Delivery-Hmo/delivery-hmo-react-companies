@@ -25,6 +25,8 @@ const CreateUserBranchOfficeSeller = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
 
+  console.log("typeeeeeeee", type)
+
   const onFinish = async () => {
     try {
       setSaveLoading(true);
