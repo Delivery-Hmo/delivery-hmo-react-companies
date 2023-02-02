@@ -8,7 +8,8 @@ import { UserAdmin } from '../interfaces/user';
 interface Auth {
   user: User | null;
   userAdmin: UserAdmin | null;
-  setUserAdmin: Dispatch<React.SetStateAction<UserAdmin | null>>
+  setUserAdmin: Dispatch<React.SetStateAction<UserAdmin | null>>;
+  loading: boolean;
 }
 
 interface Props {
@@ -19,6 +20,7 @@ const AuthContext = createContext<Auth>({
   user: null,
   userAdmin: null,
   setUserAdmin: () => {},
+  loading: true
 });
 
 export const AuthProvider: FC<Props> = ({ children }) => {
@@ -32,7 +34,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
     const uns = onIdTokenChanged(auth, async (user: User | null) => {
       if (user) {
         try {
-          const userAdmin: UserAdmin = await get('userAdmin/getByUid?uid=' + user.uid, controller);
+          const userAdmin = await get<UserAdmin>('userAdmin/getByUid?uid=' + user.uid, controller);
 
           setUserAdmin(userAdmin);
         } catch (error) {
@@ -52,7 +54,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
   if (loading) return <FullLoader />;
 
-  return <AuthContext.Provider value={{ user, userAdmin, setUserAdmin }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, userAdmin, setUserAdmin, loading }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);

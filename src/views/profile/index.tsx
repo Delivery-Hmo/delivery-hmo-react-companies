@@ -28,6 +28,7 @@ const Perfil = () => {
       setUserAdmin(_userAdmin);
 
       message.success("Datos de perfil actualizados con éxito.", 4);
+
     } catch (error) {
       console.log(error);
 

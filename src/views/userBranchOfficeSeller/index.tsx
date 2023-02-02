@@ -14,6 +14,11 @@ const headerStyle = {
   fontWeight: 'bold',
 };
 
+interface Get {
+  list: UserBranchOfficeSeller[];
+  total: number;
+}
+
 const UserBranchOfficeSellerView = () => {
   const navigate = useNavigate();
   const { userAdmin } = useAuth();
@@ -25,12 +30,13 @@ const UserBranchOfficeSellerView = () => {
   const [search, setSearch] = useState("")
 
   useEffect(() => {
-    if(!userAdmin || !staring) return;
+    if (!userAdmin || !staring) return;
 
     const controller = new AbortController();
     const init = async () => {
       try {
-        const {list, total} = await get(`userBranchOfficeSeller/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
+        const { list, total } = await get<Get>(`userBranchOfficeSeller/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
+      
         setSellers(list);
         setTotal(total);
       } catch (error) {
@@ -51,11 +57,11 @@ const UserBranchOfficeSellerView = () => {
   const columns: ColumnsType<UserBranchOfficeSeller> = [
     {
       title: 'Nombre', dataIndex: 'name', key: 'name',
-      onHeaderCell: () => ({ style: headerStyle})
+      onHeaderCell: () => ({ style: headerStyle })
     },
-    { title: 'Correo', dataIndex: 'email', key: 'email', onHeaderCell: () => ({ style: headerStyle})},
-    { title: 'Teléfono', dataIndex: 'phone', key: 'phone', onHeaderCell: () => ({ style: headerStyle})},
-    { title: 'Descripción', dataIndex: 'description', key: 'description', onHeaderCell: () => ({ style: headerStyle})},
+    { title: 'Correo', dataIndex: 'email', key: 'email', onHeaderCell: () => ({ style: headerStyle }) },
+    { title: 'Teléfono', dataIndex: 'phone', key: 'phone', onHeaderCell: () => ({ style: headerStyle }) },
+    { title: 'Descripción', dataIndex: 'description', key: 'description', onHeaderCell: () => ({ style: headerStyle }) },
     {
       title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
       render: (_, record: UserBranchOfficeSeller) => (
@@ -66,7 +72,7 @@ const UserBranchOfficeSellerView = () => {
           messageError="Vendedor eliminado con éxito."
         />
       ),
-      onHeaderCell: () => ({ style: headerStyle})
+      onHeaderCell: () => ({ style: headerStyle })
     },
   ]
 
@@ -90,13 +96,13 @@ const UserBranchOfficeSellerView = () => {
       >
         <Form.Item
           name='search'
-          style={{marginBottom: '5px'}}
+          style={{ marginBottom: '5px' }}
         >
           <Search
             enterButton
-            onSearch={()=> setStaring(true)}
-            onChange={(e)=> setSearch(e.target.value)}
-            placeholder='Buscar por Nombre, Correo ó Teléfono...'
+            onSearch={() => setStaring(true)}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder='Buscar por nombre, correo ó teléfono...'
             style={{ width: '100%' }}
           />
         </Form.Item>
@@ -106,16 +112,13 @@ const UserBranchOfficeSellerView = () => {
         columns={columns}
         dataSource={sellers}
         locale={{
-          emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores'/>
+          emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores' />
         }}
-        loading={{
-          spinning: staring,
-          tip: 'Cargando información...',
-        }}
+        loading={staring}
         pagination={{
           total,
           pageSize: limit,
-          onShowSizeChange: (_: any, size:number) => setLimit(size),
+          onShowSizeChange: (_: any, size: number) => setLimit(size),
           onChange: (page: number) => {
             setStaring(true)
             setPage(page);

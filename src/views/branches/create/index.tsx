@@ -96,12 +96,9 @@ const CreateBranch = () => {
           />
         </Card>
         <br />
-        <Row gutter={10}>
-          <Col xs={24} md={12}>
-              <Map branch={branch} />
-          </Col>
-          <Col xs={24} md={12}>
-          
+        <Row>
+          <Col xs={24}> 
+            <Map branch={branch} />
           </Col>
         </Row>
         <br />

@@ -1,6 +1,6 @@
+import { FormRule } from "antd";
 import { BranchOffice } from "../interfaces/branchOffice";
 import { UserAdmin, UserBranchOfficeSeller } from "../interfaces/user";
-import { FormRule } from 'antd';
 
 export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns";
 export const initBranch: BranchOffice = {
