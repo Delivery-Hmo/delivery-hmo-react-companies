@@ -17,7 +17,7 @@ export interface User {
   export interface UserBranchOfficeSeller extends User {
     branchOffice?: string;
     password?: string;
-    confirmPassword:? string;
+    confirmPassword?: string;
   }
   
   export interface UserAdmin extends User {

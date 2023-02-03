@@ -29,7 +29,11 @@ const CreateUserBranchOfficeSeller = () => {
     try {
       setSaveLoading(true);
 
-      const { id, uid, name, email, phone, description, password, confirmPassword, active } = seller
+      const { password, confirmPassword } = seller;
+      let _seller = {...seller};
+
+
+      delete _seller.confirmPassword;
 
       if (confirmPassword !== password) {
         message.error('Las contraseñas no coinciden.')
@@ -37,20 +41,16 @@ const CreateUserBranchOfficeSeller = () => {
       }
 
       if (type === "update") {
-        await put(`userBranchOfficeSeller/${type}`, {
-          id, uid, name, email, phone, description, password, active
-        });
+        await put(`userBranchOfficeSeller/${type}`, _seller);
       } else{
-        await post(`userBranchOfficeSeller/${type}`, {
-          id, uid, name, email, phone, description, password, active
-        });
+        await post(`userBranchOfficeSeller/${type}`, _seller);
       }
 
-      message.success('Información guardada con éxito.')
+      message.success('Vendedor guardado con éxito.', 4);
       navigate('/vendedores')
     } catch (error) {
       console.log(error)
-      message.error('Ocurrió un problema al guardar la información.')
+      message.error('Error al guardar el vendedor.', 4);
     } finally {
       setSaveLoading(false)
     }
@@ -124,11 +124,9 @@ const CreateUserBranchOfficeSeller = () => {
                 md: 8
               },
               {
-                type: 'input',
-                typeInput: 'number',
+                type: 'phone',
                 label: 'Teléfono',
                 name: 'phone',
-                rules: rulesPhoneInput,
                 value: seller.phone,
                 onChange: (value: string) => setSeller({ ...seller, phone: value }),
                 md: 8
