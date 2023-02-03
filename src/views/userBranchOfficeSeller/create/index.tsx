@@ -22,12 +22,14 @@ const CreateUserBranchOfficeSeller = () => {
   const navigate = useNavigate();
   const { state } = location;
   const [type, setType] = useState<TypeRute>("create");
-  const [saveLoading, setSaveLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
 
   const onFinish = async () => {
+    if(saving) return;
+    
     try {
-      setSaveLoading(true);
+      setSaving(true);
 
       const { password, confirmPassword } = seller;
 
@@ -52,7 +54,7 @@ const CreateUserBranchOfficeSeller = () => {
       console.log(error)
       message.error('Error al guardar el vendedor.', 4);
     } finally {
-      setSaveLoading(false)
+      setSaving(false)
     }
   }
 
@@ -145,7 +147,7 @@ const CreateUserBranchOfficeSeller = () => {
             <Form.Item>
               <SaveButton
                 htmlType='submit'
-                loading={saveLoading}
+                loading={saving}
               >
                 Guardar vendedor
               </SaveButton>
