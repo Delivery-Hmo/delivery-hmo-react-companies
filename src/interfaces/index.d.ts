@@ -21,6 +21,7 @@ export interface CustomInput {
   rules?: FormRule[];
   onChange: (value: any) => void;
   styleFI?: React.CSSProperties;
+  show?: boolean;
 }
 
 export interface Option {

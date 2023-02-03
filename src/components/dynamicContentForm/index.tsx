@@ -1,20 +1,26 @@
 import { FC } from 'react';
 import { CustomInput, Option } from '../../interfaces';
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker } from 'antd';
+import { rulesPhoneInput } from '../../constants';
 
 interface Props {
   inputs: CustomInput[];
 }
 
 const typeInputs: Record<string, (input: CustomInput) => JSX.Element> = {
-  input: ({value, onChange, typeInput}: CustomInput) => 
-    <Input 
-      type={typeInput || 'text'} 
-      value={value} 
-      onKeyDown={(e) => typeInput === "number" && ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
-      onChange={(e) => onChange(e.target.value)}
-    />,
-  select: ({ value, onChange, options }: CustomInput) => <Select value={value} onChange={onChange}>,
+  input: ({ value, onChange, typeInput }: CustomInput) => <Input
+    type={typeInput || 'text'}
+    value={value}
+    onKeyDown={(e) => typeInput === "number" && ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
+    onChange={(e) => onChange(e.target.value)}
+  />,
+  phone: ({ value, onChange }: CustomInput) => <Input
+    type="number"
+    value={value}
+    onKeyDown={(e) => ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()}
+    onChange={(e) => onChange(e.target.value)}
+  />,
+  select: ({ value, onChange, options }: CustomInput) => <Select value={value} onChange={onChange}>
     {options?.map((option: Option) => <Select.Option key={option.value} value={option.value}>{option.text}</Select.Option>)}
   </Select>,
   textarea: ({ value, onChange }: CustomInput) => <Input.TextArea value={value} onChange={(e) => onChange(e.target.value)} />,
@@ -36,7 +42,7 @@ const DynamicContentForm: FC<Props> = ({ inputs }) => {
               {show && (<Form.Item
                 label={label}
                 name={name}
-                rules={rules}
+                rules={type === "phone" ? rulesPhoneInput : rules}
                 style={styleFI}
               >
                 {typeInputs[type](input)}
