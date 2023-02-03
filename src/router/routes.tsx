@@ -6,6 +6,8 @@ import SingUp from '../views/singUp';
 import UserBranchOfficeSeller from '../views/userBranchOfficeSeller';
 import CreateUserBranchOfficeSeller from '../views/userBranchOfficeSeller/create';
 import Profile from '../views/profile';
+import UserBranchOfficeDeliveryMan from '../views/userBranchOfficeDeliveryMan';
+import CreateUserBranchOfficeDeliveryMan from '../views/userBranchOfficeDeliveryMan/create';
 
 const routes: PathRouteProps[] = [
   {
@@ -39,6 +41,18 @@ const routes: PathRouteProps[] = [
   {
     path: '/registrarse',
     element: <SingUp />,
+  },
+  {
+    path: '/repartidores',
+    element: <UserBranchOfficeDeliveryMan />,
+  },
+  {
+    path: '/repartidores/crear',
+    element: <CreateUserBranchOfficeDeliveryMan />
+  },
+  {
+    path: 'repartidores/editar',
+    element: <CreateUserBranchOfficeDeliveryMan />
   },
   {
     path: '*',

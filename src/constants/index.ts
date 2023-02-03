@@ -1,5 +1,5 @@
 import { BranchOffice } from "../interfaces/branchOffice";
-import { UserAdmin, UserBranchOfficeSeller } from "../interfaces/user";
+import { UserAdmin, UserBranchOfficeDeliveryMan, UserBranchOfficeSeller } from "../interfaces/user";
 import { FormRule } from 'antd';
 
 export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns";
@@ -53,4 +53,17 @@ export const rulesPhoneInput: FormRule[]  = [
   { min: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
   { max: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
 ];
+
+export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
+  active: true,
+  description: '',
+  email: '',
+  name: '',
+  phone: '',
+  role: 'Repartidor',
+  password: '',
+  repeatPassword: '',
+  branchOffice: '',
+  deliveryMan: true,
+}
 
