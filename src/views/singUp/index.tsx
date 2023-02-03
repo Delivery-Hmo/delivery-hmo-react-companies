@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Form, Row, Col, message } from 'antd';
 import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAdmin } from '../../interfaces/user';
 import { get, post } from '../../services';
 import DynamicContentForm from '../../components/dynamicContentForm';
 import SaveButton from '../../components/saveButton';
+import { rulesPhoneInput } from '../../constants';
+import { FormRule } from "antd";
 
 const initUserAdmin: UserAdmin = {
   active: true,
@@ -21,9 +23,12 @@ const initUserAdmin: UserAdmin = {
 const SingUp = () => {
   const [userAdmin, setUserAdmin] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState(false);
-  const sizes = {
-    xs: 24, md: 8
-  }
+
+  const rulesPassword: FormRule[] = useMemo(() => [
+    { required: userAdmin.password !== "", message: 'Favor de escribir la contraseña del vendedor.' },
+    { min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
+  ], [userAdmin.password])
+
   const onFinish = async () => {
     if (userAdmin.password !== userAdmin.repeatPassword) {
       message.error('Las contraseñas no coinciden.', 4)
@@ -76,7 +81,7 @@ const SingUp = () => {
       <Form layout="vertical" onFinish={onFinish}>
         <DynamicContentForm inputs={[
           {
-            ...sizes,
+            md: 12,
             type: "input",
             typeInput: "text",
             label: "Nombre Vendedor",
@@ -85,25 +90,7 @@ const SingUp = () => {
             value: userAdmin.name,
             onChange: (value) => setUserAdmin({ ...userAdmin, name: value })
           }, {
-            ...sizes,
-            type: "input",
-            typeInput: "text",
-            label: "Compañia",
-            name: "company",
-            rules: [{ required: true, message: 'Favor de escribir la company.' }],
-            value: userAdmin.company,
-            onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
-          }, {
-            ...sizes,
-            type: "input",
-            typeInput: "text",
-            label: "Descripcion",
-            name: "description",
-            rules: [{ required: true, message: 'Favor de seleccionar su description.' }],
-            value: userAdmin.description,
-            onChange: (value) => setUserAdmin({ ...userAdmin, description: value })
-          }, {
-            md: 6,
+            md: 12,
             type: "input",
             typeInput: "email",
             label: "Email",
@@ -112,32 +99,50 @@ const SingUp = () => {
             value: userAdmin.email,
             onChange: (value) => setUserAdmin({ ...userAdmin, email: value })
           }, {
-            md: 2,
-            type: "input",
-            typeInput: "number",
-            label: "Telefono",
-            name: "phone",
-            rules: [{ required: true, message: 'Favor de ingresar un telefono.' }],
-            value: userAdmin.phone,
-            onChange: (value) => setUserAdmin({ ...userAdmin, phone: value })
-          }, {
-            md: 8,
+            md: 12,
             type: "input",
             typeInput: "password",
             label: "Contraseña",
             name: "password",
-            rules: [{ required: true, message: 'Favor de ingresar una contraseña.' }],
+            rules: rulesPassword,
             value: userAdmin.password,
             onChange: (value) => setUserAdmin({ ...userAdmin, password: value })
           }, {
-            md: 8,
+            md: 12,
             type: "input",
             typeInput: "password",
             label: "Repetir Contraseña",
             name: "repeatPassword",
-            rules: [{ required: true, message: 'Favor de ingresar una contraseña.' }],
+            rules: rulesPassword,
             value: userAdmin.repeatPassword,
             onChange: (value) => setUserAdmin({ ...userAdmin, repeatPassword: value })
+          }, {
+            md: 12,
+            type: "input",
+            typeInput: "text",
+            label: "Compañia",
+            name: "company",
+            rules: [{ required: true, message: 'Favor de escribir la company.' }],
+            value: userAdmin.company,
+            onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
+          }, {
+            md: 12,
+            type: "input",
+            typeInput: "number",
+            label: "Telefono",
+            name: "phone",
+            rules: rulesPhoneInput,
+            value: userAdmin.phone,
+            onChange: (value) => setUserAdmin({ ...userAdmin, phone: value })
+          }, {
+            md: 24,
+            type: "textarea",
+            typeInput: "text",
+            label: "Descripcion",
+            name: "description",
+            rules: [{ required: true, message: 'Favor de seleccionar su description.' }],
+            value: userAdmin.description,
+            onChange: (value: string) => setUserAdmin({ ...userAdmin, description: value })
           }
         ]} />
 

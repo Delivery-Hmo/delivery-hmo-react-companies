@@ -23,3 +23,11 @@ export interface User {
   export interface UserAdmin extends User {
     company: string;
   }
+
+  export interface UserBranchOfficeDeliveryMan extends User {
+    branchOffice: string | BranchOffice;
+    deliveryMan: boolean;
+    deliveryManProps? : {
+      location: number | null;
+    }
+  }
