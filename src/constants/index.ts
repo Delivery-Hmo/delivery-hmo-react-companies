@@ -25,8 +25,7 @@ export const initBranch: BranchOffice = {
   salesGoalByMonth: 0,
   email: "",
   website: "",
-  facebook: "",
-
+  facebook: ""
 }
 export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
   active: true,
@@ -57,7 +56,6 @@ export const rulesPhoneInput: FormRule[]  = [
   { min: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
   { max: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
 ];
-
 export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
   active: true,
   description: '',

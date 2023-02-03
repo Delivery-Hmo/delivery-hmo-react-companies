@@ -30,14 +30,15 @@ const CreateUserBranchOfficeSeller = () => {
       setSaveLoading(true);
 
       const { password, confirmPassword } = seller;
+
+      if (confirmPassword !== password) {
+        message.error('Las contraseñas no coinciden.');
+        return;
+      }
+
       let _seller = {...seller};
 
       delete _seller.confirmPassword;
-
-      if (confirmPassword !== password) {
-        message.error('Las contraseñas no coinciden.')
-        return;
-      }
 
       if (type === "update") {
         await put(`userBranchOfficeSeller/${type}`, _seller);
