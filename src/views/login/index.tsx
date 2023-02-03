@@ -21,7 +21,7 @@ const Login: FC<Props> = ({ open }) => {
   }
 
   return (
-    <div className='app-login-wrapper'>
+    <div>
       <Card
         className='app-login-card'
         style={{

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Col, Empty, Form, Input, message, Row, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router-dom';
@@ -10,9 +10,6 @@ import TableActionsButtons from '../../components/tableActionsButtons';
 
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 const { Search } = Input
-const headerStyle = {
-  fontWeight: 'bold',
-};
 
 interface Get {
   list: UserBranchOfficeSeller[];
@@ -29,19 +26,38 @@ const UserBranchOfficeSellerView = () => {
   const [staring, setStaring] = useState(true)
   const [search, setSearch] = useState("")
 
+  const columns: ColumnsType<UserBranchOfficeSeller> = useMemo(() => [
+    { title: 'Nombre', dataIndex: 'name', key: 'name' },
+    { title: 'Correo', dataIndex: 'email', key: 'email' }, 
+    { title: 'Teléfono', dataIndex: 'phone', key: 'phone' },
+    { title: 'Descripción', dataIndex: 'description', key: 'description' },
+    {
+      title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
+      render: (_, record: UserBranchOfficeSeller) => (
+        <TableActionsButtons
+          record={record}
+          onDeleted={() => setStaring(true)}
+          fun={() => patch(`userBranchOfficeSeller/disable`, { id: record.id, active: false })}
+          messageError="Vendedor eliminado con éxito."
+        />
+      ),
+    },
+  ], [])
+
   useEffect(() => {
     if (!userAdmin || !staring) return;
 
     const controller = new AbortController();
+
     const init = async () => {
       try {
         const { list, total } = await get<Get>(`userBranchOfficeSeller/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
-      
+
         setSellers(list);
         setTotal(total);
       } catch (error) {
         console.log(error);
-        message.error("Error al obtener los vendedores");
+        message.error("Error al obtener los vendedores.");
       } finally {
         setStaring(false);
       }
@@ -53,28 +69,6 @@ const UserBranchOfficeSellerView = () => {
       controller.abort();
     }
   }, [limit, page, search, staring, userAdmin])
-
-  const columns: ColumnsType<UserBranchOfficeSeller> = [
-    {
-      title: 'Nombre', dataIndex: 'name', key: 'name',
-      onHeaderCell: () => ({ style: headerStyle })
-    },
-    { title: 'Correo', dataIndex: 'email', key: 'email', onHeaderCell: () => ({ style: headerStyle }) },
-    { title: 'Teléfono', dataIndex: 'phone', key: 'phone', onHeaderCell: () => ({ style: headerStyle }) },
-    { title: 'Descripción', dataIndex: 'description', key: 'description', onHeaderCell: () => ({ style: headerStyle }) },
-    {
-      title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
-      render: (_, record: UserBranchOfficeSeller) => (
-        <TableActionsButtons
-          record={record}
-          onDeleted={() => setStaring(true)}
-          fun={() => patch(`userBranchOfficeSeller/disable`, { id: record.id, active: false })}
-          messageError="Vendedor eliminado con éxito."
-        />
-      ),
-      onHeaderCell: () => ({ style: headerStyle })
-    },
-  ]
 
   return (
     <>
@@ -108,7 +102,6 @@ const UserBranchOfficeSellerView = () => {
         </Form.Item>
       </Form>
       <Table
-        bordered
         columns={columns}
         dataSource={sellers}
         locale={{
@@ -120,7 +113,7 @@ const UserBranchOfficeSellerView = () => {
           pageSize: limit,
           onShowSizeChange: (_: any, size: number) => setLimit(size),
           onChange: (page: number) => {
-            setStaring(true)
+            setStaring(true);
             setPage(page);
           },
           showTotal: (total: number, range: number[]) => `${range[0]}-${range[1]} de ${total} registros.`,
@@ -128,11 +121,10 @@ const UserBranchOfficeSellerView = () => {
           showSizeChanger: true
         }}
         rowKey='id'
-        scroll={{ x: 1000 }}
         size='small'
       />
     </>
   )
 }
 
-export default UserBranchOfficeSellerView
+export default UserBranchOfficeSellerView;

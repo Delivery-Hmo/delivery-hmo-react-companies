@@ -8,7 +8,12 @@ export const initBranch: BranchOffice = {
   userAdmin: "",
   name: "",
   address: "",
-  latLang: {
+  latLng: {
+    lat: 0,
+    lng: 0
+  },
+  radius: 0,
+  center: {
     lat: 0,
     lng: 0
   },
@@ -22,7 +27,6 @@ export const initBranch: BranchOffice = {
   email: "",
   website: "",
   facebook: "",
-  radius: 0,
 
 }
 export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
@@ -50,7 +54,7 @@ export const initUserAdmin: UserAdmin = {
 };
 export const namesDaysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 export const rulesPhoneInput: FormRule[]  = [
-  { required: true, message: 'Favor de escribir el teléfono del vendedor.' },
+  { required: true, message: 'Favor de escribir el teléfono.' },
   { min: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
   { max: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
 ];

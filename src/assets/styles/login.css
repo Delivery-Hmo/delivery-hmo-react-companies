@@ -9,13 +9,6 @@
   padding: 30;
 }
 
-.app-login-wrapper {
-  background-color: #fff;
-  padding: 0 15px;
-  width: 100%;
-  border-radius: 10px;
-}
-
 .ant-card-body {
   flex: 1;
   padding: 10px;

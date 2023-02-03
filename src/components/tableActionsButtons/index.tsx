@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import { Button, Space, Tooltip } from 'antd';
+import { FC } from 'react';
+import { Button, message, Space, Tooltip } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { dialogDelete } from '../../utils';
@@ -16,10 +16,11 @@ const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError }
 
   const del = async () => {
     try {
-      await dialogDelete(fun, messageError)
+      await dialogDelete(fun, messageError);
       onDeleted();
     } catch (error) {
-      console.error(error)
+      console.error(error);
+      message.error("Error al eliminar el registro.");
     }
   }
 
@@ -47,4 +48,4 @@ const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError }
   )
 }
 
-export default TableActionsButtons
+export default TableActionsButtons;
