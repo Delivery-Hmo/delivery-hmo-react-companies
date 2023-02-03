@@ -23,7 +23,7 @@ const Perfil = () => {
     setLoading(true);
 
     try {
-      const _userAdmin = await put("userAdmin/update", user);
+      const _userAdmin = await put<UserAdmin>("userAdmin/update", user);
 
       setUserAdmin(_userAdmin);
 
