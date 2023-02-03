@@ -76,10 +76,10 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
 
   return (
     <>
-      <div className="app-login-title">
-        <span>Inicio de Sesión</span>
+      <div className="app-login-title" style={{display: "flex", justifyContent: "center"}}>
+        <span>Inicio de sesión</span>
       </div>
-      <div className="app-login-subtitle">
+      <div className="app-login-subtitle" style={{display: "flex", justifyContent: "center"}}>
         <p>Bienvenido</p>
       </div>
       <Form
