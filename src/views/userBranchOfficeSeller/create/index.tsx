@@ -5,7 +5,7 @@ import SaveButton from '../../../components/saveButton';
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
-import { initUserBranchOfficeSeller, rulesPhoneInput } from '../../../constants';
+import { initUserBranchOfficeSeller } from '../../../constants';
 import { UserBranchOfficeSeller } from '../../../interfaces/user';
 
 type TypeRute = "create" | "update";
@@ -25,15 +25,12 @@ const CreateUserBranchOfficeSeller = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
 
-  console.log("typeeeeeeee", type)
-
   const onFinish = async () => {
     try {
       setSaveLoading(true);
 
       const { password, confirmPassword } = seller;
       let _seller = {...seller};
-
 
       delete _seller.confirmPassword;
 
