@@ -5,19 +5,17 @@ export interface BranchOffice {
   id?: string;
   userAdmin: string | UserAdmin;
   name: string;
-  address: string; 
-  latLng: LatLng;
-  radius: number;
-  center: LatLng;
+  email: string;
+  salesGoalByMonth: number;
+  facebook: string; 
   phones: number[];
-  active: boolean;
-  showingInApp: boolean;//
+  latLng: LatLng;
+  center: LatLng;
+  radius: number;
+  address: string; 
+  active?: boolean;
+  showingInApp?: boolean;
   logo: string;
   comments: CommentsBranchOffice[];
-  totolSales: number; 
-  salesGoalByMonth: number;
-  email?: string;
-  website?: string; 
-  facebook?: string; 
-  //faltarian las props para el radio de busqueda de repartidores y para mostar a clientes
+  totolSales?: number; 
 }

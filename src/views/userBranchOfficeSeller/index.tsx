@@ -22,9 +22,9 @@ const UserBranchOfficeSellerView = () => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [sellers, setSellers] = useState<UserBranchOfficeSeller[]>([])
-  const [staring, setStaring] = useState(true)
-  const [search, setSearch] = useState("")
+  const [sellers, setSellers] = useState<UserBranchOfficeSeller[]>([]);
+  const [staring, setStaring] = useState(true);
+  const [search, setSearch] = useState("");
 
   const columns: ColumnsType<UserBranchOfficeSeller> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },

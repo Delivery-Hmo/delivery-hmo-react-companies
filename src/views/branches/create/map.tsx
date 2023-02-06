@@ -1,14 +1,13 @@
 import { useState, useEffect, FC, Dispatch, SetStateAction } from "react";
 import { BranchOffice } from "../../../interfaces/branchOffice";
-import { GoogleMap, DrawingManagerF, useJsApiLoader, CircleF } from '@react-google-maps/api';
+import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../../constants";
 import { LibrariesGoogleMaps } from "../../../types";
 import FullLoader from "../../../components/fullLoader";
 import { LatLng } from "../../../interfaces";
-import { Card, message, Row } from "antd";
+import { Card, message } from "antd";
 
 interface Props {
-  branch: BranchOffice;
   setBranch: Dispatch<SetStateAction<BranchOffice>>
 }
 
@@ -23,7 +22,7 @@ const containerStyle = {
 };
 const libraries: LibrariesGoogleMaps = ["drawing"];
 
-const Map: FC<Props> = ({ branch, setBranch }) => {
+const Map: FC<Props> = ({ setBranch }) => {
   const [circle, setCircle] = useState<google.maps.Circle>();
   const [marker, setMarker] = useState<google.maps.Marker>();
   const { isLoaded, loadError } = useJsApiLoader({
@@ -97,13 +96,9 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
     setMarker(_marker);
   }
 
-  const { latLng, radius } = branch;
-
   return (
     <Card>
-      <Row style={{ marginBottom: 8 }}>
-        <h3>Ubicación y radio de entrega</h3>
-      </Row>
+      <b>Ubicación y radio de entrega</b>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={initCenter}
@@ -114,12 +109,6 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
           onMarkerComplete={onMarkerComplete}
           options={options}
         />
-        {
-          <CircleF
-            center={latLng}
-            radius={radius}
-          />
-        }
       </GoogleMap>
     </Card>
   )

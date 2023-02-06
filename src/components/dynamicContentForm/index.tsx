@@ -12,14 +12,29 @@ const DynamicContentForm: FC<Props> = ({ inputs }) => {
     input: ({ value, onChange, typeInput }: CustomInput) => <Input
       type={typeInput || 'text'}
       value={value}
-      onKeyDown={(e) => typeInput === "number" && ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
-      onChange={(e) => onChange(e.target.value)}
+      onKeyDown={e => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          e.preventDefault();
+        }
+
+        return typeInput === "number" && ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+      }}
+      onChange={e => onChange(e.target.value)}
+      onWheel={e => e.preventDefault()}
+      onKeyUp={e => e.preventDefault()}
     />,
     phone: ({ value, onChange }: CustomInput) => <Input
       type="number"
       value={value}
-      onKeyDown={(e) => ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()}
-      onChange={(e) => onChange(e.target.value)}
+      onKeyDown={e => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          e.preventDefault();
+        }
+        
+        return ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()
+      }}
+      onChange={e => onChange(e.target.value)}
+      onWheel={e => e.preventDefault()}
     />,
     select: ({ value, onChange, options }: CustomInput) => <Select value={value} onChange={onChange}>
       {options?.map((option: Option) => <Select.Option key={option.value} value={option.value}>{option.text}</Select.Option>)}

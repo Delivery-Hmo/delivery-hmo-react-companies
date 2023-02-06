@@ -145,13 +145,9 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                 md: 8
               }
             ]} />
-            <Form.Item>
-              <SaveButton htmlType='submit'
-                loading={saveLoading}
-              >
-                Guardar repartidor
-              </SaveButton>
-            </Form.Item>
+            <SaveButton htmlType='submit'loading={saveLoading}>
+              Guardar repartidor
+            </SaveButton>
           </Form>
         </Col>
       </Row>

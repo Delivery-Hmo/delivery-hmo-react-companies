@@ -112,11 +112,9 @@ const Perfil = () => {
               onChange: (value) => setUser({ ...user, description: value })
             }
           ]} />
-          <Form.Item >
-            <SaveButton htmlType="submit" loading={loading}>
-              Guardar
-            </SaveButton>
-          </Form.Item>
+          <SaveButton htmlType="submit" loading={loading}>
+            Guardar
+          </SaveButton>
         </Form>
       }
     ]
@@ -168,11 +166,9 @@ const Perfil = () => {
               md: 6,
             },
           ]} />
-          <Form.Item >
-            <SaveButton htmlType="submit" loading={loading}>
-              Guardar
-            </SaveButton>
-          </Form.Item>
+          <SaveButton htmlType="submit" loading={loading}>
+            Guardar
+          </SaveButton>
         </Form>
       }
     ]
@@ -221,7 +217,7 @@ const Perfil = () => {
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.phone || "Sin teléfono."}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Descripciòn: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripciòn."}</span>
+                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripciòn."}</span>
                     </Col>
                   </Row>
                 </>

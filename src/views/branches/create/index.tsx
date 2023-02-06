@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Col, Form, message, Row } from 'antd';
+import { Card, Form, message } from 'antd';
 import SaveButton from '../../../components/saveButton';
 import DynamicContentForm from '../../../components/dynamicContentForm';
 import { initBranch, rulesPhoneInput } from '../../../constants';
@@ -12,28 +12,28 @@ const CreateBranch = () => {
   const [branch, setBranch] = useState<BranchOffice>(initBranch);
   const [saving, setSaving] = useState(false);
 
-  const { name, email, facebook, website, salesGoalByMonth, phones } = branch;
+  const { name, email, facebook, salesGoalByMonth, phones, latLng, radius, center } = branch;
 
   const onFinish = async () => {
-    if(saving) return;
+    if (saving) return;
 
-    if(!branch.radius || branch.center) {
+    if (!latLng.lat || !latLng.lng) {
+      message.error("La ubicación de la sucursal es obligatoria.");
+      return;
+    }
+
+    if (!radius || (!center.lat || !center.lng)) {
       message.error("El radio de entrega es obligatorio.");
       return;
     }
 
-    if(!branch.latLng) {
-      message.error("La ubicación de la sucursal es obligatoria.");
-      return;
-    }
-    
     setSaving(true);
 
     try {
       console.log(branch);
-      
+
       await post("branchOffice/create", branch);
-      
+
       message.success("Sucursal guardada con exito.");
     } catch (error) {
       console.log(error);
@@ -45,99 +45,75 @@ const CreateBranch = () => {
 
   return (
     <div>
-      <Row>
-        <Col>
-          <h1>Registrar sucursal</h1>
-        </Col>
-      </Row>
-      <Form 
+      <h1>Registrar sucursal</h1>
+      <Form
         layout="vertical"
         onFinish={onFinish}
       >
         <Card>
-          <h3>Datos</h3>
-          <DynamicContentForm 
+          <b>Información principal</b>
+          <DynamicContentForm
             inputs={[
-              {
-                md: 16,
-                type: "input",
-                typeInput: "text",
-                label: "Nombre",
-                name: "name",
-                rules: [{ required: true, message: 'Favor de escribir el Nombre.' }],
-                value: name,
-                onChange: (value: string) => setBranch({...branch, name: value})
-              },
-              {
+              ...[
+                {
+                  md: 12,
+                  type: "input",
+                  typeInput: "text",
+                  label: "Nombre",
+                  name: "name",
+                  rules: [{ required: true, message: 'Favor de escribir el Nombre.' }],
+                  value: name,
+                  onChange: (value: string) => setBranch({ ...branch, name: value })
+                },
+                {
+                  md: 12,
+                  type: "input",
+                  typeInput: "email",
+                  label: "Correo electrónico",
+                  name: "email",
+                  rules: [{ required: true, message: 'Favor de escribir el Correo electrónico.' }],
+                  value: email,
+                  onChange: (value: string) => setBranch({ ...branch, email: value })
+                },
+                {
+                  md: 12,
+                  type: "input",
+                  typeInput: "number",
+                  label: "Meta ventas / mes",
+                  name: "salesGoalByMonth",
+                  value: salesGoalByMonth,
+                  onChange: (value: string) => setBranch({ ...branch, salesGoalByMonth: +value })
+                },
+                {
+                  md: 12,
+                  type: "input",
+                  label: "Facebook",
+                  name: "faceebok",
+                  value: facebook,
+                  onChange: (value: string) => setBranch({ ...branch, facebook: value })
+                }
+              ] as CustomInput[],
+              ...phones.map((phone, index) => ({
+                rules: (index === 0 || phone) ? rulesPhoneInput : null,
                 md: 8,
-                type: "input",
-                typeInput: "number",
-                label: "Meta ventas por mes",
-                name: "salesGoalByMonth",
-                value: salesGoalByMonth,
-                onChange: (value: string) => setBranch({...branch, salesGoalByMonth: +value})
-              },
-              {
-                md: 8,
-                type: "input",
-                typeInput: "email",
-                label: "Correo electronico",
-                name: "email",
-                value: email,
-                onChange: (value: string) => setBranch({...branch, email: value})
-              },
-              {
-                md: 8,
-                type: "input",
-                label: "Facebook",
-                name: "faceebok",
-                value: facebook,
-                onChange: (value: string) => setBranch({...branch, facebook: value})
-              },
-              {
-                md: 8,
-                type: "input",
-                label: "Sitio web",
-                name: "website",
-                value: website,
-                onChange: (value: string) => setBranch({...branch, website: value})
-              }
-            ]}
-          />
-        </Card>
-        <br />
-        <Card>
-          <h3>Teléfonos</h3>
-          <DynamicContentForm 
-            inputs={
-              phones.map((phone, index) => ({
-                rules: index === 0 ? rulesPhoneInput : null,
-                md: 4,
                 type: "phone",
                 label: `Teléfono ${index + 1}`,
                 name: `phone${index}`,
                 value: phone,
-                styleFI: { marginBottom: 0 },
-                onChange: (value: string) => setBranch({...branch, phones: phones.map((p, i) => i === index ? +value : p) })
+                onChange: (value: string) => setBranch({ ...branch, phones: phones.map((p, i) => i === index ? +value : p) })
               }) as CustomInput)
-            }
+            ]}
           />
         </Card>
         <br />
-        <Row>
-          <Col xs={24}> 
-            <Map branch={branch} setBranch={setBranch} />
-          </Col>
-        </Row>
+        <Map setBranch={setBranch} />
         <br />
-        <Form.Item>
-          <SaveButton
-            htmlType="submit"
-            loading={saving}
-          >
-            Guardar
-          </SaveButton>
-        </Form.Item>
+        <SaveButton
+          htmlType="submit"
+          loading={saving}
+        >
+          Guardar
+        </SaveButton>
       </Form>
     </div>
   )
