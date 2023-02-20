@@ -15,7 +15,8 @@ export interface BranchOffice {
   address: string; 
   active?: boolean;
   showingInApp?: boolean;
-  logo: string;
   comments: CommentsBranchOffice[];
   totolSales?: number; 
+  password?: string;
+  confirmPassword?: string;
 }

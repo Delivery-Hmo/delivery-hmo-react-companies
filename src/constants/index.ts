@@ -21,7 +21,6 @@ export const initBranch: BranchOffice = {
     lng: 0
   },
   address: "",
-  logo: "",
   comments: [],
 };
 export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
@@ -31,8 +30,6 @@ export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
   name: '',
   phone: '',
   role: 'Vendedor',
-  password: '',
-  confirmPassword: ''
 };
 export const initUserAdmin: UserAdmin = {
   id: '',
@@ -44,7 +41,7 @@ export const initUserAdmin: UserAdmin = {
   name: '',
   phone: '',
   password: '',
-  repeatPassword: '',
+  confirmPassword: '',
   role: ''
 };
 export const rulesPhoneInput: FormRule[]  = [
@@ -60,7 +57,7 @@ export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
   phone: '',
   role: 'Repartidor',
   password: '',
-  repeatPassword: '',
+  confirmPassword: '',
   branchOffice: '',
   deliveryMan: true
 };

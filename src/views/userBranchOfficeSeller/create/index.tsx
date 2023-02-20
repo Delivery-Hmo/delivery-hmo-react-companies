@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import DynamicContentForm from '../../../components/dynamicContentForm'
-import { Card, Col, Form, message, Row } from 'antd'
+import { Card, Col, Form, FormRule, message, Row } from 'antd'
 import SaveButton from '../../../components/saveButton';
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -19,6 +19,10 @@ const CreateUserBranchOfficeSeller = () => {
   const [saving, setSaving] = useState(false);
   const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
 
+  const rulesPassword: FormRule[] = useMemo(() => [
+    { required: !seller.id || seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
+  ], [seller.password])
+
   const onFinish = async () => {
     if (saving) return;
 
@@ -27,7 +31,7 @@ const CreateUserBranchOfficeSeller = () => {
 
       const { password, confirmPassword } = seller;
 
-      if (confirmPassword !== password) {
+      if (password && confirmPassword !== password) {
         message.error('Las contraseñas no coinciden.');
         return;
       }
@@ -54,7 +58,7 @@ const CreateUserBranchOfficeSeller = () => {
 
   useEffect(() => {
     if (!state) {
-      navigate("/vendedores")
+      navigate("/vendedores");
       return;
     }
 
@@ -104,7 +108,7 @@ const CreateUserBranchOfficeSeller = () => {
                   typeInput: 'password',
                   label: 'Contraseña',
                   name: 'password',
-                  rules: [{ required: type === "create", message: 'Favor de escribir la contraseña del vendedor.' }],
+                  rules: rulesPassword,
                   value: seller.password,
                   onChange: (value: string) => setSeller({ ...seller, password: value }),
                   md: 8
@@ -112,9 +116,9 @@ const CreateUserBranchOfficeSeller = () => {
                 {
                   type: 'input',
                   typeInput: 'password',
-                  label: 'Confirmar Contraseña',
+                  label: 'Confirmar contraseña',
                   name: 'confirmPassword',
-                  rules: [{ required: type === "create", message: 'Favor de confirmar la contraseña del vendedor.' }],
+                  rules: rulesPassword,
                   value: seller.confirmPassword,
                   onChange: (value: string) => setSeller({ ...seller, confirmPassword: value }),
                   md: 8

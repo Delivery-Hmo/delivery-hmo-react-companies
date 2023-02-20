@@ -11,13 +11,12 @@ export interface User {
     image?: string;
     role: Rols;
     password?: string;
-    repeatPassword?: string;
+    confirmPassword?: string;
   }
 
   export interface UserBranchOfficeSeller extends User {
     branchOffice?: string;
     password?: string;
-    confirmPassword?: string;
   }
   
   export interface UserAdmin extends User {

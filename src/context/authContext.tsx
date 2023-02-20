@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, createContext, FC, ReactNode, Dispatch } from 'react';
+import { useEffect, useState, useContext, createContext, FC, ReactNode, Dispatch, SetStateAction } from 'react';
 import FullLoader from '../components/fullLoader';
 import { User, onIdTokenChanged } from 'firebase/auth';
 import { get } from '../services';
@@ -8,7 +8,7 @@ import { UserAdmin } from '../interfaces/user';
 interface Auth {
   user: User | null;
   userAdmin: UserAdmin | null;
-  setUserAdmin: Dispatch<React.SetStateAction<UserAdmin | null>>;
+  setUserAdmin: Dispatch<SetStateAction<UserAdmin | null>>;
   loading: boolean;
 }
 
