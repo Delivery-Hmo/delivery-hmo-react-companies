@@ -31,7 +31,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !deliveryMan.id || deliveryMan.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
-  ], [deliveryMan.password])
+  ], [deliveryMan])
 
   const onFinish = async () => {
     try {

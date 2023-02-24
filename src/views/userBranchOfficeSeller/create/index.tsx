@@ -21,7 +21,7 @@ const CreateUserBranchOfficeSeller = () => {
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !seller.id || seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
-  ], [seller.password])
+  ], [seller])
 
   const onFinish = async () => {
     if (saving) return;

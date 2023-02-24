@@ -70,7 +70,7 @@ const Perfil = () => {
     } finally {
       setLoading(false)
     }
-  }, [email, password, userFirebase])
+  }, [email, password, userFirebase, confirmPassword])
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
@@ -178,7 +178,7 @@ const Perfil = () => {
     if (userFirebase?.providerData[0]?.providerId === "password") return isPassword;
 
     return istPassword;
-  }, [userFirebase, user, setUser, form, loading, email, password, confirmPassword, onEditAuth, onEditProfile])
+  }, [userFirebase, user, setUser, form, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword])
 
   useEffect(() => {
     if (!userAdmin) return;

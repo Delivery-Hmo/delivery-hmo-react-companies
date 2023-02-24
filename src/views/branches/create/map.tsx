@@ -1,4 +1,4 @@
-import { useState, useEffect, FC, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, FC, Dispatch, SetStateAction, memo } from "react";
 import { BranchOffice } from "../../../interfaces/branchOffice";
 import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../../constants";
@@ -16,10 +16,6 @@ const initCenter: LatLng = {
   lng: -110.960000
 };
 const initZoom = 11;
-const containerStyle = {
-  width: '100%',
-  height: '400px'
-};
 const libraries: LibrariesGoogleMaps = ["drawing"];
 
 const Map: FC<Props> = ({ setBranch }) => {
@@ -60,7 +56,15 @@ const Map: FC<Props> = ({ setBranch }) => {
   const onCircleComplete = (_circle: google.maps.Circle) => {
     circle?.setMap(null);
 
-    if (_circle.getRadius() >= 4500) {
+    if (_circle.getRadius() <= 1000) {
+      _circle?.setMap(null);
+      message.error("El radio de entrega es muy limitado.", 5);
+      setCircle(undefined);
+      return;
+    }
+
+
+    if (_circle.getRadius() >= 3800) {
       _circle?.setMap(null);
       message.error("Se esta exediendo el radio de entrega, contacta a soporte para mas información.", 5);
       setCircle(undefined);
@@ -100,7 +104,10 @@ const Map: FC<Props> = ({ setBranch }) => {
     <Card>
       <b>Ubicación y radio de entrega</b>
       <GoogleMap
-        mapContainerStyle={containerStyle}
+        mapContainerStyle={{
+          width: '100%',
+          height: '400px'
+        }}
         center={initCenter}
         zoom={initZoom}
       >
@@ -114,4 +121,4 @@ const Map: FC<Props> = ({ setBranch }) => {
   )
 }
 
-export default Map;
+export default memo(Map);

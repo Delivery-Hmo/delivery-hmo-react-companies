@@ -16,7 +16,7 @@ const CreateBranch = () => {
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !id || password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
-  ], [password])
+  ], [password, id])
 
   const onFinish = async () => {
     if (saving) return;

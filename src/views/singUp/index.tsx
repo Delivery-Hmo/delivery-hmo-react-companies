@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Form, Row, Col, message } from 'antd';
 import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAdmin } from '../../interfaces/user';
@@ -6,7 +6,6 @@ import { get, post } from '../../services';
 import DynamicContentForm from '../../components/dynamicContentForm';
 import SaveButton from '../../components/saveButton';
 import { rulesPhoneInput } from '../../constants';
-import { FormRule } from "antd";
 
 const initUserAdmin: UserAdmin = {
   active: true,
