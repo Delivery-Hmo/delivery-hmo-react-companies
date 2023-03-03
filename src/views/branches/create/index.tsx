@@ -6,11 +6,13 @@ import { initBranch, rulesPhoneInput } from '../../../constants';
 import { BranchOffice } from '../../../interfaces/branchOffice';
 import { CustomInput } from '../../../interfaces';
 import Map from './map';
-import { post } from '../../../services';
+import { get, post } from '../../../services';
+import { useNavigate } from 'react-router-dom';
 
 const CreateBranch = () => {
   const [branch, setBranch] = useState<BranchOffice>(initBranch);
   const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
 
   const { name, email, facebook, salesGoalByMonth, phones, latLng, radius, center, password, confirmPassword, id } = branch;
 
@@ -26,9 +28,16 @@ const CreateBranch = () => {
       return;
     }
 
-    if (!radius || (!center.lat || !center.lng)) {
+    if (!radius || !center.lat || !center.lng) {
       message.error("El radio de entrega es obligatorio.", 4);
       return;
+    }
+
+    const branchOfficeRegistered = await get<boolean>("branchOffice/verifyEmail?email=" + email);
+
+    if (branchOfficeRegistered) {
+      message.error('El correo ya esta registrado.', 4)
+      return
     }
 
     setSaving(true);
@@ -39,9 +48,10 @@ const CreateBranch = () => {
       await post("branchOffice/create", branch);
 
       message.success("Sucursal guardada con exito.", 4);
+
+      navigate("/sucursales");
     } catch (error) {
-      console.log(error);
-      message.error("Error al guardar la sucursal.", 4);
+      message.error(error as string, 4);
     } finally {
       setSaving(false);
     }

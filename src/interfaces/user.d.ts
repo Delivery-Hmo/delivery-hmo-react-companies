@@ -26,7 +26,7 @@ export interface User {
   export interface UserBranchOfficeDeliveryMan extends User {
     branchOffice: string | BranchOffice;
     deliveryMan: boolean;
-    deliveryManProps? : {
+    deliveryManProps?: {
       location: number | null;
     }
   }

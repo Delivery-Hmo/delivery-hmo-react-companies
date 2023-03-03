@@ -19,12 +19,12 @@ const initZoom = 11;
 const libraries: LibrariesGoogleMaps = ["drawing"];
 
 const Map: FC<Props> = ({ setBranch }) => {
-  const [circle, setCircle] = useState<google.maps.Circle>();
-  const [marker, setMarker] = useState<google.maps.Marker>();
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey,
     libraries
   });
+  const [circle, setCircle] = useState<google.maps.Circle>();
+  const [marker, setMarker] = useState<google.maps.Marker>();
   const [options, setOptions] = useState<google.maps.drawing.DrawingManagerOptions>();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const Map: FC<Props> = ({ setBranch }) => {
         drawingModes: [MARKER, CIRCLE],
         position: google.maps.ControlPosition.TOP_CENTER
       },
-    })
+    });
   }, [isLoaded])
 
   if (!isLoaded) return (
@@ -62,7 +62,6 @@ const Map: FC<Props> = ({ setBranch }) => {
       setCircle(undefined);
       return;
     }
-
 
     if (_circle.getRadius() >= 3800) {
       _circle?.setMap(null);
