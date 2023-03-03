@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import DynamicContentForm from '../../../components/dynamicContentForm'
-import { Col, Form, message, Row } from 'antd'
+import { Col, Form, FormRule, message, Row } from 'antd'
 import SaveButton from '../../../components/saveButton';
-import { post, put } from '../../../services';
+import { get, post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
 import { initUserBranchOfficeDeliveryMan, rulesPhoneInput } from '../../../constants';
@@ -26,24 +26,34 @@ const CreateUserBranchOfficeDeliveryMan = () => {
   const navigate = useNavigate();
   const { state } = location;
   const [type, setType] = useState<TypeRute>("create");
-
   const [saveLoading, setSaveLoading] = useState(false);
   const [deliveryMan, setDeliveryMan] = useState<UserBranchOfficeDeliveryMan>(initUserBranchOfficeDeliveryMan)
+
+  const rulesPassword: FormRule[] = useMemo(() => [
+    { required: !deliveryMan.id || deliveryMan.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
+  ], [deliveryMan])
 
   const onFinish = async () => {
     try {
       setSaveLoading(true);
 
-      const { password, repeatPassword } = deliveryMan;
+      const { password, confirmPassword, email } = deliveryMan;
 
-      if (repeatPassword !== password) {
+      if (password && confirmPassword !== password) {
         message.error('Las contraseñas no coinciden.');
+        return;
+      }
+
+      const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + email);
+
+      if (userAdminRegistered) {
+        message.error('El usuario ya esta registrado.', 4);
         return;
       }
 
       let _deliveryMan = {...deliveryMan};
 
-      delete _deliveryMan.repeatPassword;
+      delete _deliveryMan.confirmPassword;
 
       if (type === "update") {
         await put(`userBranchOfficeDeliveryMan/${type}`, _deliveryMan);
@@ -53,7 +63,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
       
     } catch (error) {
       console.log(error)
-      message.error('Ocurrió un problema al guardar la información.')
+      message.error('Ocurrió un problema al guardar la información.', 4);
     } finally {
       setSaveLoading(false)
     }
@@ -109,7 +119,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                 typeInput: 'password',
                 label: 'Contraseña',
                 name: 'password',
-                rules: [{ required: type === "update", message: 'Favor de escribir la contraseña del repartidor.' }],
+                rules: rulesPassword,
                 value: deliveryMan.password,
                 onChange: (value: string) => setDeliveryMan({ ...deliveryMan, password: value }),
                 md: 8
@@ -119,9 +129,9 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                 typeInput: 'password',
                 label: 'Confirmar Contraseña',
                 name: 'confirmPassword',
-                rules: [{ required: type === "update", message: 'Favor de confirmar la contraseña del repartidor.' }],
-                value: deliveryMan.repeatPassword,
-                onChange: (value: string) => setDeliveryMan({ ...deliveryMan, repeatPassword: value }),
+                rules: rulesPassword,
+                value: deliveryMan.confirmPassword,
+                onChange: (value: string) => setDeliveryMan({ ...deliveryMan, confirmPassword: value }),
                 md: 8
               },
               {
@@ -145,13 +155,9 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                 md: 8
               }
             ]} />
-            <Form.Item>
-              <SaveButton htmlType='submit'
-                loading={saveLoading}
-              >
-                Guardar repartidor
-              </SaveButton>
-            </Form.Item>
+            <SaveButton htmlType='submit'loading={saveLoading}>
+              Guardar repartidor
+            </SaveButton>
           </Form>
         </Col>
       </Row>

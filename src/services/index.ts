@@ -1,6 +1,6 @@
 import { getCurrentToken } from '../utils';
 
-const baseUrl = process.env.REACT_APP_SERVER_ELASTIC;
+const baseUrl = "http://localhost:3001/";
 //const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
 
 const getHeaders = (token: string) => ({
@@ -41,7 +41,8 @@ export const post = async <T>(url: string, body: Record<string, any>) => {
   )
 
   if (!response.ok) {
-    throw new Error('Error request!')
+    const error = await response.json();
+    throw error;
   }
 
   return response.json() as T

@@ -1,12 +1,16 @@
 import { FormRule } from "antd";
 import { BranchOffice } from "../interfaces/branchOffice";
 import { UserAdmin, UserBranchOfficeDeliveryMan, UserBranchOfficeSeller } from "../interfaces/user";
+import { TypeRute } from "../types";
 
-export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns";
+export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns"; //pasar a env
 export const initBranch: BranchOffice = {
   userAdmin: "",
   name: "",
-  address: "",
+  email: "",
+  salesGoalByMonth: 0,
+  facebook: "",
+  phones: [0, 0, 0],
   latLng: {
     lat: 0,
     lng: 0
@@ -16,17 +20,9 @@ export const initBranch: BranchOffice = {
     lat: 0,
     lng: 0
   },
-  phones: [0, 0, 0, 0, 0, 0],
-  active: true,
-  showingInApp: false,
-  logo: "",
+  address: "",
   comments: [],
-  totolSales: 0,
-  salesGoalByMonth: 0,
-  email: "",
-  website: "",
-  facebook: ""
-}
+};
 export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
   active: true,
   description: '',
@@ -34,9 +30,7 @@ export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
   name: '',
   phone: '',
   role: 'Vendedor',
-  password: '',
-  confirmPassword: ''
-}
+};
 export const initUserAdmin: UserAdmin = {
   id: '',
   uid: '',
@@ -47,14 +41,13 @@ export const initUserAdmin: UserAdmin = {
   name: '',
   phone: '',
   password: '',
-  repeatPassword: '',
+  confirmPassword: '',
   role: ''
 };
-export const namesDaysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 export const rulesPhoneInput: FormRule[]  = [
   { required: true, message: 'Favor de escribir el teléfono.' },
   { min: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
-  { max: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
+  { max: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' }
 ];
 export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
   active: true,
@@ -64,8 +57,11 @@ export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
   phone: '',
   role: 'Repartidor',
   password: '',
-  repeatPassword: '',
+  confirmPassword: '',
   branchOffice: '',
-  deliveryMan: true,
-}
-
+  deliveryMan: true
+};
+export const title: Record<TypeRute, string> = {
+  create: "Registrar",
+  update: "Editar"
+};

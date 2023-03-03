@@ -13,26 +13,27 @@ const MenuComponent = () => {
   const { userAdmin } = useAuth();
 
   const onCollapse = (collapsed: boolean | undefined) => setCollapsed(collapsed);
-  
+
   return (
-    <Sider 
-      collapsible 
-      collapsed={collapsed} 
+    <Sider
+      collapsible
+      collapsed={collapsed}
       onCollapse={onCollapse}
     >
       <br />
-      <Row 
-        justify="center" 
-        style={{margin: 15, textAlign: "center"}}
+      <Row
+        justify="center"
+        style={{ margin: 15, textAlign: "center", fontSize: 16 }}
       >
         <Avatar size={collapsed ? 48 : 64} icon={<UserOutlined />} />
-        { 
-          !collapsed && <div style={{color: "white"}}>
-            <div style={{marginTop: 20}}>
-              { userAdmin?.email }
+        {
+          !collapsed && <div style={{ color: "white" }}>
+            <br />
+            <div>
+              {userAdmin?.email}
             </div>
             <div>
-              { userAdmin?.role }
+              <b>{userAdmin?.role}</b>
             </div>
           </div>
         }

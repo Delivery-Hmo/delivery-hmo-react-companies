@@ -1,14 +1,13 @@
-import { useState, useEffect, FC, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, FC, Dispatch, SetStateAction, memo } from "react";
 import { BranchOffice } from "../../../interfaces/branchOffice";
-import { GoogleMap, DrawingManagerF, useJsApiLoader, CircleF } from '@react-google-maps/api';
+import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../../constants";
 import { LibrariesGoogleMaps } from "../../../types";
 import FullLoader from "../../../components/fullLoader";
 import { LatLng } from "../../../interfaces";
-import { Card, message, Row } from "antd";
+import { Card, message } from "antd";
 
 interface Props {
-  branch: BranchOffice;
   setBranch: Dispatch<SetStateAction<BranchOffice>>
 }
 
@@ -17,19 +16,15 @@ const initCenter: LatLng = {
   lng: -110.960000
 };
 const initZoom = 11;
-const containerStyle = {
-  width: '100%',
-  height: '400px'
-};
 const libraries: LibrariesGoogleMaps = ["drawing"];
 
-const Map: FC<Props> = ({ branch, setBranch }) => {
-  const [circle, setCircle] = useState<google.maps.Circle>();
-  const [marker, setMarker] = useState<google.maps.Marker>();
+const Map: FC<Props> = ({ setBranch }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey,
     libraries
   });
+  const [circle, setCircle] = useState<google.maps.Circle>();
+  const [marker, setMarker] = useState<google.maps.Marker>();
   const [options, setOptions] = useState<google.maps.drawing.DrawingManagerOptions>();
 
   useEffect(() => {
@@ -43,7 +38,7 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
         drawingModes: [MARKER, CIRCLE],
         position: google.maps.ControlPosition.TOP_CENTER
       },
-    })
+    });
   }, [isLoaded])
 
   if (!isLoaded) return (
@@ -61,7 +56,14 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
   const onCircleComplete = (_circle: google.maps.Circle) => {
     circle?.setMap(null);
 
-    if (_circle.getRadius() >= 4500) {
+    if (_circle.getRadius() <= 1000) {
+      _circle?.setMap(null);
+      message.error("El radio de entrega es muy limitado.", 5);
+      setCircle(undefined);
+      return;
+    }
+
+    if (_circle.getRadius() >= 3800) {
       _circle?.setMap(null);
       message.error("Se esta exediendo el radio de entrega, contacta a soporte para mas información.", 5);
       setCircle(undefined);
@@ -97,15 +99,14 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
     setMarker(_marker);
   }
 
-  const { latLng, radius } = branch;
-
   return (
     <Card>
-      <Row style={{ marginBottom: 8 }}>
-        <h3>Ubicación y radio de entrega</h3>
-      </Row>
+      <b>Ubicación y radio de entrega</b>
       <GoogleMap
-        mapContainerStyle={containerStyle}
+        mapContainerStyle={{
+          width: '100%',
+          height: '400px'
+        }}
         center={initCenter}
         zoom={initZoom}
       >
@@ -114,15 +115,9 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
           onMarkerComplete={onMarkerComplete}
           options={options}
         />
-        {
-          <CircleF
-            center={latLng}
-            radius={radius}
-          />
-        }
       </GoogleMap>
     </Card>
   )
 }
 
-export default Map;
+export default memo(Map);

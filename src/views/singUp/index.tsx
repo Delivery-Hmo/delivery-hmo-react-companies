@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Form, Row, Col, message } from 'antd';
 import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAdmin } from '../../interfaces/user';
@@ -6,7 +6,6 @@ import { get, post } from '../../services';
 import DynamicContentForm from '../../components/dynamicContentForm';
 import SaveButton from '../../components/saveButton';
 import { rulesPhoneInput } from '../../constants';
-import { FormRule } from "antd";
 
 const initUserAdmin: UserAdmin = {
   active: true,
@@ -16,24 +15,20 @@ const initUserAdmin: UserAdmin = {
   name: '',
   phone: '',
   password: '',
-  repeatPassword: '',
+  confirmPassword: '',
   role: ''
-}
+};
 
 const SingUp = () => {
   const [userAdmin, setUserAdmin] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState(false);
 
-  const rulesPassword: FormRule[] = useMemo(() => [
-    { required: userAdmin.password !== "", message: 'Favor de escribir la contraseña del vendedor.' },
-    { min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
-  ], [userAdmin.password])
-
   const onFinish = async () => {
-    if (userAdmin.password !== userAdmin.repeatPassword) {
+    if (userAdmin.password !== userAdmin.confirmPassword) {
       message.error('Las contraseñas no coinciden.', 4)
       return
     }
+
     if (loading) return;
 
     setLoading(true);
@@ -46,20 +41,17 @@ const SingUp = () => {
         return
       }
 
-      const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email, userAdmin.password as string)
+      const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email, userAdmin.password as string);
       const user = result.user
       const additional = getAdditionalUserInfo(result)
 
-      if (!additional?.isNewUser) return
+      if (!additional?.isNewUser) return;
 
-      const userInfo: UserAdmin = {
-        ...userAdmin,
-        uid: user.uid,
-        active: true,
-        role: ''
-      }
+      userAdmin.uid = user.uid;
 
-      await post('userAdmin/create', userInfo);
+      delete userAdmin.confirmPassword;
+
+      await post('userAdmin/create', userAdmin);
     } catch (error) {
       console.log(error);
       message.error('Error al registrarse.', 4)
@@ -104,18 +96,18 @@ const SingUp = () => {
             typeInput: "password",
             label: "Contraseña",
             name: "password",
-            rules: rulesPassword,
+            rules: [{ required: true, min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }],
             value: userAdmin.password,
             onChange: (value) => setUserAdmin({ ...userAdmin, password: value })
           }, {
             md: 12,
             type: "input",
             typeInput: "password",
-            label: "Repetir Contraseña",
-            name: "repeatPassword",
-            rules: rulesPassword,
-            value: userAdmin.repeatPassword,
-            onChange: (value) => setUserAdmin({ ...userAdmin, repeatPassword: value })
+            label: "Confirmar contraseña",
+            name: "confirmPassword",
+            rules: [{ required: true, min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }],
+            value: userAdmin.confirmPassword,
+            onChange: (value) => setUserAdmin({ ...userAdmin, confirmPassword: value })
           }, {
             md: 12,
             type: "input",
