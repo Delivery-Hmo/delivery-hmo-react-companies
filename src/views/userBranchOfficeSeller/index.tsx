@@ -39,6 +39,7 @@ const UserBranchOfficeSellerView = () => {
           onDeleted={() => setStaring(true)}
           fun={() => patch(`userBranchOfficeSeller/disable`, { id: record.id, active: false })}
           messageError="Vendedor eliminado con éxito."
+          pathEdit="/vendedores/editar" 
         />
       ),
     },

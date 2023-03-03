@@ -9,9 +9,10 @@ interface Props {
   onDeleted: () => void;
   fun: () => Promise<any>;
   messageError: string;
+  pathEdit: string;
 }
 
-const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError }) => {
+const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError, pathEdit }) => {
   const navigate = useNavigate();
 
   const del = async () => {
@@ -30,7 +31,7 @@ const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError }
         <Button
           icon={<EditOutlined />}
           shape="circle"
-          onClick={() => navigate('/vendedores/editar', { state: record})}
+          onClick={() => navigate(pathEdit, { state: record})}
           size="middle"
           style={{ color: '#fff', backgroundColor: '#ec9822'}}
         />

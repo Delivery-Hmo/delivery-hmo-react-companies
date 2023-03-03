@@ -51,7 +51,7 @@ const routes: PathRouteProps[] = [
     element: <CreateUserBranchOfficeDeliveryMan />
   },
   {
-    path: 'repartidores/editar',
+    path: '/repartidores/editar',
     element: <CreateUserBranchOfficeDeliveryMan />
   },
   {

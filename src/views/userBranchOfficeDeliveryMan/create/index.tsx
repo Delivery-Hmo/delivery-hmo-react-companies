@@ -1,22 +1,18 @@
 import { useEffect, useState } from 'react'
 import DynamicContentForm from '../../../components/dynamicContentForm'
-import { Col, Form, message, Row } from 'antd'
+import { Card, Col, Form, message, Row } from 'antd'
 import SaveButton from '../../../components/saveButton';
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
-import { initUserBranchOfficeDeliveryMan, rulesPhoneInput } from '../../../constants';
+import { initUserBranchOfficeDeliveryMan } from '../../../constants';
 import { UserBranchOfficeDeliveryMan } from '../../../interfaces/user';
 
 type TypeRute = "create" | "update";
 
-interface State {
-  data: UserBranchOfficeDeliveryMan;
-}
-
 const title: Record<TypeRute, string> = {
-  "create": "Registrar",
-  "update": "Editar"
+  create: "Registrar",
+  update: "Editar"
 };
 
 const CreateUserBranchOfficeDeliveryMan = () => {
@@ -24,11 +20,27 @@ const CreateUserBranchOfficeDeliveryMan = () => {
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
-  const { state } = location;
+  const { state, pathname } = location;
   const [type, setType] = useState<TypeRute>("create");
-
   const [saveLoading, setSaveLoading] = useState(false);
   const [deliveryMan, setDeliveryMan] = useState<UserBranchOfficeDeliveryMan>(initUserBranchOfficeDeliveryMan)
+
+
+  useEffect(() => {
+    if (pathname.includes("editar") && !state) {
+      navigate("/repartidores")
+      return;
+    }
+
+    const _deliveryMan: UserBranchOfficeDeliveryMan | null = state;
+
+    setType(_deliveryMan ? "update" : "create");
+
+    if (!_deliveryMan) return;
+
+    setDeliveryMan(_deliveryMan);
+    form.setFieldsValue(_deliveryMan);
+  }, [state, form, navigate, pathname])
 
   const onFinish = async () => {
     try {
@@ -41,7 +53,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
         return;
       }
 
-      let _deliveryMan = {...deliveryMan};
+      let _deliveryMan = { ...deliveryMan };
 
       delete _deliveryMan.repeatPassword;
 
@@ -50,27 +62,18 @@ const CreateUserBranchOfficeDeliveryMan = () => {
       } else {
         await post(`userBranchOfficeDeliveryMan/${type}`, _deliveryMan);
       }
-      
+
+      message.success('Repartidor guardado con éxito.', 4);
+      navigate('/repartidores')
     } catch (error) {
       console.log(error)
-      message.error('Ocurrió un problema al guardar la información.')
+      message.error('Error al guardar el repartidor.', 4);
     } finally {
       setSaveLoading(false)
     }
   }
 
-  useEffect(() => {
-    if (!state) {
-      navigate("/repartidores")
-      return;
-    }
 
-    const { data } = state as State;
-
-    setType(data.id ? "update" : "create");
-    setDeliveryMan(data);
-    form.setFieldsValue(data);
-  }, [state, form, userAdmin, navigate])
 
   return (
     <>
@@ -79,79 +82,81 @@ const CreateUserBranchOfficeDeliveryMan = () => {
           <h1>{title[type]} Repartidor</h1>
         </Col>
         <Col md={24}>
-          <Form form={form}
+          <Form
+            form={form}
             layout='vertical'
             onFinish={onFinish}
           >
-            <DynamicContentForm inputs={[
-              {
-                type: 'input',
-                typeInput: 'text',
-                label: 'Nombre',
-                name: 'name',
-                rules: [{ required: true, message: 'Favor de escribir el nombre del repartidor.' }],
-                value: deliveryMan.name,
-                onChange: (value: string) => setDeliveryMan({ ...deliveryMan, name: value }),
-                md: 8
-              },
-              {
-                type: 'input',
-                typeInput: 'email',
-                label: 'Correo',
-                name: 'email',
-                rules: [{ required: true, message: 'Favor de escribir el correo del repartidor.' }],
-                value: deliveryMan.email,
-                onChange: (value: string) => setDeliveryMan({ ...deliveryMan, email: value }),
-                md: 8
-              },
-              {
-                type: 'input',
-                typeInput: 'password',
-                label: 'Contraseña',
-                name: 'password',
-                rules: [{ required: type === "update", message: 'Favor de escribir la contraseña del repartidor.' }],
-                value: deliveryMan.password,
-                onChange: (value: string) => setDeliveryMan({ ...deliveryMan, password: value }),
-                md: 8
-              },
-              {
-                type: 'input',
-                typeInput: 'password',
-                label: 'Confirmar Contraseña',
-                name: 'confirmPassword',
-                rules: [{ required: type === "update", message: 'Favor de confirmar la contraseña del repartidor.' }],
-                value: deliveryMan.repeatPassword,
-                onChange: (value: string) => setDeliveryMan({ ...deliveryMan, repeatPassword: value }),
-                md: 8
-              },
-              {
-                type: 'input',
-                typeInput: 'number',
-                label: 'Teléfono',
-                name: 'phone',
-                rules: rulesPhoneInput,
-                value: deliveryMan.phone,
-                onChange: (value: string) => setDeliveryMan({ ...deliveryMan, phone: value }),
-                md: 8
-              },
-              {
-                type: 'input',
-                typeInput: 'text',
-                label: 'Sucursal',
-                name: 'branchOffice',
-                rules: [{ required: true, message: 'Favor de escribir la sucursal a la que pertenece el repartidor' }],
-                value: deliveryMan.branchOffice,
-                onChange: (value: string) => setDeliveryMan({ ...deliveryMan, branchOffice: value }),
-                md: 8
-              }
-            ]} />
-            <Form.Item>
-              <SaveButton htmlType='submit'
-                loading={saveLoading}
-              >
-                Guardar repartidor
-              </SaveButton>
-            </Form.Item>
+            <Card>
+              <DynamicContentForm inputs={[
+                {
+                  type: 'input',
+                  typeInput: 'text',
+                  label: 'Nombre',
+                  name: 'name',
+                  rules: [{ required: true, message: 'Favor de escribir el nombre del repartidor.' }],
+                  value: deliveryMan.name,
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, name: value }),
+                  md: 8
+                },
+                {
+                  type: 'input',
+                  typeInput: 'email',
+                  label: 'Correo',
+                  name: 'email',
+                  rules: [{ required: true, message: 'Favor de escribir el correo del repartidor.' }],
+                  value: deliveryMan.email,
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, email: value }),
+                  md: 8
+                },
+                {
+                  type: 'input',
+                  typeInput: 'password',
+                  label: 'Contraseña',
+                  name: 'password',
+                  rules: [{ required: type === "create", message: 'Favor de escribir la contraseña del repartidor.' }],
+                  value: deliveryMan.password,
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, password: value }),
+                  md: 8
+                },
+                {
+                  type: 'input',
+                  typeInput: 'password',
+                  label: 'Confirmar Contraseña',
+                  name: 'repeatPassword',
+                  rules: [{ required: type === "create", message: 'Favor de confirmar la contraseña del repartidor.' }],
+                  value: deliveryMan.repeatPassword,
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, repeatPassword: value }),
+                  md: 8
+                },
+                {
+                  type: 'phone',
+                  label: 'Teléfono',
+                  name: 'phone',
+                  value: deliveryMan.phone,
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, phone: value }),
+                  md: 8
+                },
+                {
+                  type: 'input',
+                  typeInput: 'text',
+                  label: 'Sucursal',
+                  name: 'branchOffice',
+                  rules: [{ required: true, message: 'Favor de escribir la sucursal que pertenece el repartidor.' }],
+                  value: deliveryMan.branchOffice,
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, branchOffice: value }),
+                  md: 8
+                }
+              ]} />
+              <Form.Item>
+                <SaveButton
+                  htmlType='submit'
+                  loading={saveLoading}
+                >
+                  Guardar repartidor
+                </SaveButton>
+              </Form.Item>
+            </Card>
           </Form>
         </Col>
       </Row>
