@@ -8,13 +8,13 @@ import { get, patch } from '../../services';
 import { UserBranchOfficeSeller } from '../../interfaces/user';
 import TableActionsButtons from '../../components/tableActionsButtons';
 
-const { PRESENTED_IMAGE_SIMPLE } = Empty;
-const { Search } = Input
-
 interface Get {
   list: UserBranchOfficeSeller[];
   total: number;
 }
+
+const { PRESENTED_IMAGE_SIMPLE } = Empty;
+const { Search } = Input;
 
 const UserBranchOfficeSellerView = () => {
   const navigate = useNavigate();
@@ -33,12 +33,13 @@ const UserBranchOfficeSellerView = () => {
     { title: 'Descripción', dataIndex: 'description', key: 'description' },
     {
       title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
-      render: (_, record: UserBranchOfficeSeller) => (
+      render: (_, record) => (
         <TableActionsButtons
           record={record}
           onDeleted={() => setStaring(true)}
           fun={() => patch(`userBranchOfficeSeller/disable`, { id: record.id, active: false })}
           messageError="Vendedor eliminado con éxito."
+          pathEdit="/vendedores/editar"
         />
       ),
     },
@@ -104,9 +105,7 @@ const UserBranchOfficeSellerView = () => {
       <Table
         columns={columns}
         dataSource={sellers}
-        locale={{
-          emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores' />
-        }}
+        locale={{ emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores' /> }}
         loading={staring}
         pagination={{
           total,
@@ -121,7 +120,6 @@ const UserBranchOfficeSellerView = () => {
           showSizeChanger: true
         }}
         rowKey='id'
-        size='small'
       />
     </>
   )

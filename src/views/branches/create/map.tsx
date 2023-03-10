@@ -41,11 +41,7 @@ const Map: FC<Props> = ({ setBranch }) => {
     });
   }, [isLoaded])
 
-  if (!isLoaded) return (
-    <div>
-      <FullLoader />
-    </div>
-  )
+  if (!isLoaded) return <FullLoader />
 
   if (loadError) return (
     <div style={{ textAlign: "center" }}>
