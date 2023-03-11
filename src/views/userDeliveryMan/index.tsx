@@ -5,28 +5,28 @@ import { useNavigate } from 'react-router-dom';
 import RegisterButton from '../../components/registerButton';
 import { useAuth } from '../../context/authContext';
 import { get, patch } from '../../services';
-import { UserBranchOfficeDeliveryMan } from '../../interfaces/user';
+import { UserDeliveryMan } from '../../interfaces/user';
 import TableActionsButtons from '../../components/tableActionsButtons';
 
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 const { Search } = Input
 
 interface Get {
-  list: UserBranchOfficeDeliveryMan[];
+  list: UserDeliveryMan[];
   total: number;
 }
 
-const UserBranchOfficeDeliveryManView = () => {
+const UserDeliveryManView = () => {
   const navigate = useNavigate();
   const { userAdmin } = useAuth();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [deliveryMan, setDeliveryMan] = useState<UserBranchOfficeDeliveryMan[]>([])
+  const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan[]>([])
   const [staring, setStaring] = useState(true)
   const [search, setSearch] = useState("")
 
-  const columns: ColumnsType<UserBranchOfficeDeliveryMan> = useMemo(() => [
+  const columns: ColumnsType<UserDeliveryMan> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Correo', dataIndex: 'email', key: 'email' }, 
     { title: 'Teléfono', dataIndex: 'phone', key: 'phone' },
@@ -34,11 +34,11 @@ const UserBranchOfficeDeliveryManView = () => {
     { title: 'Sucursal', dataIndex: 'branchOffice', key: 'branchOffice' },
     {
       title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
-      render: (_, record: UserBranchOfficeDeliveryMan) => (
+      render: (_, record: UserDeliveryMan) => (
         <TableActionsButtons
           record={record}
           onDeleted={() => setStaring(true)}
-          fun={() => patch(`userBranchOfficeDeliveryMan/disable`, { id: record.id, active: false })}
+          fun={() => patch(`userDeliveryMan/disable`, { id: record.id, active: false })}
           messageError="Repartidor eliminado con éxito."
           pathEdit="/repartidores/editar"
         />
@@ -53,7 +53,7 @@ const UserBranchOfficeDeliveryManView = () => {
 
     const init = async () => {
       try {
-        const { list, total } = await get<Get>(`userBranchOfficeDeliveryMan/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
+        const { list, total } = await get<Get>(`userDeliveryMan/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
 
         setDeliveryMan(list);
         setTotal(total);
@@ -129,4 +129,4 @@ const UserBranchOfficeDeliveryManView = () => {
   )
 }
 
-export default UserBranchOfficeDeliveryManView;
+export default UserDeliveryManView;

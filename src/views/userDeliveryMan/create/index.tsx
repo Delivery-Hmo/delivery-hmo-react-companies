@@ -5,8 +5,8 @@ import SaveButton from '../../../components/saveButton';
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
-import { initUserBranchOfficeDeliveryMan } from '../../../constants';
-import { UserBranchOfficeDeliveryMan } from '../../../interfaces/user';
+import { initUserDeliveryMan } from '../../../constants';
+import { UserDeliveryMan } from '../../../interfaces/user';
 
 type TypeRute = "create" | "update";
 
@@ -15,7 +15,7 @@ const title: Record<TypeRute, string> = {
   update: "Editar"
 };
 
-const CreateUserBranchOfficeDeliveryMan = () => {
+const CreateUserDeliveryMan = () => {
   const { userAdmin } = useAuth();
   const [form] = Form.useForm();
   const location = useLocation();
@@ -23,7 +23,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
   const { state, pathname } = location;
   const [type, setType] = useState<TypeRute>("create");
   const [saveLoading, setSaveLoading] = useState(false);
-  const [deliveryMan, setDeliveryMan] = useState<UserBranchOfficeDeliveryMan>(initUserBranchOfficeDeliveryMan)
+  const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(initUserDeliveryMan)
 
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
       return;
     }
 
-    const _deliveryMan: UserBranchOfficeDeliveryMan | null = state;
+    const _deliveryMan: UserDeliveryMan | null = state;
 
     setType(_deliveryMan ? "update" : "create");
 
@@ -40,7 +40,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
 
     setDeliveryMan(_deliveryMan);
     form.setFieldsValue(_deliveryMan);
-  }, [state, form, navigate, pathname])
+  }, [state, form, navigate, pathname, userAdmin])
 
   const onFinish = async () => {
     try {
@@ -58,9 +58,9 @@ const CreateUserBranchOfficeDeliveryMan = () => {
       delete _deliveryMan.repeatPassword;
 
       if (type === "update") {
-        await put(`userBranchOfficeDeliveryMan/${type}`, _deliveryMan);
+        await put(`userDeliveryMan/${type}`, _deliveryMan);
       } else {
-        await post(`userBranchOfficeDeliveryMan/${type}`, _deliveryMan);
+        await post(`userDeliveryMan/${type}`, _deliveryMan);
       }
 
       message.success('Repartidor guardado con éxito.', 4);
@@ -146,6 +146,16 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                   value: deliveryMan.branchOffice,
                   onChange: (value: string) => setDeliveryMan({ ...deliveryMan, branchOffice: value }),
                   md: 8
+                },
+                {
+                  type: 'input',
+                  typeInput: 'text',
+                  label: 'Descripción',
+                  name: 'description',
+                  rules: [{required: true, message: 'Favor de escribir una breve descripción del repartidor.'}],
+                  value: deliveryMan.description,
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, description: value}),
+                  md: 24
                 }
               ]} />
               <Form.Item>
@@ -164,4 +174,4 @@ const CreateUserBranchOfficeDeliveryMan = () => {
   )
 }
 
-export default CreateUserBranchOfficeDeliveryMan
+export default CreateUserDeliveryMan
