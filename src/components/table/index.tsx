@@ -7,7 +7,7 @@ import SearchTable from '../searchTable';
 interface Props<T> {
 	columns: ColumnsType<T> | undefined;
 	url: string;
-	wait: boolean;
+	wait?: boolean;
 	placeholderSearch?: string;
 }
 

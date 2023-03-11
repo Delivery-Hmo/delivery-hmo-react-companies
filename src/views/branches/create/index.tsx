@@ -71,36 +71,41 @@ const CreateBranch = () => {
               ...[
                 {
                   md: 12,
-                  type: "input",
+                  typeControl: "input",
                   typeInput: "text",
                   label: "Nombre",
                   name: "name",
-                  rules: [{ required: true, message: 'Favor de escribir el Nombre.' }],
+                  rules: [
+                    { 
+                      required: true, 
+                      message: 'Favor de escribir el Nombre.',
+                    }
+                  ],
                   value: name,
                   onChange: (value: string) => setBranch({ ...branch, name: value })
                 },
                 {
                   md: 12,
-                  type: "input",
+                  typeControl: "input",
                   typeInput: "email",
                   label: "Correo electrónico",
                   name: "email",
-                  rules: [{ required: true, message: 'Favor de escribir el Correo electrónico.' }],
                   value: email,
                   onChange: (value: string) => setBranch({ ...branch, email: value })
                 },
                 {
                   md: 12,
-                  type: "input",
+                  typeControl: "input",
                   typeInput: "password",
                   label: "Contraseña",
                   name: "password",
                   rules: rulesPassword,
                   value: password,
                   onChange: (value) => setBranch({ ...branch, password: value })
-                }, {
+                }, 
+                {
                   md: 12,
-                  type: "input",
+                  typeControl: "input",
                   typeInput: "password",
                   label: "Confirmar contraseña",
                   name: "confirmPassword",
@@ -110,16 +115,22 @@ const CreateBranch = () => {
                 }, 
                 {
                   md: 12,
-                  type: "input",
+                  typeControl: "input",
                   typeInput: "number",
                   label: "Meta ventas / mes",
                   name: "salesGoalByMonth",
                   value: salesGoalByMonth,
+                  rules: [
+                    {
+                      message: 'La meta de ventas no puede ser mayor a 50,000.',
+                      validator: (rule, value, cb) => value > 50000 ? cb(rule.message as string) : cb(),
+                    }
+                  ],
                   onChange: (value: string) => setBranch({ ...branch, salesGoalByMonth: +value })
                 },
                 {
                   md: 12,
-                  type: "input",
+                  typeControl: "input",
                   label: "Facebook",
                   name: "faceebok",
                   value: facebook,
@@ -127,9 +138,9 @@ const CreateBranch = () => {
                 }
               ] as CustomInput[],
               ...phones.map((phone, index) => ({
-                rules: (index === 0 || phone) ? rulesPhoneInput : null,
+                required: (index === 0 || phone),
                 md: 8,
-                type: "phone",
+                typeControl: "phone",
                 label: `Teléfono ${index + 1}`,
                 name: `phone${index}`,
                 value: phone,

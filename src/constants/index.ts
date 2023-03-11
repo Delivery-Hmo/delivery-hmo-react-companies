@@ -3,7 +3,7 @@ import { BranchOffice } from "../interfaces/branchOffice";
 import { UserAdmin, UserBranchOfficeDeliveryMan, UserBranchOfficeSeller } from "../interfaces/user";
 import { TypeRute } from "../types";
 
-export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns"; //pasar a env
+export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns"; //pasar a una api
 export const initBranch: BranchOffice = {
   userAdmin: "",
   name: "",
@@ -49,6 +49,21 @@ export const rulesPhoneInput: FormRule[]  = [
   { min: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
   { max: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' }
 ];
+export const ruleMaxLength: FormRule = {
+  max: 300,
+  message: "El texto no puede tener más de 300 caracteres."
+};
+export const ruleEmail: FormRule = { 
+  required: true, 
+  message: 'Favor de escribir el Correo electrónico válido.', 
+  type: "email" 
+};
+export const rulePassword: FormRule = {
+  required: true, 
+  min: 6, 
+  message: 'La contraseña tiene que ser de 6 dígitos o màs.' 
+};
+
 export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
   active: true,
   description: '',

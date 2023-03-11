@@ -6,6 +6,7 @@ import '../../../assets/styles/login.css';
 import { auth } from '../../../firebaseConfig';
 import { post } from '../../../services';
 import { UserAdmin } from '../../../interfaces/user';
+import { ruleEmail, rulePassword } from '../../../constants';
 
 type KeysProviders = 'facebook' | 'google';
 
@@ -17,6 +18,7 @@ interface Account {
   email: string;
   password: string;
 }
+
 const providers: Record<KeysProviders, FacebookAuthProvider | GoogleAuthProvider> = {
   facebook: new FacebookAuthProvider(),
   google: new GoogleAuthProvider()
@@ -91,7 +93,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
       >
         <Form.Item
           name="email"
-          rules={[{ required: true, message: 'Favor de escribir el correo.' }]}
+          rules={[ruleEmail]}
           hasFeedback
           style={{ marginBottom: '10px' }}
         >
@@ -106,7 +108,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
         </Form.Item>
         <Form.Item
           name="password"
-          rules={[{ required: true, message: 'Favor de escribir la contraseña.' }]}
+          rules={[rulePassword]}
           hasFeedback
           style={{ marginBottom: '10px' }}
         >

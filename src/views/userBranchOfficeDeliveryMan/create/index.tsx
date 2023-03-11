@@ -95,7 +95,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
           >
             <DynamicContentForm inputs={[
               {
-                type: 'input',
+                typeControl: 'input',
                 typeInput: 'text',
                 label: 'Nombre',
                 name: 'name',
@@ -105,17 +105,16 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                 md: 8
               },
               {
-                type: 'input',
+                typeControl: 'input',
                 typeInput: 'email',
                 label: 'Correo',
                 name: 'email',
-                rules: [{ required: true, message: 'Favor de escribir el correo del repartidor.' }],
                 value: deliveryMan.email,
                 onChange: (value: string) => setDeliveryMan({ ...deliveryMan, email: value }),
                 md: 8
               },
               {
-                type: 'input',
+                typeControl: 'input',
                 typeInput: 'password',
                 label: 'Contraseña',
                 name: 'password',
@@ -125,7 +124,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                 md: 8
               },
               {
-                type: 'input',
+                typeControl: 'input',
                 typeInput: 'password',
                 label: 'Confirmar Contraseña',
                 name: 'confirmPassword',
@@ -135,7 +134,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                 md: 8
               },
               {
-                type: 'input',
+                typeControl: 'input',
                 typeInput: 'number',
                 label: 'Teléfono',
                 name: 'phone',
@@ -145,7 +144,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                 md: 8
               },
               {
-                type: 'input',
+                typeControl: 'input',
                 typeInput: 'text',
                 label: 'Sucursal',
                 name: 'branchOffice',

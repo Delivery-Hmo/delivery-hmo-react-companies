@@ -74,7 +74,7 @@ const SingUp = () => {
         <DynamicContentForm inputs={[
           {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "text",
             label: "Nombre Vendedor",
             name: "name",
@@ -83,34 +83,31 @@ const SingUp = () => {
             onChange: (value) => setUserAdmin({ ...userAdmin, name: value })
           }, {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "email",
             label: "Email",
             name: "email",
-            rules: [{ required: true, message: 'Favor de ingresar un email.' }],
             value: userAdmin.email,
             onChange: (value) => setUserAdmin({ ...userAdmin, email: value })
           }, {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "password",
             label: "Contraseña",
             name: "password",
-            rules: [{ required: true, min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }],
             value: userAdmin.password,
             onChange: (value) => setUserAdmin({ ...userAdmin, password: value })
           }, {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "password",
             label: "Confirmar contraseña",
             name: "confirmPassword",
-            rules: [{ required: true, min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }],
             value: userAdmin.confirmPassword,
             onChange: (value) => setUserAdmin({ ...userAdmin, confirmPassword: value })
           }, {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "text",
             label: "Compañia",
             name: "company",
@@ -119,16 +116,14 @@ const SingUp = () => {
             onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
           }, {
             md: 12,
-            type: "input",
-            typeInput: "number",
+            typeControl: "phone",
             label: "Telefono",
             name: "phone",
-            rules: rulesPhoneInput,
             value: userAdmin.phone,
             onChange: (value) => setUserAdmin({ ...userAdmin, phone: value })
           }, {
             md: 24,
-            type: "textarea",
+            typeControl: "textarea",
             typeInput: "text",
             label: "Descripcion",
             name: "description",
