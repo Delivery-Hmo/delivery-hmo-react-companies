@@ -32,7 +32,7 @@ const RoterChecker = () => {
       { user ? <MenuComponent /> : <HeaderComponent /> }
       <Layout.Content style={{ padding: user ? "2vh" : 0 }}>
       { user && <Breadcrumb /> }
-        <Suspense fallback={<FullLoader />}>
+       <Suspense fallback={<FullLoader />}>
           <Outlet />
         </Suspense>
       </Layout.Content>

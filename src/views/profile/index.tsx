@@ -8,7 +8,7 @@ import DynamicContentForm from '../../components/dynamicContentForm'
 import { get, put } from '../../services'
 import { useAuth } from '../../context/authContext'
 import { UserAdmin } from '../../interfaces/user';
-import { initUserAdmin, rulesPhoneInput } from '../../constants';
+import { initUserAdmin } from '../../constants';
 import { updateEmail, updatePassword, User } from 'firebase/auth';
 
 const Perfil = () => {

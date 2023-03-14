@@ -5,7 +5,6 @@ import { UserAdmin } from '../../interfaces/user';
 import { get, post } from '../../services';
 import DynamicContentForm from '../../components/dynamicContentForm';
 import SaveButton from '../../components/saveButton';
-import { rulesPhoneInput } from '../../constants';
 
 const initUserAdmin: UserAdmin = {
   active: true,

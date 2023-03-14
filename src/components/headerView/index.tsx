@@ -29,7 +29,7 @@ const HeaderView: FC<Props> = ({ title, path, goBack }) => {
         <Col>
           {
             goBack
-              ? <BackButton />
+              ? <BackButton onClick={() => navigate(path)} />
               : <CreateButton onClick={() => navigate(path)}>
                 {"Registar " + textButtonsCreate[title]}
               </CreateButton>

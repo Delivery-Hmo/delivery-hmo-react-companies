@@ -5,7 +5,7 @@ import SaveButton from '../../../components/saveButton';
 import { get, post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
-import { initUserBranchOfficeDeliveryMan, rulesPhoneInput } from '../../../constants';
+import { initUserBranchOfficeDeliveryMan, title } from '../../../constants';
 import { UserBranchOfficeDeliveryMan } from '../../../interfaces/user';
 
 type TypeRute = "create" | "update";
@@ -13,11 +13,6 @@ type TypeRute = "create" | "update";
 interface State {
   data: UserBranchOfficeDeliveryMan;
 }
-
-const title: Record<TypeRute, string> = {
-  "create": "Registrar",
-  "update": "Editar"
-};
 
 const CreateUserBranchOfficeDeliveryMan = () => {
   const { userAdmin } = useAuth();
@@ -30,8 +25,22 @@ const CreateUserBranchOfficeDeliveryMan = () => {
   const [deliveryMan, setDeliveryMan] = useState<UserBranchOfficeDeliveryMan>(initUserBranchOfficeDeliveryMan)
 
   const rulesPassword: FormRule[] = useMemo(() => [
-    { required: !deliveryMan.id || deliveryMan.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
+    { required: !deliveryMan.id && deliveryMan.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
   ], [deliveryMan])
+
+  
+  useEffect(() => {
+    if (!state) {
+      navigate("/repartidores")
+      return;
+    }
+
+    const { data } = state as State;
+
+    setType(data.id ? "update" : "create");
+    setDeliveryMan(data);
+    form.setFieldsValue(data);
+  }, [state, form, userAdmin, navigate])
 
   const onFinish = async () => {
     try {
@@ -68,19 +77,6 @@ const CreateUserBranchOfficeDeliveryMan = () => {
       setSaveLoading(false)
     }
   }
-
-  useEffect(() => {
-    if (!state) {
-      navigate("/repartidores")
-      return;
-    }
-
-    const { data } = state as State;
-
-    setType(data.id ? "update" : "create");
-    setDeliveryMan(data);
-    form.setFieldsValue(data);
-  }, [state, form, userAdmin, navigate])
 
   return (
     <>
@@ -138,7 +134,6 @@ const CreateUserBranchOfficeDeliveryMan = () => {
                 typeInput: 'number',
                 label: 'Teléfono',
                 name: 'phone',
-                rules: rulesPhoneInput,
                 value: deliveryMan.phone,
                 onChange: (value: string) => setDeliveryMan({ ...deliveryMan, phone: value }),
                 md: 8

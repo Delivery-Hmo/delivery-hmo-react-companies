@@ -21,7 +21,7 @@ export const initBranch: BranchOffice = {
     lng: 0
   },
   address: "",
-  comments: [],
+  comments: []
 };
 export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
   active: true,
@@ -29,7 +29,7 @@ export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
   email: '',
   name: '',
   phone: '',
-  role: 'Vendedor',
+  role: 'Vendedor'
 };
 export const initUserAdmin: UserAdmin = {
   id: '',
@@ -44,26 +44,6 @@ export const initUserAdmin: UserAdmin = {
   confirmPassword: '',
   role: ''
 };
-export const rulesPhoneInput: FormRule[]  = [
-  { required: true, message: 'Favor de escribir el teléfono.' },
-  { min: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' },
-  { max: 10, message: 'El número telefónico tiene que ser de 10 dígitos.' }
-];
-export const ruleMaxLength: FormRule = {
-  max: 300,
-  message: "El texto no puede tener más de 300 caracteres."
-};
-export const ruleEmail: FormRule = { 
-  required: true, 
-  message: 'Favor de escribir el Correo electrónico válido.', 
-  type: "email" 
-};
-export const rulePassword: FormRule = {
-  required: true, 
-  min: 6, 
-  message: 'La contraseña tiene que ser de 6 dígitos o más.' 
-};
-
 export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
   active: true,
   description: '',
@@ -75,6 +55,25 @@ export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
   confirmPassword: '',
   branchOffice: '',
   deliveryMan: true
+};
+export const rulePhoneInput: FormRule = {
+  required: true,
+  message: 'El número telefónico tiene que ser de 10 dígitos.',
+  validator: (rule, value: string) => value.length !== 10 ? Promise.reject(rule.message) : Promise.resolve(),
+};
+export const ruleMaxLength: FormRule = {
+  max: 300,
+  message: "El texto no puede tener más de 300 caracteres."
+};
+export const ruleEmail: FormRule = {
+  required: true,
+  message: 'Favor de escribir el Correo electrónico válido.',
+  type: "email"
+};
+export const rulePassword: FormRule = {
+  required: true,
+  min: 6,
+  message: 'La contraseña tiene que ser de 6 dígitos o más.'
 };
 export const title: Record<TypeRute, string> = {
   create: "Registrar",

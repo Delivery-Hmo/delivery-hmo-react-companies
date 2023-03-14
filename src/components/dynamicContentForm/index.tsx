@@ -1,37 +1,44 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule } from 'antd';
-import { rulesPhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
+import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
 
 interface Props {
+  id?: string;
   inputs: CustomInput[];
+  staring?: boolean;
 }
 
-const DynamicContentForm: FC<Props> = ({ inputs: inputsProp }) => {
+const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id, staring = false }) => {
   const [inputs, setInputs] = useState<CustomInput[]>(inputsProp);
 
   useEffect(() => {
+    if(!staring) return;
+
     const _inputs = inputsProp.map(input => {
       const { rules, typeControl, typeInput, required } = input;
       const _rules = [...rules || [] as FormRule[]];
 
       if(["text", "password", "email"].includes(typeInput || "" as string)) {
-        _rules?.push(ruleMaxLength);
+        _rules.push(ruleMaxLength);
       }
 
-      if(typeControl === "phone" && required) {
-        _rules.push(...rulesPhoneInput);
+
+      if(!id && typeControl === "phone" && required) {
+        console.log(id)
+
+        _rules.push(rulePhoneInput);
       }
 
       if(typeInput === "email") {
-        _rules?.push(ruleEmail)
+        _rules.push(ruleEmail)
       }
 
       return { ...input, rules: _rules };
     });
 
     setInputs(_inputs);
-  }, [inputsProp]);
+  }, [inputsProp, id, staring]);
 
   const controls: Record<string, (input: CustomInput) => JSX.Element> = useMemo(() => ({
     input: ({ value, onChange, typeInput }: CustomInput) => <Input
@@ -48,7 +55,7 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp }) => {
       onWheel={e => e.preventDefault()}
       onKeyUp={e => e.preventDefault()}
     />,
-    phone: ({ value, onChange }: CustomInput) => <Input
+    phone: ({ name, value, onChange, rules }: CustomInput) => <Input
       type="number"
       value={value}
       onKeyDown={e => {
@@ -58,7 +65,19 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp }) => {
 
         return ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()
       }}
-      onChange={e => onChange(e.target.value)}
+      onChange={e => {
+        if(!rules?.length) {
+          setInputs(i => i.map(input => {
+            if(input.name === name && input.typeControl === "phone") {
+              return { ...input, rules: [rulePhoneInput] };
+            }
+
+            return input;
+          }));
+        }
+
+        onChange(e.target.value)
+      }}
       onWheel={e => e.preventDefault()}
     />,
     select: ({ value, onChange, options }: CustomInput) => <Select value={value} onChange={onChange}>
