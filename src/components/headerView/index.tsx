@@ -1,19 +1,21 @@
 import { FC } from 'react';
 import { Col, Row } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import RegisterButton from '../registerButton';
+import CreateButton from '../registerButton';
+import BackButton from '../backButton';
 
 interface Props {
   title: string;
-  pathCreate: string;
+  path: string;
+  goBack?: boolean;
 }
 
-const textButtons: Record<string, string> = {
+const textButtonsCreate: Record<string, string> = {
   "Sucursales": "sucursal",
   "Vendedores": "vendedor"
 };
 
-const HeaderView: FC<Props> = ({ title, pathCreate }) => {
+const HeaderView: FC<Props> = ({ title, path, goBack }) => {
   const navigate = useNavigate();
 
   return (
@@ -25,9 +27,13 @@ const HeaderView: FC<Props> = ({ title, pathCreate }) => {
           </h1>
         </Col>
         <Col>
-          <RegisterButton onClick={() => navigate(pathCreate)}>
-            {"Registar " + textButtons[title]}
-          </RegisterButton>
+          {
+            goBack
+              ? <BackButton />
+              : <CreateButton onClick={() => navigate(path)}>
+                {"Registar " + textButtonsCreate[title]}
+              </CreateButton>
+          }
         </Col>
       </Row>
       <br />

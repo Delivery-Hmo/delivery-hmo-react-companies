@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'react';
 import { Card, Form, FormRule, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import SaveButton from '../../../components/saveButton';
 import DynamicContentForm from '../../../components/dynamicContentForm';
-import { initBranch, rulesPhoneInput } from '../../../constants';
+import { initBranch } from '../../../constants';
 import { BranchOffice } from '../../../interfaces/branchOffice';
 import { CustomInput } from '../../../interfaces';
-import Map from './map';
 import { get, post } from '../../../services';
-import { useNavigate } from 'react-router-dom';
+import Map from './map';
+import HeaderView from '../../../components/headerView';
 
 const CreateBranch = () => {
   const [branch, setBranch] = useState<BranchOffice>(initBranch);
@@ -59,7 +60,11 @@ const CreateBranch = () => {
 
   return (
     <div>
-      <h1>Registrar sucursal</h1>
+      <HeaderView 
+        title="Registrar sucursal" 
+        path="/sucursales" 
+        goBack
+      />
       <Form
         layout="vertical"
         onFinish={onFinish}
@@ -123,7 +128,7 @@ const CreateBranch = () => {
                   rules: [
                     {
                       message: 'La meta de ventas no puede ser mayor a 50,000.',
-                      validator: (rule, value, cb) => value > 50000 ? cb(rule.message as string) : cb(),
+                      validator: (rule, value) => value > 50000 ? Promise.reject(rule.message) : Promise.resolve(),
                     }
                   ],
                   onChange: (value: string) => setBranch({ ...branch, salesGoalByMonth: +value })

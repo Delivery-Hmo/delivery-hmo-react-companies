@@ -1,10 +1,11 @@
 import { Layout } from 'antd';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
 import MenuComponent from '../../components/menu';
 import Breadcrumb from '../../components/breadcrumb';
 import HeaderComponent from '../../components/header';
+import FullLoader from "../../components/fullLoader";
 
 const blockedPathsWithoAuthentication = ["/registrarse", "/"];
 
@@ -31,7 +32,9 @@ const RoterChecker = () => {
       { user ? <MenuComponent /> : <HeaderComponent /> }
       <Layout.Content style={{ padding: user ? "2vh" : 0 }}>
       { user && <Breadcrumb /> }
-        <Outlet />
+        <Suspense fallback={<FullLoader />}>
+          <Outlet />
+        </Suspense>
       </Layout.Content>
     </Layout>
   )

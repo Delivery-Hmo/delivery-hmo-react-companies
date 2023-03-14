@@ -61,7 +61,7 @@ export const ruleEmail: FormRule = {
 export const rulePassword: FormRule = {
   required: true, 
   min: 6, 
-  message: 'La contraseña tiene que ser de 6 dígitos o màs.' 
+  message: 'La contraseña tiene que ser de 6 dígitos o más.' 
 };
 
 export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {

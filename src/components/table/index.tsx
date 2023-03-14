@@ -39,7 +39,7 @@ const Table = <T extends {}>({ url: urlParam, columns, wait, placeholderSearch }
 				pagination={{
 					total: response?.total,
 					pageSize: limit,
-					onShowSizeChange: (_: any, size: number) => setLimit(size),
+					onShowSizeChange: (_: number, size: number) => setLimit(size),
 					onChange: (page: number) => setPage(page),
 					showTotal: (total: number, range: number[]) => `${range[0]}-${range[1]} de ${total} registros.`,
 					locale: { items_per_page: '/ página' },
