@@ -8,7 +8,7 @@ import DynamicContentForm from '../../components/dynamicContentForm'
 import { get, put } from '../../services'
 import { useAuth } from '../../context/authContext'
 import { UserAdmin } from '../../interfaces/user';
-import { initUserAdmin, rulesPhoneInput } from '../../constants';
+import { initUserAdmin } from '../../constants';
 import { updateEmail, updatePassword, User } from 'firebase/auth';
 
 const Perfil = () => {
@@ -85,16 +85,16 @@ const Perfil = () => {
           <DynamicContentForm inputs={[
             {
               md: 6,
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'text',
-              label: 'Nombre Vendedor',
+              label: 'Nombre vendedor',
               name: 'name',
               rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
               value: user.name,
               onChange: (value) => setUser({ ...user, name: value })
             }, {
               md: 12,
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'text',
               label: 'Compañia',
               name: 'company',
@@ -104,21 +104,19 @@ const Perfil = () => {
             },
             {
               md: 6,
-              type: 'input',
-              typeInput: 'text',
+              typeControl: 'phone',
               label: 'Teléfono',
               name: 'phone',
-              rules: rulesPhoneInput,
               value: user.phone,
               onChange: (value) => setUser({ ...user, phone: value })
             },
             {
               md: 24,
-              type: 'textarea',
+              typeControl: 'textarea',
               typeInput: 'text',
-              label: 'Descripciòn',
+              label: 'Descripción',
               name: 'description',
-              rules: [{ required: true, message: 'Favor de seleccionar su description.' }],
+              rules: [{ required: true, message: 'Favor de seleccionar su descripción.' }],
               value: user.description,
               onChange: (value) => setUser({ ...user, description: value })
             }
@@ -139,16 +137,15 @@ const Perfil = () => {
           <DynamicContentForm inputs={[
             {
               md: 12,
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'email',
               label: 'Email',
               name: 'email',
-              rules: [{ required: true, message: 'Favor de ingresar un email.', type: "email" }],
               value: email,
               onChange: (value) => setUser({ ...user, email: value })
             },
             {
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'password',
               label: 'Contraseña',
               name: 'password',
@@ -158,7 +155,7 @@ const Perfil = () => {
               md: 6,
             },
             {
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'password',
               label: 'Confirmar Contraseña',
               name: 'confirmPassword',

@@ -1,13 +1,14 @@
+import { lazy } from "react";
 import { PathRouteProps } from 'react-router-dom';
-import Branches from '../views/branches';
-import CreateBranch from '../views/branches/create';
-import LandingPage from '../views/landingPage';
-import SingUp from '../views/singUp';
-import UserBranchOfficeSeller from '../views/userBranchOfficeSeller';
-import CreateUserBranchOfficeSeller from '../views/userBranchOfficeSeller/create';
-import Profile from '../views/profile';
-import UserBranchOfficeDeliveryMan from '../views/userBranchOfficeDeliveryMan';
-import CreateUserBranchOfficeDeliveryMan from '../views/userBranchOfficeDeliveryMan/create';
+const Branches =  lazy(() => import('../views/branches'));
+const CreateBranch =  lazy(() => import('../views/branches/create'));
+const LandingPage =  lazy(() => import('../views/landingPage'));
+const SingUp =  lazy(() => import('../views/singUp'));
+const UserBranchOfficeSeller =  lazy(() => import('../views/userBranchOfficeSeller'));
+const CreateUserBranchOfficeSeller =  lazy(() => import('../views/userBranchOfficeSeller/create'));
+const Profile =  lazy(() => import('../views/profile'));
+const UserBranchOfficeDeliveryMan =  lazy(() => import('../views/userBranchOfficeDeliveryMan'));
+const CreateUserBranchOfficeDeliveryMan =  lazy(() => import('../views/userBranchOfficeDeliveryMan/create'));
 
 const routes: PathRouteProps[] = [
   {
@@ -24,6 +25,10 @@ const routes: PathRouteProps[] = [
   },
   {
     path: '/sucursales/crear',
+    element: <CreateBranch />
+  },
+  {
+    path: '/sucursales/editar',
     element: <CreateBranch />
   },
   {

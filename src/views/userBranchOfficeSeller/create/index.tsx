@@ -20,7 +20,7 @@ const CreateUserBranchOfficeSeller = () => {
   const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
 
   const rulesPassword: FormRule[] = useMemo(() => [
-    { required: !seller.id || seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
+    { required: !seller.id && seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
   ], [seller])
 
   const onFinish = async () => {
@@ -84,7 +84,7 @@ const CreateUserBranchOfficeSeller = () => {
             <Card>
               <DynamicContentForm inputs={[
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'text',
                   label: 'Nombre',
                   name: 'name',
@@ -94,17 +94,16 @@ const CreateUserBranchOfficeSeller = () => {
                   md: 8
                 },
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'email',
                   label: 'Correo',
                   name: 'email',
-                  rules: [{ required: true, message: 'Favor de escribir el correo del vendedor.' }],
                   value: seller.email,
                   onChange: (value: string) => setSeller({ ...seller, email: value }),
                   md: 8
                 },
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'password',
                   label: 'Contraseña',
                   name: 'password',
@@ -114,7 +113,7 @@ const CreateUserBranchOfficeSeller = () => {
                   md: 8
                 },
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'password',
                   label: 'Confirmar contraseña',
                   name: 'confirmPassword',
@@ -124,7 +123,7 @@ const CreateUserBranchOfficeSeller = () => {
                   md: 8
                 },
                 {
-                  type: 'phone',
+                  typeControl: 'phone',
                   label: 'Teléfono',
                   name: 'phone',
                   value: seller.phone,
@@ -132,11 +131,11 @@ const CreateUserBranchOfficeSeller = () => {
                   md: 8
                 },
                 {
-                  type: 'textarea',
+                  typeControl: 'textarea',
                   typeInput: 'text',
                   label: 'Descripción',
                   name: 'description',
-                  rules: [{ required: true, message: 'Favor de escribir el teléfono del vendedor.' }],
+                  rules: [{ required: true, message: 'Favor de escribir la descripción del vendedor.' }],
                   value: seller.description,
                   onChange: (value: string) => setSeller({ ...seller, description: value }),
                   md: 8

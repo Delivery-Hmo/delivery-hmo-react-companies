@@ -1,6 +1,6 @@
 import { useState, useEffect, FC, Dispatch, SetStateAction, memo } from "react";
 import { BranchOffice } from "../../../interfaces/branchOffice";
-import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, DrawingManagerF, useJsApiLoader, MarkerF, CircleF } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../../constants";
 import { LibrariesGoogleMaps } from "../../../types";
 import FullLoader from "../../../components/fullLoader";
@@ -8,7 +8,8 @@ import { LatLng } from "../../../interfaces";
 import { Card, message } from "antd";
 
 interface Props {
-  setBranch: Dispatch<SetStateAction<BranchOffice>>
+  branch: BranchOffice;
+  setBranch: Dispatch<SetStateAction<BranchOffice>>;
 }
 
 const initCenter: LatLng = {
@@ -18,11 +19,12 @@ const initCenter: LatLng = {
 const initZoom = 11;
 const libraries: LibrariesGoogleMaps = ["drawing"];
 
-const Map: FC<Props> = ({ setBranch }) => {
+const Map: FC<Props> = ({ branch, setBranch }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey,
     libraries
   });
+  const [center, setCenter] = useState<LatLng>(initCenter);
   const [circle, setCircle] = useState<google.maps.Circle>();
   const [marker, setMarker] = useState<google.maps.Marker>();
   const [options, setOptions] = useState<google.maps.drawing.DrawingManagerOptions>();
@@ -39,13 +41,24 @@ const Map: FC<Props> = ({ setBranch }) => {
         position: google.maps.ControlPosition.TOP_CENTER
       },
     });
-  }, [isLoaded])
 
-  if (!isLoaded) return (
-    <div>
-      <FullLoader />
-    </div>
-  )
+    if (!branch.id) return;
+
+    const _circle = new google.maps.Circle({
+      center: branch.center,
+      radius: branch.radius
+    });
+    
+    const _marker = new google.maps.Marker({
+      position: branch.latLng
+    });
+
+    setCenter(branch.latLng);
+    setCircle(_circle);
+    setMarker(_marker);
+  }, [isLoaded, branch])
+
+  if (!isLoaded) return <FullLoader />;
 
   if (loadError) return (
     <div style={{ textAlign: "center" }}>
@@ -65,7 +78,7 @@ const Map: FC<Props> = ({ setBranch }) => {
 
     if (_circle.getRadius() >= 3800) {
       _circle?.setMap(null);
-      message.error("Se esta exediendo el radio de entrega, contacta a soporte para mas información.", 5);
+      message.error("Se esta exediendo el radio de entrega, contacta a soporte para más información.", 5);
       setCircle(undefined);
       return;
     }
@@ -107,9 +120,16 @@ const Map: FC<Props> = ({ setBranch }) => {
           width: '100%',
           height: '400px'
         }}
-        center={initCenter}
+        center={center}
         zoom={initZoom}
       >
+        {
+          branch && 
+          <>
+            <MarkerF position={{ lat: branch.latLng.lat, lng: branch.latLng.lng }} />
+            <CircleF center={branch.center} radius={branch.radius} />
+          </>
+        }
         <DrawingManagerF
           onCircleComplete={onCircleComplete}
           onMarkerComplete={onMarkerComplete}
