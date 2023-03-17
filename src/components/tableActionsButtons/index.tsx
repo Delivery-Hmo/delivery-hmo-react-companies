@@ -1,8 +1,7 @@
 import { FC } from 'react';
-import { Button, message, Space, Tooltip } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, message, Space, Tooltip, Modal } from 'antd';
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { dialogDelete } from '../../utils';
 
 interface Props {
   record: any;
@@ -11,6 +10,27 @@ interface Props {
   messageError: string;
   pathEdit: string;
 }
+
+const dialogDelete = (fun: () => Promise<any>, messageError: string): Promise<boolean> =>
+  new Promise((resolve, reject) => Modal.confirm({
+    title: 'Eliminar',
+    icon: <ExclamationCircleOutlined />,
+    content: '¿Seguro que deseas eliminar este registro?',
+    okText: 'Aceptar',
+    cancelText: 'Cancelar',
+    onOk: async () => {
+      try {
+        await fun();
+        message.success(messageError);
+        resolve(true);
+      } catch (error) {
+        console.log(error);
+        message.error("Error al eliminar el registro.", 4)
+        reject(false)
+      }
+    },
+  }));
+
 
 const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError, pathEdit }) => {
   const navigate = useNavigate();
@@ -31,9 +51,9 @@ const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError, 
         <Button
           icon={<EditOutlined />}
           shape="circle"
-          onClick={() => navigate(pathEdit, { state: record})}
+          onClick={() => navigate(pathEdit, { state: record })}
           size="middle"
-          style={{ color: '#fff', backgroundColor: '#ec9822'}}
+          style={{ color: '#fff', backgroundColor: '#ec9822' }}
         />
       </Tooltip>
       <Tooltip title="Eliminar">
@@ -42,7 +62,7 @@ const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError, 
           shape="circle"
           onClick={del}
           size="middle"
-          style={{ color: '#fff', backgroundColor: '#d34745'}}
+          style={{ color: '#fff', backgroundColor: '#d34745' }}
         />
       </Tooltip>
     </Space>

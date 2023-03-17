@@ -1,7 +1,7 @@
-import { getCurrentToken } from '../utils';
+import { getCurrentToken } from '../utils/functions';
 
-// const baseUrl = process.env.REACT_APP_SERVER_ELASTIC;
-const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
+const baseUrl = "http://localhost:3001/";
+//const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
 
 const getHeaders = (token: string) => ({
   Accept: 'application/json',
@@ -10,7 +10,7 @@ const getHeaders = (token: string) => ({
 });
 
 export const get = async <T>(url: string, controller?: AbortController) => {
-  const token = await getCurrentToken()
+  const token = await getCurrentToken();
 
   const response = await fetch(
     baseUrl + url,
@@ -22,7 +22,8 @@ export const get = async <T>(url: string, controller?: AbortController) => {
   );
 
   if (!response.ok) {
-    throw new Error('Error request!');
+    const error = await response.json();
+    throw error;
   }
 
   return response.json() as T;
@@ -41,7 +42,8 @@ export const post = async <T>(url: string, body: Record<string, any>) => {
   )
 
   if (!response.ok) {
-    throw new Error('Error request!')
+    const error = await response.json();
+    throw error;
   }
 
   return response.json() as T

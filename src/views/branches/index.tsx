@@ -1,65 +1,35 @@
-import { Col, message, Row, Table } from 'antd';
-import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/authContext';
-import { get } from '../../services';
-import { useNavigate } from 'react-router-dom';
-import RegisterButton from '../../components/registerButton';
+import { BranchOffice } from '../../interfaces/branchOffice';
+import { ColumnsType } from 'antd/es/table';
+import { useMemo } from 'react';
+import HeaderView from '../../components/headerView';
+import Table from '../../components/table';
 
 const Branches = () => {
-  const { userAdmin } = useAuth();
-  const [staring, setStaring] = useState(true);
-  const navigate = useNavigate();
+  const { loading: loadingUser } = useAuth();
 
-  useEffect(() => {
-    if(!userAdmin) return;
-
-    const controller = new AbortController();
-
-    const init = async () => {
-      try {
-        const branches = await get("branchOffice/listByUserAdmin", controller);
-        console.log(branches);
-      } catch (error) {
-        message.error("Error al obtener las sucursales");
-        console.log(error);
-      } finally {
-        setStaring(false);
-      }
-    }
-
-    init();
-
-    return () => {
-      controller.abort();
-    }
-  }, [userAdmin])
+  const columns: ColumnsType<BranchOffice> = useMemo(() => [
+    { title: 'Nombre', dataIndex: 'name', key: 'name' },
+    { title: 'Correo', dataIndex: 'email', key: 'email' },
+    { title: 'Meta ventas / mes', dataIndex: 'salesGoalByMonth', key: 'salesGoalByMonth' },
+  ], [])
 
   return (
     <div>
-      <Row justify='space-between'>
-        <Col>
-          <h1>
-            Mis sucursales
-          </h1>
-        </Col>
-        <Col>
-          <RegisterButton onClick={() => navigate("/sucursales/crear")}>
-            Registar sucursal
-          </RegisterButton>
-        </Col>
-      </Row>
-      <br />
-      <Table
-        loading={staring}
-        locale={{
-          emptyText: <div style={{ fontSize: 18 }}>
-            Sin sucursales
-          </div>
-        }}
+      <HeaderView  
+        title="Sucursales"
+        path="/sucursales/crear"
+      />      
+      <Table 
+        url="branchOffice/listByUserAdmin"
+        columns={columns}
+        wait={loadingUser}
+        placeholderSearch="Buscar por nombre ó correo..."
+        pathEdit="/sucursales/editar"
+        urlDisabled="branchOffice/disable"
       />
     </div>
   )
 }
 
 export default Branches;
-

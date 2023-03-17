@@ -46,16 +46,16 @@ const CreateUserDeliveryMan = () => {
     try {
       setSaveLoading(true);
 
-      const { password, repeatPassword } = deliveryMan;
+      const { password, confirmPassword } = deliveryMan;
 
-      if (repeatPassword !== password) {
+      if (confirmPassword !== password) {
         message.error('Las contraseñas no coinciden.');
         return;
       }
 
       let _deliveryMan = { ...deliveryMan };
 
-      delete _deliveryMan.repeatPassword;
+      delete _deliveryMan.confirmPassword;
 
       if (type === "update") {
         await put(`userDeliveryMan/${type}`, _deliveryMan);
@@ -72,9 +72,6 @@ const CreateUserDeliveryMan = () => {
       setSaveLoading(false)
     }
   }
-
-
-
   return (
     <>
       <Row>
@@ -90,7 +87,7 @@ const CreateUserDeliveryMan = () => {
             <Card>
               <DynamicContentForm inputs={[
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'text',
                   label: 'Nombre',
                   name: 'name',
@@ -100,7 +97,7 @@ const CreateUserDeliveryMan = () => {
                   md: 8
                 },
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'email',
                   label: 'Correo',
                   name: 'email',
@@ -110,7 +107,7 @@ const CreateUserDeliveryMan = () => {
                   md: 8
                 },
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'password',
                   label: 'Contraseña',
                   name: 'password',
@@ -120,17 +117,17 @@ const CreateUserDeliveryMan = () => {
                   md: 8
                 },
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'password',
                   label: 'Confirmar Contraseña',
-                  name: 'repeatPassword',
+                  name: 'confirmPassword',
                   rules: [{ required: type === "create", message: 'Favor de confirmar la contraseña del repartidor.' }],
-                  value: deliveryMan.repeatPassword,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, repeatPassword: value }),
+                  value: deliveryMan.confirmPassword,
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, confirmPassword: value }),
                   md: 8
                 },
                 {
-                  type: 'phone',
+                  typeControl: 'phone',
                   label: 'Teléfono',
                   name: 'phone',
                   value: deliveryMan.phone,
@@ -138,7 +135,7 @@ const CreateUserDeliveryMan = () => {
                   md: 8
                 },
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'text',
                   label: 'Sucursal',
                   name: 'branchOffice',
@@ -148,7 +145,7 @@ const CreateUserDeliveryMan = () => {
                   md: 8
                 },
                 {
-                  type: 'input',
+                  typeControl: 'input',
                   typeInput: 'text',
                   label: 'Descripción',
                   name: 'description',

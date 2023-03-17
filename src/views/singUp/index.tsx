@@ -1,12 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Form, Row, Col, message } from 'antd';
 import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAdmin } from '../../interfaces/user';
 import { get, post } from '../../services';
 import DynamicContentForm from '../../components/dynamicContentForm';
 import SaveButton from '../../components/saveButton';
-import { rulesPhoneInput } from '../../constants';
-import { FormRule } from "antd";
 
 const initUserAdmin: UserAdmin = {
   active: true,
@@ -16,24 +14,20 @@ const initUserAdmin: UserAdmin = {
   name: '',
   phone: '',
   password: '',
-  repeatPassword: '',
+  confirmPassword: '',
   role: ''
-}
+};
 
 const SingUp = () => {
   const [userAdmin, setUserAdmin] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState(false);
 
-  const rulesPassword: FormRule[] = useMemo(() => [
-    { required: userAdmin.password !== "", message: 'Favor de escribir la contraseña del vendedor.' },
-    { min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
-  ], [userAdmin.password])
-
   const onFinish = async () => {
-    if (userAdmin.password !== userAdmin.repeatPassword) {
+    if (userAdmin.password !== userAdmin.confirmPassword) {
       message.error('Las contraseñas no coinciden.', 4)
       return
     }
+
     if (loading) return;
 
     setLoading(true);
@@ -46,20 +40,17 @@ const SingUp = () => {
         return
       }
 
-      const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email, userAdmin.password as string)
+      const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email, userAdmin.password as string);
       const user = result.user
       const additional = getAdditionalUserInfo(result)
 
-      if (!additional?.isNewUser) return
+      if (!additional?.isNewUser) return;
 
-      const userInfo: UserAdmin = {
-        ...userAdmin,
-        uid: user.uid,
-        active: true,
-        role: ''
-      }
+      userAdmin.uid = user.uid;
 
-      await post('userAdmin/create', userInfo);
+      delete userAdmin.confirmPassword;
+
+      await post('userAdmin/create', userAdmin);
     } catch (error) {
       console.log(error);
       message.error('Error al registrarse.', 4)
@@ -82,7 +73,7 @@ const SingUp = () => {
         <DynamicContentForm inputs={[
           {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "text",
             label: "Nombre Vendedor",
             name: "name",
@@ -91,34 +82,31 @@ const SingUp = () => {
             onChange: (value) => setUserAdmin({ ...userAdmin, name: value })
           }, {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "email",
             label: "Email",
             name: "email",
-            rules: [{ required: true, message: 'Favor de ingresar un email.' }],
             value: userAdmin.email,
             onChange: (value) => setUserAdmin({ ...userAdmin, email: value })
           }, {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "password",
             label: "Contraseña",
             name: "password",
-            rules: rulesPassword,
             value: userAdmin.password,
             onChange: (value) => setUserAdmin({ ...userAdmin, password: value })
           }, {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "password",
-            label: "Repetir Contraseña",
-            name: "repeatPassword",
-            rules: rulesPassword,
-            value: userAdmin.repeatPassword,
-            onChange: (value) => setUserAdmin({ ...userAdmin, repeatPassword: value })
+            label: "Confirmar contraseña",
+            name: "confirmPassword",
+            value: userAdmin.confirmPassword,
+            onChange: (value) => setUserAdmin({ ...userAdmin, confirmPassword: value })
           }, {
             md: 12,
-            type: "input",
+            typeControl: "input",
             typeInput: "text",
             label: "Compañia",
             name: "company",
@@ -127,16 +115,14 @@ const SingUp = () => {
             onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
           }, {
             md: 12,
-            type: "input",
-            typeInput: "number",
+            typeControl: "phone",
             label: "Telefono",
             name: "phone",
-            rules: rulesPhoneInput,
             value: userAdmin.phone,
             onChange: (value) => setUserAdmin({ ...userAdmin, phone: value })
           }, {
             md: 24,
-            type: "textarea",
+            typeControl: "textarea",
             typeInput: "text",
             label: "Descripcion",
             name: "description",

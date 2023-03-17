@@ -8,13 +8,13 @@ import { get, patch } from '../../services';
 import { UserBranchOfficeSeller } from '../../interfaces/user';
 import TableActionsButtons from '../../components/tableActionsButtons';
 
-const { PRESENTED_IMAGE_SIMPLE } = Empty;
-const { Search } = Input
-
 interface Get {
   list: UserBranchOfficeSeller[];
   total: number;
 }
+
+const { PRESENTED_IMAGE_SIMPLE } = Empty;
+const { Search } = Input;
 
 const UserBranchOfficeSellerView = () => {
   const navigate = useNavigate();
@@ -22,9 +22,9 @@ const UserBranchOfficeSellerView = () => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [sellers, setSellers] = useState<UserBranchOfficeSeller[]>([])
-  const [staring, setStaring] = useState(true)
-  const [search, setSearch] = useState("")
+  const [sellers, setSellers] = useState<UserBranchOfficeSeller[]>([]);
+  const [staring, setStaring] = useState(true);
+  const [search, setSearch] = useState("");
 
   const columns: ColumnsType<UserBranchOfficeSeller> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
@@ -33,7 +33,7 @@ const UserBranchOfficeSellerView = () => {
     { title: 'Descripción', dataIndex: 'description', key: 'description' },
     {
       title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
-      render: (_, record: UserBranchOfficeSeller) => (
+      render: (_, record) => (
         <TableActionsButtons
           record={record}
           onDeleted={() => setStaring(true)}
@@ -105,9 +105,7 @@ const UserBranchOfficeSellerView = () => {
       <Table
         columns={columns}
         dataSource={sellers}
-        locale={{
-          emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores' />
-        }}
+        locale={{ emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores' /> }}
         loading={staring}
         pagination={{
           total,
@@ -122,7 +120,6 @@ const UserBranchOfficeSellerView = () => {
           showSizeChanger: true
         }}
         rowKey='id'
-        size='small'
       />
     </>
   )
