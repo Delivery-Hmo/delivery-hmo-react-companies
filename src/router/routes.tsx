@@ -7,8 +7,8 @@ const SingUp =  lazy(() => import('../views/singUp'));
 const UserBranchOfficeSeller =  lazy(() => import('../views/userBranchOfficeSeller'));
 const CreateUserBranchOfficeSeller =  lazy(() => import('../views/userBranchOfficeSeller/create'));
 const Profile =  lazy(() => import('../views/profile'));
-const UserBranchOfficeDeliveryMan =  lazy(() => import('../views/userBranchOfficeDeliveryMan'));
-const CreateUserBranchOfficeDeliveryMan =  lazy(() => import('../views/userBranchOfficeDeliveryMan/create'));
+const UserDeliveryMan =  lazy(() => import('../views/userDeliveryMan'));
+const CreateUserDeliveryMan =  lazy(() => import('../views/userDeliveryMan/create'));
 
 const routes: PathRouteProps[] = [
   {
@@ -49,15 +49,15 @@ const routes: PathRouteProps[] = [
   },
   {
     path: '/repartidores',
-    element: <UserBranchOfficeDeliveryMan />,
+    element: <UserDeliveryMan />,
   },
   {
     path: '/repartidores/crear',
-    element: <CreateUserBranchOfficeDeliveryMan />
+    element: <CreateUserDeliveryMan />
   },
   {
-    path: 'repartidores/editar',
-    element: <CreateUserBranchOfficeDeliveryMan />
+    path: '/repartidores/editar',
+    element: <CreateUserDeliveryMan />
   },
   {
     path: '*',

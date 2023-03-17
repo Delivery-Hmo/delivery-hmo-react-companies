@@ -1,6 +1,8 @@
 import { DollarCircleOutlined, UserOutlined, SettingOutlined, ShopOutlined, LogoutOutlined, AuditOutlined} from '@ant-design/icons';
 import { getAuth } from 'firebase/auth';
 import { Link } from 'react-router-dom';
+import { MdOutlineDeliveryDining } from 'react-icons/md';
+
 
 const signOut = () => getAuth().signOut();
 
@@ -20,6 +22,12 @@ const menuItems = [
     title: '',
     label: <Link to="/vendedores">Vendedores</Link>,
     icon: <DollarCircleOutlined style={styleIcon} />
+  },
+  {
+    key: '/repartidores',
+    title: '',
+    label: <Link to="/repartidores">Repartidores</Link>,
+    icon: <MdOutlineDeliveryDining style={styleIcon} />
   },
   {
     key: '/usuarios',

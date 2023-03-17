@@ -5,41 +5,42 @@ import { useNavigate } from 'react-router-dom';
 import RegisterButton from '../../components/registerButton';
 import { useAuth } from '../../context/authContext';
 import { get, patch } from '../../services';
-import { UserBranchOfficeSeller } from '../../interfaces/user';
+import { UserDeliveryMan } from '../../interfaces/user';
 import TableActionsButtons from '../../components/tableActionsButtons';
 
+const { PRESENTED_IMAGE_SIMPLE } = Empty;
+const { Search } = Input
+
 interface Get {
-  list: UserBranchOfficeSeller[];
+  list: UserDeliveryMan[];
   total: number;
 }
 
-const { PRESENTED_IMAGE_SIMPLE } = Empty;
-const { Search } = Input;
-
-const UserBranchOfficeSellerView = () => {
+const UserDeliveryManView = () => {
   const navigate = useNavigate();
   const { userAdmin } = useAuth();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [sellers, setSellers] = useState<UserBranchOfficeSeller[]>([]);
-  const [staring, setStaring] = useState(true);
-  const [search, setSearch] = useState("");
+  const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan[]>([])
+  const [staring, setStaring] = useState(true)
+  const [search, setSearch] = useState("")
 
-  const columns: ColumnsType<UserBranchOfficeSeller> = useMemo(() => [
+  const columns: ColumnsType<UserDeliveryMan> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Correo', dataIndex: 'email', key: 'email' }, 
     { title: 'Teléfono', dataIndex: 'phone', key: 'phone' },
-    { title: 'Descripción', dataIndex: 'description', key: 'description' },
+    { title: 'Compañia', dataIndex: 'company', key: 'company' },
+    { title: 'Sucursal', dataIndex: 'branchOffice', key: 'branchOffice' },
     {
       title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
-      render: (_, record) => (
+      render: (_, record: UserDeliveryMan) => (
         <TableActionsButtons
           record={record}
           onDeleted={() => setStaring(true)}
-          fun={() => patch(`userBranchOfficeSeller/disable`, { id: record.id, active: false })}
-          messageError="Vendedor eliminado con éxito."
-          pathEdit="/vendedores/editar" 
+          fun={() => patch(`userDeliveryMan/disable`, { id: record.id, active: false })}
+          messageError="Repartidor eliminado con éxito."
+          pathEdit="/repartidores/editar"
         />
       ),
     },
@@ -52,13 +53,13 @@ const UserBranchOfficeSellerView = () => {
 
     const init = async () => {
       try {
-        const { list, total } = await get<Get>(`userBranchOfficeSeller/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
+        const { list, total } = await get<Get>(`userDeliveryMan/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
 
-        setSellers(list);
+        setDeliveryMan(list);
         setTotal(total);
       } catch (error) {
         console.log(error);
-        message.error("Error al obtener los vendedores.");
+        message.error("Error al obtener los repartidores.");
       } finally {
         setStaring(false);
       }
@@ -76,12 +77,12 @@ const UserBranchOfficeSellerView = () => {
       <Row justify="space-between">
         <Col>
           <h1>
-            Vendedores
+            Repartidores
           </h1>
         </Col>
         <Col>
-          <RegisterButton onClick={() => navigate("/vendedores/crear")}>
-            Registrar vendedor
+          <RegisterButton onClick={() => navigate("/repartidores/crear")}>
+            Registrar raprtidor
           </RegisterButton>
         </Col>
       </Row>
@@ -104,8 +105,10 @@ const UserBranchOfficeSellerView = () => {
       </Form>
       <Table
         columns={columns}
-        dataSource={sellers}
-        locale={{ emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin vendedores' /> }}
+        dataSource={deliveryMan}
+        locale={{
+          emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin repartidores' />
+        }}
         loading={staring}
         pagination={{
           total,
@@ -120,9 +123,10 @@ const UserBranchOfficeSellerView = () => {
           showSizeChanger: true
         }}
         rowKey='id'
+        size='small'
       />
     </>
   )
 }
 
-export default UserBranchOfficeSellerView;
+export default UserDeliveryManView;

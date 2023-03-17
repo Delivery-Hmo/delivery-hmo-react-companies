@@ -1,6 +1,6 @@
 import { FormRule } from "antd";
 import { BranchOffice } from "../interfaces/branchOffice";
-import { UserAdmin, UserBranchOfficeDeliveryMan, UserBranchOfficeSeller } from "../interfaces/user";
+import { UserAdmin, UserDeliveryMan, UserBranchOfficeSeller } from "../interfaces/user";
 import { TypeRute } from "../types";
 
 export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns"; //pasar a una api
@@ -44,7 +44,8 @@ export const initUserAdmin: UserAdmin = {
   confirmPassword: '',
   role: ''
 };
-export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
+export const namesDaysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+export const initUserDeliveryMan: UserDeliveryMan = {
   active: true,
   description: '',
   email: '',

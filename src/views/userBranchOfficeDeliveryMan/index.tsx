@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import RegisterButton from '../../components/registerButton';
 import { useAuth } from '../../context/authContext';
 import { get } from '../../services';
-import { UserBranchOfficeDeliveryMan } from '../../interfaces/user';
+import { UserDeliveryMan } from '../../interfaces/user';
 
 interface Get {
-  list: UserBranchOfficeDeliveryMan[];
+  list: UserDeliveryMan[];
   total: number;
 }
 
@@ -18,13 +18,13 @@ const headerStyle = {
   fontWeight: 'bold',
 };
 
-const UserBranchOfficeDeliveryManView = () => {
+const UserDeliveryManView = () => {
   const navigate = useNavigate();
   const { userAdmin } = useAuth();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [deliveryMan, setDeliveryMan] = useState<UserBranchOfficeDeliveryMan[]>([])
+  const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan[]>([])
   const [staring, setStaring] = useState(true)
   const [search, setSearch] = useState("")
 
@@ -34,7 +34,7 @@ const UserBranchOfficeDeliveryManView = () => {
     const controller = new AbortController();
     const init = async () => {
       try {
-        const { list, total } = await get<Get>(`userBranchOfficeDeliveryMan/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
+        const { list, total } = await get<Get>(`userDeliveryMan/listByUserAdmin?page=${page}&limit=${limit}&search=${search}`, controller);
 
         setDeliveryMan(list);
         setTotal(total);
@@ -53,7 +53,7 @@ const UserBranchOfficeDeliveryManView = () => {
     }
   }, [limit, page, search, staring, userAdmin])
 
-  const columns: ColumnsType<UserBranchOfficeDeliveryMan> = [
+  const columns: ColumnsType<UserDeliveryMan> = [
     { title: 'Nombre', dataIndex: 'name', key: 'name', onHeaderCell: () => ({ style: headerStyle }) },
     { title: 'Correo', dataIndex: 'email', key: 'email', onHeaderCell: () => ({ style: headerStyle }) },
     { title: 'Teléfono', dataIndex: 'phone', key: 'phone', onHeaderCell: () => ({ style: headerStyle }) },
@@ -61,7 +61,7 @@ const UserBranchOfficeDeliveryManView = () => {
     { title: 'Sucursal', dataIndex: 'branchOffice', key: 'branchOffice', onHeaderCell: () => ({ style: headerStyle }) },
     {
       title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
-      //render: (_, record: UserBranchOfficeDeliveryMan) => (<ActionsButtons record={record} />),
+      //render: (_, record: UserDeliveryMan) => (<ActionsButtons record={record} />),
       onHeaderCell: () => ({ style: headerStyle })
     },
   ]
@@ -116,4 +116,4 @@ const UserBranchOfficeDeliveryManView = () => {
   )
 }
 
-export default UserBranchOfficeDeliveryManView
+export default UserDeliveryManView

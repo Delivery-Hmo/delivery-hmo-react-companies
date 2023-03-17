@@ -23,7 +23,7 @@ export interface User {
     company: string;
   }
 
-  export interface UserBranchOfficeDeliveryMan extends User {
+  export interface UserDeliveryMan extends User {
     branchOffice: string | BranchOffice;
     deliveryMan: boolean;
     deliveryManProps?: {

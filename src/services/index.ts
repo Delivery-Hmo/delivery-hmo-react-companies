@@ -10,7 +10,7 @@ const getHeaders = (token: string) => ({
 });
 
 export const get = async <T>(url: string, controller?: AbortController) => {
-  const token = await getCurrentToken()
+  const token = await getCurrentToken();
 
   const response = await fetch(
     baseUrl + url,
