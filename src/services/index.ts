@@ -62,7 +62,8 @@ export const put = async <T>(url: string, body: Record<string, any>) => {
   )
 
   if (!response.ok) {
-    throw new Error('Error request!')
+    const error = await response.json();
+    throw error;
   }
 
   return response.json() as T
@@ -81,7 +82,8 @@ export const patch = async (url: string, body: Record<string, any>) => {
   )
 
   if (!response.ok) {
-    throw new Error('Error request!')
+    const error = await response.json();
+    throw error;
   }
 
   return response.json()
