@@ -21,7 +21,7 @@ const Branches = () => {
         path="/sucursales/crear"
       />      
       <Table 
-        url="branchOffice/listByUserAdmin"
+        url="branchOffice/paginatedListByUserAdmin"
         columns={columns}
         wait={loadingUser}
         placeholderSearch="Buscar por nombre ó correo..."

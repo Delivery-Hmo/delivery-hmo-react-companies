@@ -12,7 +12,8 @@ interface Props {
 
 const textButtonsCreate: Record<string, string> = {
   "Sucursales": "sucursal",
-  "Vendedores": "vendedor"
+  "Vendedores": "vendedor",
+  "Repartidores": "repartidores"
 };
 
 const HeaderView: FC<Props> = ({ title, path, goBack }) => {
