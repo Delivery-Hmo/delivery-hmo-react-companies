@@ -13,8 +13,6 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id, staring = false
   const [inputs, setInputs] = useState<CustomInput[]>(inputsProp);
 
   useEffect(() => {
-    if(!staring) return;
-
     const _inputs = inputsProp.map(input => {
       const { rules, typeControl, typeInput, required } = input;
       const _rules = [...rules || [] as FormRule[]];

@@ -27,8 +27,8 @@ const CreateUserDeliveryMan = () => {
   const { state, pathname } = location;
   const [type, setType] = useState<TypeRute>("create");
   const [saveLoading, setSaveLoading] = useState(false);
-  const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(initUserDeliveryMan)
-  console.log(branchOffices, loading);
+  const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(initUserDeliveryMan);
+
   useEffect(() => {
     if (pathname.includes("editar") && !state) {
       navigate("/repartidores")
@@ -104,7 +104,6 @@ const CreateUserDeliveryMan = () => {
                   typeInput: 'email',
                   label: 'Correo',
                   name: 'email',
-                  rules: [{ required: true, message: 'Favor de escribir el correo del repartidor.' }],
                   value: deliveryMan.email,
                   onChange: (value: string) => setDeliveryMan({ ...deliveryMan, email: value }),
                   md: 8
