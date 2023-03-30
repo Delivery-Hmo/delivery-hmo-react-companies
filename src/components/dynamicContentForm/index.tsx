@@ -23,15 +23,12 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id, staring = false
         _rules.push(ruleMaxLength);
       }
 
-
       if(!id && typeControl === "phone" && required) {
-        console.log(id)
-
         _rules.push(rulePhoneInput);
       }
 
       if(typeInput === "email") {
-        _rules.push(ruleEmail)
+        _rules.push(ruleEmail);
       }
 
       return { ...input, rules: _rules };
@@ -54,6 +51,7 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id, staring = false
       onChange={e => onChange(e.target.value)}
       onWheel={e => e.preventDefault()}
       onKeyUp={e => e.preventDefault()}
+      autoComplete="new-password"
     />,
     phone: ({ name, value, onChange, rules }: CustomInput) => <Input
       type="number"

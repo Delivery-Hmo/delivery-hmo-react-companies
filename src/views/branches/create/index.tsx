@@ -6,11 +6,11 @@ import DynamicContentForm from '../../../components/dynamicContentForm';
 import { initBranch, title } from '../../../constants';
 import { BranchOffice } from '../../../interfaces/branchOffice';
 import { CustomInput } from '../../../interfaces';
-import { get, post, put } from '../../../services';
+import { post, put } from '../../../services';
 import HeaderView from '../../../components/headerView';
 import { TypeRute } from "../../../types";
-import Map from '../map';
 import { sleep } from "../../../utils/functions";
+import Map from '../map';
 
 const CreateBranch = () => {
   const [form] = Form.useForm();
@@ -24,11 +24,9 @@ const CreateBranch = () => {
 
   const { name, email, facebook, salesGoalByMonth, phones, latLng, radius, center, password, confirmPassword, id } = branch;
 
-  const rulesPassword: FormRule[] = useMemo(() => [
-    { required: !id && password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o más.' },
-  ], [password, id])
-
   useEffect(() => {
+    if (!staring) return;
+
     const inti = async () => {
       try {
         const _brancOffice = state as BranchOffice | null;
@@ -44,17 +42,20 @@ const CreateBranch = () => {
           phone2: _brancOffice?.phones[2] || undefined
         });
         setBranch(_brancOffice);
+        await sleep(300);
+        setStaring(false);
       } catch (error) {
         console.log(error);
         message.error("Error al cargar la sucursal.", 4);
-      } finally {
-        await sleep(300);
-        setStaring(false);
       }
     }
 
     inti();
-  }, [state, form])
+  }, [state, staring, form])
+
+  const rulesPassword: FormRule[] = useMemo(() => [
+    { required: !id && password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o más.' },
+  ], [password, id])
 
   const onFinish = async () => {
     if (saving) return;
@@ -84,6 +85,7 @@ const CreateBranch = () => {
 
       navigate("/sucursales");
     } catch (error) {
+      console.log(error);
       message.error(error as string, 4);
     } finally {
       setSaving(false);
@@ -103,7 +105,7 @@ const CreateBranch = () => {
         onFinish={onFinish}
       >
         <Card>
-          <b>Información principal</b>
+          <div style={{ paddingBottom: 20, fontWeight: "bold" }}>Información principal</div>
           <DynamicContentForm
             staring={staring}
             id={id}
