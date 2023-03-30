@@ -1,4 +1,4 @@
-import { OptionsValue, TypeControl, TypeInput } from "../types";
+import { TypeControl, TypeInput } from "../types";
 import { FormRule } from 'antd';
 
 export interface LatLng {
@@ -23,6 +23,7 @@ export interface CustomInput {
   styleFI?: React.CSSProperties;
   show?: boolean;
   required?: boolean;
+  loading?: boolean;
 }
 
 export interface Option {

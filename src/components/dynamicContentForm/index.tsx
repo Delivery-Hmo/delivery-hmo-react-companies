@@ -78,7 +78,7 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id, staring = false
       }}
       onWheel={e => e.preventDefault()}
     />,
-    select: ({ value, onChange, options }: CustomInput) => <Select value={value} onChange={onChange}>
+    select: ({ value, onChange, options, loading }: CustomInput) => <Select loading={loading} value={value} onChange={onChange}>
       {options?.map((option: Option) => <Select.Option key={option.value} value={option.value}>{option.text}</Select.Option>)}
     </Select>,
     textarea: ({ value, onChange }: CustomInput) => <Input.TextArea value={value} onChange={(e) => onChange(e.target.value)} />,

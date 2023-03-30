@@ -8,6 +8,8 @@ import { useAuth } from '../../../context/authContext';
 import { initUserDeliveryMan } from '../../../constants';
 import { UserDeliveryMan } from '../../../interfaces/user';
 import useGet from '../../../hooks/useGet';
+import { BranchOffice } from '../../../interfaces/branchOffice';
+import { Option } from '../../../interfaces';
 
 type TypeRute = "create" | "update";
 
@@ -21,13 +23,12 @@ const CreateUserDeliveryMan = () => {
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
-  const {} = useGet("branchOffice/listByUserAdmin");
+  const { loading, response: branchOffices } = useGet<BranchOffice[]>("branchOffice/listByUserAdmin");
   const { state, pathname } = location;
   const [type, setType] = useState<TypeRute>("create");
   const [saveLoading, setSaveLoading] = useState(false);
   const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(initUserDeliveryMan)
-
-
+  console.log(branchOffices, loading);
   useEffect(() => {
     if (pathname.includes("editar") && !state) {
       navigate("/repartidores")
@@ -137,8 +138,9 @@ const CreateUserDeliveryMan = () => {
                   md: 8
                 },
                 {
-                  typeControl: 'input',
-                  typeInput: 'text',
+                  typeControl: 'select',
+                  loading,
+                  options: branchOffices?.map(b => ({text: b.name, value: b.id})) as Option[],
                   label: 'Sucursal',
                   name: 'branchOffice',
                   rules: [{ required: true, message: 'Favor de escribir la sucursal que pertenece el repartidor.' }],
