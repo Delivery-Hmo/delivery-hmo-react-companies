@@ -7,6 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
 import { initUserDeliveryMan } from '../../../constants';
 import { UserDeliveryMan } from '../../../interfaces/user';
+import useGet from '../../../hooks/useGet';
 
 type TypeRute = "create" | "update";
 
@@ -20,6 +21,7 @@ const CreateUserDeliveryMan = () => {
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
+  const {} = useGet("branchOffice/listByUserAdmin");
   const { state, pathname } = location;
   const [type, setType] = useState<TypeRute>("create");
   const [saveLoading, setSaveLoading] = useState(false);

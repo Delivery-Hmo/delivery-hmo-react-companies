@@ -69,13 +69,6 @@ const CreateBranch = () => {
       return;
     }
 
-    const branchOfficeRegistered = await get<boolean>("branchOffice/verifyEmail?email=" + email);
-
-    if (branchOfficeRegistered) {
-      message.error('El correo ya esta registrado.', 4)
-      return
-    }
-
     setSaving(true);
 
     delete branch.confirmPassword;
