@@ -6,15 +6,12 @@ import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
 interface Props {
   id?: string;
   inputs: CustomInput[];
-  staring?: boolean;
 }
 
-const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id, staring = false }) => {
+const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id }) => {
   const [inputs, setInputs] = useState<CustomInput[]>(inputsProp);
 
   useEffect(() => {
-    if(!staring) return;
-
     const _inputs = inputsProp.map(input => {
       const { rules, typeControl, typeInput, required } = input;
       const _rules = [...rules || [] as FormRule[]];
@@ -35,7 +32,7 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id, staring = false
     });
 
     setInputs(_inputs);
-  }, [inputsProp, id, staring]);
+  }, [inputsProp, id]);
 
   const controls: Record<string, (input: CustomInput) => JSX.Element> = useMemo(() => ({
     input: ({ value, onChange, typeInput }: CustomInput) => <Input
