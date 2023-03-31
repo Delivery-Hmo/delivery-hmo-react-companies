@@ -107,7 +107,6 @@ const CreateBranch = () => {
         <Card>
           <div style={{ paddingBottom: 20, fontWeight: "bold" }}>Información principal</div>
           <DynamicContentForm
-            staring={staring}
             id={id}
             inputs={
               [
