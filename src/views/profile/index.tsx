@@ -1,14 +1,14 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import {
-  Card, Col, Row, Avatar, Divider, Form, Tabs, message, Spin
+  Card, Col, Row, Avatar, Divider, Form, Tabs, message, Spin, FormRule
 } from 'antd';
 import SaveButton from './../../components/saveButton';
 import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons'
 import DynamicContentForm from '../../components/dynamicContentForm'
-import { put } from '../../services'
+import { get, put } from '../../services'
 import { useAuth } from '../../context/authContext'
 import { UserAdmin } from '../../interfaces/user';
-import { initUserAdmin, rulesPhoneInput } from '../../constants';
+import { initUserAdmin } from '../../constants';
 import { updateEmail, updatePassword, User } from 'firebase/auth';
 
 const Perfil = () => {
@@ -17,7 +17,7 @@ const Perfil = () => {
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { password, repeatPassword, email } = user;
+  const { password, confirmPassword, email } = user;
 
   const onEditProfile = useCallback(async () => {
     setLoading(true);
@@ -31,7 +31,6 @@ const Perfil = () => {
 
     } catch (error) {
       console.log(error);
-
       message.error("Error al actualizar los datos.");
     } finally {
       setLoading(false);
@@ -42,18 +41,26 @@ const Perfil = () => {
     setLoading(true);
 
     try {
-      if ((password || repeatPassword) && password !== repeatPassword) {
+      if (password && password !== confirmPassword) {
         message.error('Las contraseñas no coinciden.', 4);
         return;
       }
 
       if (userFirebase?.email !== email) {
+        const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + email);
+
+        if (userAdminRegistered) {
+          message.error('El usuario ya esta registrado.', 4);
+          return;
+        }
+
         await updateEmail(userFirebase as User, email);
+        await put("userAdmin/update", { email });
       }
 
-      if (!password || !repeatPassword) return;
-
-      await updatePassword(userFirebase as User, password);
+      if (password) {
+        await updatePassword(userFirebase as User, password);
+      }
 
       message.success("Datos de sesión actualizados con éxito.", 4);
     } catch (error) {
@@ -63,7 +70,11 @@ const Perfil = () => {
     } finally {
       setLoading(false)
     }
-  }, [email, password, repeatPassword, userFirebase])
+  }, [email, password, userFirebase, confirmPassword])
+
+  const rulesPassword: FormRule[] = useMemo(() => [
+    { required: password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
+  ], [password])
 
   const items = useMemo(() => {
     const istPassword = [
@@ -74,16 +85,16 @@ const Perfil = () => {
           <DynamicContentForm inputs={[
             {
               md: 6,
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'text',
-              label: 'Nombre Vendedor',
+              label: 'Nombre vendedor',
               name: 'name',
               rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
               value: user.name,
               onChange: (value) => setUser({ ...user, name: value })
             }, {
               md: 12,
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'text',
               label: 'Compañia',
               name: 'company',
@@ -93,30 +104,26 @@ const Perfil = () => {
             },
             {
               md: 6,
-              type: 'input',
-              typeInput: 'text',
+              typeControl: 'phone',
               label: 'Teléfono',
               name: 'phone',
-              rules: rulesPhoneInput,
               value: user.phone,
               onChange: (value) => setUser({ ...user, phone: value })
             },
             {
               md: 24,
-              type: 'textarea',
+              typeControl: 'textarea',
               typeInput: 'text',
-              label: 'Descripciòn',
+              label: 'Descripción',
               name: 'description',
-              rules: [{ required: true, message: 'Favor de seleccionar su description.' }],
+              rules: [{ required: true, message: 'Favor de seleccionar su descripción.' }],
               value: user.description,
               onChange: (value) => setUser({ ...user, description: value })
             }
           ]} />
-          <Form.Item >
-            <SaveButton htmlType="submit" loading={loading}>
-              Guardar
-            </SaveButton>
-          </Form.Item>
+          <SaveButton htmlType="submit" loading={loading}>
+            Guardar
+          </SaveButton>
         </Form>
       }
     ]
@@ -130,57 +137,45 @@ const Perfil = () => {
           <DynamicContentForm inputs={[
             {
               md: 12,
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'email',
               label: 'Email',
               name: 'email',
-              rules: [{ required: true, message: 'Favor de ingresar un email.', type: "email" }],
               value: email,
               onChange: (value) => setUser({ ...user, email: value })
             },
             {
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'password',
               label: 'Contraseña',
               name: 'password',
-              rules: [
-                { required: password !== "", message: 'Favor de escribir la contraseña del vendedor.' },
-                { min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
-              ],
+              rules: rulesPassword,
               value: password,
               onChange: (value: string) => setUser({ ...user, password: value }),
               md: 6,
             },
             {
-              type: 'input',
+              typeControl: 'input',
               typeInput: 'password',
               label: 'Confirmar Contraseña',
               name: 'confirmPassword',
-              rules: [
-                {
-                  required: password !== "",
-                  message: 'Favor de confirmar la contraseña del vendedor.'
-                },
-                { min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
-              ],
-              value: repeatPassword,
-              onChange: (value: string) => setUser({ ...user, repeatPassword: value }),
+              rules: rulesPassword,
+              value: confirmPassword,
+              onChange: (value: string) => setUser({ ...user, confirmPassword: value }),
               md: 6,
             },
           ]} />
-          <Form.Item >
-            <SaveButton htmlType="submit" loading={loading}>
-              Guardar
-            </SaveButton>
-          </Form.Item>
+          <SaveButton htmlType="submit" loading={loading}>
+            Guardar
+          </SaveButton>
         </Form>
       }
     ]
 
     if (userFirebase?.providerData[0]?.providerId === "password") return isPassword;
-    
+
     return istPassword;
-  }, [userFirebase, user, setUser, form, loading, email, password, repeatPassword, onEditAuth, onEditProfile,])
+  }, [userFirebase, user, setUser, form, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword])
 
   useEffect(() => {
     if (!userAdmin) return;
@@ -221,7 +216,7 @@ const Perfil = () => {
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.phone || "Sin teléfono."}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Descripciòn: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripciòn."}</span>
+                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripciòn."}</span>
                     </Col>
                   </Row>
                 </>

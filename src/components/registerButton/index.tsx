@@ -1,10 +1,10 @@
 import  { FC } from 'react';
-import { Button as ButtonAnt, ButtonProps } from 'antd';
+import { Button, ButtonProps } from 'antd';
 import { PlusCircleOutlined } from "@ant-design/icons";
 
-const RegisterButton: FC<ButtonProps> = ({...rest}) => {
+const CreateButton: FC<ButtonProps> = ({...rest}) => {
   return (
-    <ButtonAnt
+    <Button
       shape="round"
       icon={<PlusCircleOutlined />}
       type="primary"
@@ -13,4 +13,4 @@ const RegisterButton: FC<ButtonProps> = ({...rest}) => {
   )
 }
 
-export default RegisterButton;
+export default CreateButton;
