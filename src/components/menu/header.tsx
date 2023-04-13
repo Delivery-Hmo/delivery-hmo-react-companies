@@ -15,7 +15,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <_Header>
+      <_Header style={{backgroundColor:'#CF9F29'}}>
         <Button onClick={showDrawer} type="primary" style={{ top: "5px", right: "34px" }} icon={<BarsOutlined style={{ fontSize: "140%", marginTop: "8%" }} />} size="large" />
       </_Header>
       <Drawer open={open} onClose={showDrawer}/>
