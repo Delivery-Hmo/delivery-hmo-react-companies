@@ -1,22 +1,23 @@
-import { FC } from 'react';
-import { Drawer } from 'antd';
-import { Menu, Avatar, Divider, Card, Layout } from 'antd';
-import menuItems from './menuItems';
-import { UserOutlined } from '@ant-design/icons';
-import { useAuth } from '../../context/authContext';
+import { FC, useState } from 'react';
+import { Drawer as DrawerAnt } from 'antd';
+import { Menu, Card } from 'antd';
+import menuItems from '../menuItems';
+import { useAuth } from '../../../context/authContext';
 import { useLocation } from 'react-router-dom';
+import RowHeader from '../rowHeader';
 
-interface DrawerI {
+interface Props {
   open: boolean;
   onClose: () => void;
 }
 
-const DrawerD: FC<DrawerI> = ({ open, onClose }) => {
+const Drawer: FC<Props> = ({ open, onClose }) => {
   const location = useLocation();
+  const [collapsed, setCollapsed] = useState<boolean | undefined>(false);
   const { userAdmin } = useAuth();
 
   return (
-    <Drawer
+    <DrawerAnt
       headerStyle={{ backgroundColor: '#CF9F29', color: "white" }}
       bodyStyle={{ backgroundColor: '#C8C8C8', color: "white" }}
       width="80%"
@@ -25,19 +26,18 @@ const DrawerD: FC<DrawerI> = ({ open, onClose }) => {
       open={open}
     >
       <Card style={{ backgroundColor: 'white', textAlign: 'center' }}>
-        <Avatar size={50} icon={<UserOutlined />} />
-        <div style={{ marginTop: 20 }}><b>{userAdmin?.email.toUpperCase()}</b></div>
-        <div> {userAdmin?.role} </div>
-        <Divider />
+        <RowHeader collapsed={collapsed} />
         <Menu
           theme="dark"
           selectedKeys={["/" + location.pathname.split("/")[1]]}
-          items={menuItems}
+          items={menuItems.map(m => {
+            return { ...m, onClick: () => onClose() };
+          })}
         />
       </Card>
-    </Drawer>
+    </DrawerAnt>
 
   );
 };
 
-export default DrawerD;
+export default Drawer;

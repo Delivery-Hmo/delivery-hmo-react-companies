@@ -38,20 +38,25 @@ input[type=number] {
 }
 
 .ant-menu {
-  background-color: var(--primary) !important;
+  background-color: white !important;
   font-size: 16px;
   font-weight: bold;
 }
 
 .ant-layout-sider-children {
-  background-color: var(--primary) !important;
+  background-color: white !important;
 }
 
 .ant-layout-sider-trigger {
   background-color: var(--primary) !important;
 }
 
+.ant-menu-item {
+  color: black !important;
+}
+
 .ant-menu-item-selected {
+  color: white !important;
   background-color: var(--secondary) !important;
 }
 
