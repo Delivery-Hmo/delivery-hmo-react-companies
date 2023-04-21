@@ -59,7 +59,7 @@ export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
 export const rulePhoneInput: FormRule = {
   required: true,
   message: 'El número telefónico tiene que ser de 10 dígitos.',
-  validator: (rule, value: string) => value.length !== 10 ? Promise.reject(rule.message) : Promise.resolve(),
+  validator: (rule, value?: string ) => value?.length !== 10 ? Promise.reject(rule.message) : Promise.resolve(),
 };
 export const ruleMaxLength: FormRule = {
   max: 300,

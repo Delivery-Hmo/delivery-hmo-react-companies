@@ -10,7 +10,7 @@ import { post, put } from '../../../services';
 import HeaderView from '../../../components/headerView';
 import { TypeRute } from "../../../types";
 import { sleep } from "../../../utils/functions";
-import Map from '../map';
+import Map from './map';
 
 const CreateBranch = () => {
   const [form] = Form.useForm();
@@ -107,7 +107,6 @@ const CreateBranch = () => {
         <Card>
           <div style={{ paddingBottom: 20, fontWeight: "bold" }}>Información principal</div>
           <DynamicContentForm
-            id={id}
             inputs={
               [
                 {
@@ -178,7 +177,7 @@ const CreateBranch = () => {
                   onChange: (value: string) => setBranch({ ...branch, facebook: value })
                 },
                 ...phones.map((phone, index) => ({
-                  required: (index === 0 || phone),
+                  required: index === 0 || phone,
                   md: 8,
                   typeControl: "phone",
                   label: `Teléfono ${index + 1}`,

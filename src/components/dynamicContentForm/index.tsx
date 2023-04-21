@@ -1,30 +1,31 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
-import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule } from 'antd';
+import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, Button } from 'antd';
 import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
+import { UploadOutlined } from '@ant-design/icons';
 
 interface Props {
   id?: string;
   inputs: CustomInput[];
 }
 
-const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id }) => {
+const DynamicContentForm: FC<Props> = ({ inputs: inputsProp }) => {
   const [inputs, setInputs] = useState<CustomInput[]>(inputsProp);
 
   useEffect(() => {
     const _inputs = inputsProp.map(input => {
-      const { rules, typeControl, typeInput, required } = input;
+      const { rules, typeControl, typeInput, required, value } = input;
       const _rules = [...rules || [] as FormRule[]];
 
-      if(["text", "password", "email"].includes(typeInput || "" as string)) {
+      if (["input", "textarea"].includes(typeControl) && (value || "" as string).length > 300) {
         _rules.push(ruleMaxLength);
       }
 
-      if(!id && typeControl === "phone" && required) {
+      if (typeControl === "phone" && required && (value as number).toString().length !== 10) {
         _rules.push(rulePhoneInput);
       }
 
-      if(typeInput === "email") {
+      if (typeInput === "email") {
         _rules.push(ruleEmail);
       }
 
@@ -32,9 +33,9 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id }) => {
     });
 
     setInputs(_inputs);
-  }, [inputsProp, id]);
+  }, [inputsProp]);
 
-  const controls: Record<string, (input: CustomInput) => JSX.Element> = useMemo(() => ({
+  const controls: Record<string, (input: CustomInput) => ReactNode> = useMemo(() => ({
     input: ({ value, onChange, typeInput }: CustomInput) => <Input
       type={typeInput || 'text'}
       value={value}
@@ -43,14 +44,14 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id }) => {
           e.preventDefault();
         }
 
-        return typeInput === "number" && ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+        return typeInput === "number" && ["e", "E", "+", "-"].includes(e.key) && e.preventDefault();
       }}
       onChange={e => onChange(e.target.value)}
       onWheel={e => e.preventDefault()}
       onKeyUp={e => e.preventDefault()}
       autoComplete="new-password"
     />,
-    phone: ({ name, value, onChange, rules }: CustomInput) => <Input
+    phone: ({ value, onChange }: CustomInput) => <Input
       type="number"
       value={value}
       onKeyDown={e => {
@@ -60,29 +61,17 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp, id }) => {
 
         return ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()
       }}
-      onChange={e => {
-        if(!rules?.length) {
-          setInputs(i => i.map(input => {
-            if(input.name === name && input.typeControl === "phone") {
-              return { ...input, rules: [rulePhoneInput] };
-            }
-
-            return input;
-          }));
-        }
-
-        onChange(e.target.value)
-      }}
+      onChange={e => onChange(e.target.value)}
       onWheel={e => e.preventDefault()}
     />,
     select: ({ value, onChange, options }: CustomInput) => <Select value={value} onChange={onChange}>
       {options?.map((option: Option) => <Select.Option key={option.value} value={option.value}>{option.text}</Select.Option>)}
     </Select>,
-    textarea: ({ value, onChange }: CustomInput) => <Input.TextArea value={value} onChange={(e) => onChange(e.target.value)} />,
-    checkbox: ({ value, onChange }: CustomInput) => <Checkbox checked={value} onChange={(e) => onChange(e.target.checked)} />,
+    textarea: ({ value, onChange }: CustomInput) => <Input.TextArea value={value} onChange={e => onChange(e.target.value)} />,
+    checkbox: ({ value, onChange }: CustomInput) => <Checkbox checked={value} onChange={e => onChange(e.target.checked)} />,
     date: ({ value, onChange }: CustomInput) => <DatePicker style={{ width: '100%' }} value={value} onChange={onChange} />,
-    timeRangePicker: ({ value, onChange }) => <TimePicker.RangePicker value={value} onChange={onChange} />
-    //file: ({value, onChange}: CustomInput) => <Upload> <Button icon={<UploadOutlined />}>Upload</Button> </Upload>
+    timeRangePicker: ({ value, onChange }) => <TimePicker.RangePicker value={value} onChange={onChange} />,
+    file: ({ value, onChange, accept }: CustomInput) => <Upload data={value} onChange={e => onChange(e.fileList)} accept={accept}><Button icon={<UploadOutlined />}>Upload</Button></Upload>
   }), [])
 
   return (
