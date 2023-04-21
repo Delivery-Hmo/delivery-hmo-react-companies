@@ -4,11 +4,11 @@ const Branches =  lazy(() => import('../views/branches'));
 const CreateBranch =  lazy(() => import('../views/branches/create'));
 const LandingPage =  lazy(() => import('../views/landingPage'));
 const SingUp =  lazy(() => import('../views/singUp'));
-const UserBranchOfficeSeller =  lazy(() => import('../views/userBranchOfficeSeller'));
-const CreateUserBranchOfficeSeller =  lazy(() => import('../views/userBranchOfficeSeller/create'));
+const UserSeller =  lazy(() => import('../views/userSeller'));
+const CreateuserSeller =  lazy(() => import('../views/userSeller/create'));
 const Profile =  lazy(() => import('../views/profile'));
-const UserBranchOfficeDeliveryMan =  lazy(() => import('../views/userBranchOfficeDeliveryMan'));
-const CreateUserBranchOfficeDeliveryMan =  lazy(() => import('../views/userBranchOfficeDeliveryMan/create'));
+const UserDeliveryMan =  lazy(() => import('../views/userDeliveryMan'));
+const CreateuserDeliveryMan =  lazy(() => import('../views/userDeliveryMan/create'));
 
 const routes: PathRouteProps[] = [
   {
@@ -33,15 +33,15 @@ const routes: PathRouteProps[] = [
   },
   {
     path: '/vendedores',
-    element: <UserBranchOfficeSeller />
+    element: <UserSeller />
   },
   {
     path: '/vendedores/crear',
-    element: <CreateUserBranchOfficeSeller />
+    element: <CreateuserSeller />
   },
   {
     path: '/vendedores/editar',
-    element: <CreateUserBranchOfficeSeller />
+    element: <CreateuserSeller />
   },
   {
     path: '/registrarse',
@@ -49,15 +49,15 @@ const routes: PathRouteProps[] = [
   },
   {
     path: '/repartidores',
-    element: <UserBranchOfficeDeliveryMan />,
+    element: <UserDeliveryMan />,
   },
   {
     path: '/repartidores/crear',
-    element: <CreateUserBranchOfficeDeliveryMan />
+    element: <CreateuserDeliveryMan />
   },
   {
     path: 'repartidores/editar',
-    element: <CreateUserBranchOfficeDeliveryMan />
+    element: <CreateuserDeliveryMan />
   },
   {
     path: '*',

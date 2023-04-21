@@ -1,6 +1,6 @@
 import { FormRule } from "antd";
 import { BranchOffice } from "../interfaces/branchOffice";
-import { UserAdmin, UserBranchOfficeDeliveryMan, UserBranchOfficeSeller } from "../interfaces/user";
+import { UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
 import { TypeRute } from "../types";
 
 export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns"; //pasar a una api
@@ -23,7 +23,7 @@ export const initBranch: BranchOffice = {
   address: "",
   comments: []
 };
-export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
+export const inituserSeller: UserSeller = {
   active: true,
   description: '',
   email: '',
@@ -44,7 +44,7 @@ export const initUserAdmin: UserAdmin = {
   confirmPassword: '',
   role: ''
 };
-export const initUserBranchOfficeDeliveryMan: UserBranchOfficeDeliveryMan = {
+export const inituserDeliveryMan: UserDeliveryMan = {
   active: true,
   description: '',
   email: '',

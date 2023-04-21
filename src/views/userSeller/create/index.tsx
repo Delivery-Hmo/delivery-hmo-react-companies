@@ -4,24 +4,49 @@ import { Card, Col, Form, FormRule, message, Row } from 'antd'
 import SaveButton from '../../../components/saveButton';
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../../context/authContext';
-import { initUserBranchOfficeSeller, title } from '../../../constants';
-import { UserBranchOfficeSeller } from '../../../interfaces/user';
+import { inituserSeller, title } from '../../../constants';
+import { UserSeller } from '../../../interfaces/user';
 import { TypeRute } from '../../../types';
+import { sleep } from "../../../utils/functions";
 
-const CreateUserBranchOfficeSeller = () => {
-  const { userAdmin } = useAuth();
+const CreateuserSeller = () => {
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
   const [type, setType] = useState<TypeRute>("create");
   const [saving, setSaving] = useState(false);
-  const [seller, setSeller] = useState<UserBranchOfficeSeller>(initUserBranchOfficeSeller)
+  const [seller, setSeller] = useState<UserSeller>(inituserSeller)
+  const [staring, setStaring] = useState(true);
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !seller.id && seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
   ], [seller])
+
+  useEffect(() => {
+    if (!staring) return;
+
+    const inti = async () => {
+      try {
+        const _userSeller = state as UserSeller | null;
+
+        setType(_userSeller?.id ? "update" : "create");
+
+        if (!_userSeller) return;
+
+        form.setFieldsValue(_userSeller);
+        setSeller(_userSeller);
+        await sleep(300);
+        setStaring(false);
+      } catch (error) {
+        console.log(error);
+        message.error("Error al cargar el vendedor.", 4);
+      }
+    }
+
+    inti();
+  }, [state, staring, form])
+
 
   const onFinish = async () => {
     if (saving) return;
@@ -41,9 +66,9 @@ const CreateUserBranchOfficeSeller = () => {
       delete _seller.confirmPassword;
 
       if (type === "update") {
-        await put(`userBranchOfficeSeller/${type}`, _seller);
+        await put(`userSeller/${type}`, _seller);
       } else {
-        await post(`userBranchOfficeSeller/${type}`, _seller);
+        await post(`userSeller/${type}`, _seller);
       }
 
       message.success('Vendedor guardado con éxito.', 4);
@@ -55,19 +80,6 @@ const CreateUserBranchOfficeSeller = () => {
       setSaving(false)
     }
   }
-
-  useEffect(() => {
-    if (!state) {
-      navigate("/vendedores");
-      return;
-    }
-
-    const _seller = state as UserBranchOfficeSeller;
-
-    setType(_seller.id ? "update" : "create");
-    setSeller(_seller);
-    form.setFieldsValue(_seller);
-  }, [state, form, userAdmin, navigate])
 
   return (
     <>
@@ -155,4 +167,4 @@ const CreateUserBranchOfficeSeller = () => {
   )
 }
 
-export default CreateUserBranchOfficeSeller;
+export default CreateuserSeller;

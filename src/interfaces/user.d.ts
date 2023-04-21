@@ -14,7 +14,7 @@ export interface User {
     confirmPassword?: string;
   }
 
-  export interface UserBranchOfficeSeller extends User {
+  export interface UserSeller extends User {
     branchOffice?: string;
     password?: string;
   }
@@ -23,7 +23,7 @@ export interface User {
     company: string;
   }
 
-  export interface UserBranchOfficeDeliveryMan extends User {
+  export interface UserDeliveryMan extends User {
     branchOffice: string | BranchOffice;
     deliveryMan: boolean;
     deliveryManProps?: {

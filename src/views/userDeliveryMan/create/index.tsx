@@ -4,25 +4,23 @@ import { Col, Form, FormRule, message, Row } from 'antd'
 import SaveButton from '../../../components/saveButton';
 import { get, post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../../context/authContext';
-import { initUserBranchOfficeDeliveryMan, title } from '../../../constants';
-import { UserBranchOfficeDeliveryMan } from '../../../interfaces/user';
+import { inituserDeliveryMan, title } from '../../../constants';
+import { UserDeliveryMan } from '../../../interfaces/user';
 
 type TypeRute = "create" | "update";
 
 interface State {
-  data: UserBranchOfficeDeliveryMan;
+  data: UserDeliveryMan;
 }
 
-const CreateUserBranchOfficeDeliveryMan = () => {
-  const { userAdmin } = useAuth();
+const CreateuserDeliveryMan = () => {
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
   const [type, setType] = useState<TypeRute>("create");
   const [saveLoading, setSaveLoading] = useState(false);
-  const [deliveryMan, setDeliveryMan] = useState<UserBranchOfficeDeliveryMan>(initUserBranchOfficeDeliveryMan)
+  const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(inituserDeliveryMan)
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !deliveryMan.id && deliveryMan.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
@@ -40,7 +38,7 @@ const CreateUserBranchOfficeDeliveryMan = () => {
     setType(data.id ? "update" : "create");
     setDeliveryMan(data);
     form.setFieldsValue(data);
-  }, [state, form, userAdmin, navigate])
+  }, [state, form, navigate])
 
   const onFinish = async () => {
     try {
@@ -65,9 +63,9 @@ const CreateUserBranchOfficeDeliveryMan = () => {
       delete _deliveryMan.confirmPassword;
 
       if (type === "update") {
-        await put(`userBranchOfficeDeliveryMan/${type}`, _deliveryMan);
+        await put(`userDeliveryMan/${type}`, _deliveryMan);
       } else {
-        await post(`userBranchOfficeDeliveryMan/${type}`, _deliveryMan);
+        await post(`userDeliveryMan/${type}`, _deliveryMan);
       }
       
     } catch (error) {
@@ -159,4 +157,4 @@ const CreateUserBranchOfficeDeliveryMan = () => {
   )
 }
 
-export default CreateUserBranchOfficeDeliveryMan
+export default CreateuserDeliveryMan

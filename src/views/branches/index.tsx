@@ -6,8 +6,6 @@ import HeaderView from '../../components/headerView';
 import Table from '../../components/table';
 
 const Branches = () => {
-  const { loading: loadingUser } = useAuth();
-
   const columns: ColumnsType<BranchOffice> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Correo', dataIndex: 'email', key: 'email' },
@@ -23,7 +21,6 @@ const Branches = () => {
       <Table 
         url="branchOffice/paginatedListByUserAdmin"
         columns={columns}
-        wait={loadingUser}
         placeholderSearch="Buscar por nombre ó correo..."
         pathEdit="/sucursales/editar"
         urlDisabled="branchOffice/disable"
