@@ -16,7 +16,7 @@ const UserSellerView = () => {
     <div>
       <HeaderView  
         title="Vendedores"
-        path="/vendedores/crear"
+        path="/vendedores/registrar"
       />      
       <Table 
         url="userSeller/listByUserAdmin"

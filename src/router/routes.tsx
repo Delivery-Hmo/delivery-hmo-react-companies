@@ -24,7 +24,7 @@ const routes: PathRouteProps[] = [
     element: <Branches />
   },
   {
-    path: '/sucursales/crear',
+    path: '/sucursales/registrar',
     element: <CreateBranch />
   },
   {
@@ -36,7 +36,7 @@ const routes: PathRouteProps[] = [
     element: <UserSeller />
   },
   {
-    path: '/vendedores/crear',
+    path: '/vendedores/registrar',
     element: <CreateuserSeller />
   },
   {
@@ -52,7 +52,7 @@ const routes: PathRouteProps[] = [
     element: <UserDeliveryMan />,
   },
   {
-    path: '/repartidores/crear',
+    path: '/repartidores/registrar',
     element: <CreateuserDeliveryMan />
   },
   {

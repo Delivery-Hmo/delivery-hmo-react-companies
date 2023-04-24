@@ -75,7 +75,7 @@ export const rulePassword: FormRule = {
   min: 6,
   message: 'La contraseña tiene que ser de 6 dígitos o más.'
 };
-export const title: Record<TypeRute, string> = {
+export const titleForm: Record<TypeRute, string> = {
   create: "Registrar",
   update: "Editar"
 };

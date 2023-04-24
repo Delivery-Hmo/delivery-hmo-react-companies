@@ -4,7 +4,7 @@ import { Col, Form, FormRule, message, Row } from 'antd'
 import SaveButton from '../../../components/saveButton';
 import { get, post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { inituserDeliveryMan, title } from '../../../constants';
+import { inituserDeliveryMan, titleForm } from '../../../constants';
 import { UserDeliveryMan } from '../../../interfaces/user';
 
 type TypeRute = "create" | "update";
@@ -80,7 +80,7 @@ const CreateuserDeliveryMan = () => {
     <>
       <Row>
         <Col md={24}>
-          <h1>{title[type]} Repartidor</h1>
+          <h1>{titleForm[type]} Repartidor</h1>
         </Col>
         <Col md={24}>
           <Form form={form}

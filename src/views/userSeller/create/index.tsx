@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import DynamicContentForm from '../../../components/dynamicContentForm'
-import { Card, Col, Form, FormRule, message, Row } from 'antd'
+import { Card, Col, Form, FormRule, message, Row, UploadFile } from 'antd'
 import SaveButton from '../../../components/saveButton';
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { inituserSeller, title } from '../../../constants';
+import { inituserSeller, titleForm } from '../../../constants';
 import { UserSeller } from '../../../interfaces/user';
 import { TypeRute } from '../../../types';
 import { sleep } from "../../../utils/functions";
+import HeaderView from "../../../components/headerView";
 
 const CreateuserSeller = () => {
   const [form] = Form.useForm();
@@ -47,46 +48,45 @@ const CreateuserSeller = () => {
     inti();
   }, [state, staring, form])
 
-
   const onFinish = async () => {
     if (saving) return;
 
+    const { password, confirmPassword } = seller;
+
+    if (password && confirmPassword !== password) {
+      message.error('Las contraseñas no coinciden.');
+      return;
+    }
+
+    setSaving(true);
+
+    delete seller.confirmPassword;
+
     try {
-      setSaving(true);
-
-      const { password, confirmPassword } = seller;
-
-      if (password && confirmPassword !== password) {
-        message.error('Las contraseñas no coinciden.');
-        return;
-      }
-
-      let _seller = { ...seller };
-
-      delete _seller.confirmPassword;
-
       if (type === "update") {
-        await put(`userSeller/${type}`, _seller);
+        await put(`userSeller/${type}`, seller);
       } else {
-        await post(`userSeller/${type}`, _seller);
+        await post(`userSeller/${type}`, seller);
       }
 
       message.success('Vendedor guardado con éxito.', 4);
       navigate('/vendedores')
     } catch (error) {
-      console.log(error)
-      message.error('Error al guardar el vendedor.', 4);
+      console.log(error);
+      message.error(error as string, 4);
     } finally {
       setSaving(false)
     }
   }
 
   return (
-    <>
+    <div>
+      <HeaderView
+        title={titleForm[type]}
+        path="/sucursales"
+        goBack
+      />
       <Row>
-        <Col md={24}>
-          <h1>{title[type]} vendedor</h1>
-        </Col>
         <Col md={24}>
           <Form
             form={form}
@@ -94,65 +94,76 @@ const CreateuserSeller = () => {
             onFinish={onFinish}
           >
             <Card>
-              <DynamicContentForm inputs={[
-                {
-                  typeControl: 'input',
-                  typeInput: 'text',
-                  label: 'Nombre',
-                  name: 'name',
-                  rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
-                  value: seller.name,
-                  onChange: (value: string) => setSeller({ ...seller, name: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'input',
-                  typeInput: 'email',
-                  label: 'Correo',
-                  name: 'email',
-                  value: seller.email,
-                  onChange: (value: string) => setSeller({ ...seller, email: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'input',
-                  typeInput: 'password',
-                  label: 'Contraseña',
-                  name: 'password',
-                  rules: rulesPassword,
-                  value: seller.password,
-                  onChange: (value: string) => setSeller({ ...seller, password: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'input',
-                  typeInput: 'password',
-                  label: 'Confirmar contraseña',
-                  name: 'confirmPassword',
-                  rules: rulesPassword,
-                  value: seller.confirmPassword,
-                  onChange: (value: string) => setSeller({ ...seller, confirmPassword: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'phone',
-                  label: 'Teléfono',
-                  name: 'phone',
-                  value: seller.phone,
-                  onChange: (value: string) => setSeller({ ...seller, phone: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'textarea',
-                  typeInput: 'text',
-                  label: 'Descripción',
-                  name: 'description',
-                  rules: [{ required: true, message: 'Favor de escribir la descripción del vendedor.' }],
-                  value: seller.description,
-                  onChange: (value: string) => setSeller({ ...seller, description: value }),
-                  md: 8
-                }
-              ]} />
+              <DynamicContentForm
+                inputs={[
+                  {
+                    typeControl: 'input',
+                    typeInput: 'text',
+                    label: 'Nombre',
+                    name: 'name',
+                    rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
+                    value: seller.name,
+                    onChange: (value: string) => setSeller({ ...seller, name: value }),
+                    md: 12
+                  },
+                  {
+                    typeControl: 'input',
+                    typeInput: 'email',
+                    label: 'Correo',
+                    name: 'email',
+                    value: seller.email,
+                    onChange: (value: string) => setSeller({ ...seller, email: value }),
+                    md: 12
+                  },
+                  {
+                    typeControl: 'input',
+                    typeInput: 'password',
+                    label: 'Contraseña',
+                    name: 'password',
+                    rules: rulesPassword,
+                    value: seller.password,
+                    onChange: (value: string) => setSeller({ ...seller, password: value }),
+                    md: 10
+                  },
+                  {
+                    typeControl: 'input',
+                    typeInput: 'password',
+                    label: 'Confirmar contraseña',
+                    name: 'confirmPassword',
+                    rules: rulesPassword,
+                    value: seller.confirmPassword,
+                    onChange: (value: string) => setSeller({ ...seller, confirmPassword: value }),
+                    md: 10
+                  },
+                  {
+                    typeControl: 'phone',
+                    label: 'Teléfono',
+                    name: 'phone',
+                    value: seller.phone,
+                    onChange: (value: string) => setSeller({ ...seller, phone: value }),
+                    md: 4
+                  },
+                  {
+                    typeControl: 'textarea',
+                    typeInput: 'text',
+                    label: 'Descripción',
+                    name: 'description',
+                    rules: [{ required: true, message: 'Favor de escribir la descripción del vendedor.' }],
+                    value: seller.description,
+                    onChange: (value: string) => setSeller({ ...seller, description: value }),
+                    md: 24
+                  },
+                  {
+                    typeControl: "file",
+                    label: "Foto vendedor",
+                    name: "image",
+                    value: seller.image,
+                    maxCount: 1,
+                    accept: "image/png, image/jpeg",
+                    onChange: (value: UploadFile<any>[]) => setSeller({ ...seller, image: value.map(v => ({ ...v, status: "done" })) })
+                  }
+                ]}
+              />
               <SaveButton
                 htmlType='submit'
                 loading={saving}
@@ -163,7 +174,7 @@ const CreateuserSeller = () => {
           </Form>
         </Col>
       </Row>
-    </>
+    </div>
   )
 }
 

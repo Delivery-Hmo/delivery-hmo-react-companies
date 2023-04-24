@@ -75,7 +75,7 @@ const UserDeliveryManView = () => {
           </h1>
         </Col>
         <Col>
-          <RegisterButton onClick={() => navigate("/repartidores/crear", { state: { type: 'create' } })}>
+          <RegisterButton onClick={() => navigate("/repartidores/registrar", { state: { type: 'create' } })}>
             Registrar repartidor
           </RegisterButton>
         </Col>
@@ -88,7 +88,8 @@ const UserDeliveryManView = () => {
             onSearch={() => setStaring(true)}
             onChange={(e) => setSearch(e.target.value)}
             placeholder='Buscar por Nombre, Correo ó Teléfono...'
-            style={{ width: '100%' }} />
+            style={{ width: '100%' }}
+          />
         </Form.Item>
       </Form>
       <Table
@@ -97,7 +98,7 @@ const UserDeliveryManView = () => {
         locale={{
           emptyText: <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin repartidores' />
         }}
-        loading={ staring}
+        loading={staring}
         pagination={{
           total,
           pageSize: limit,

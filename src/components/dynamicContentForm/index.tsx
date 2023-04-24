@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
-import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, Button } from 'antd';
+import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, Button, UploadFile } from 'antd';
 import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
 import { UploadOutlined } from '@ant-design/icons';
 
@@ -71,7 +71,26 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp }) => {
     checkbox: ({ value, onChange }: CustomInput) => <Checkbox checked={value} onChange={e => onChange(e.target.checked)} />,
     date: ({ value, onChange }: CustomInput) => <DatePicker style={{ width: '100%' }} value={value} onChange={onChange} />,
     timeRangePicker: ({ value, onChange }) => <TimePicker.RangePicker value={value} onChange={onChange} />,
-    file: ({ value, onChange, accept }: CustomInput) => <Upload data={value} onChange={e => onChange(e.fileList)} accept={accept}><Button icon={<UploadOutlined />}>Upload</Button></Upload>
+    file: ({ value, onChange, accept, maxCount, multiple }: CustomInput) => {
+      const _value = value as UploadFile<any>[] | undefined;
+
+      return <Upload
+        fileList={_value}
+        onChange={e => onChange(e.fileList)}
+        accept={accept}
+        listType="picture-card"
+        maxCount={maxCount}
+        multiple={multiple}
+      >
+        <Button
+          icon={<UploadOutlined />}
+        >
+          {
+            multiple || !_value?.length ? "Subir foto/imagen" : "Cambiar foto/imagen"
+          }
+        </Button>
+      </Upload>
+    }
   }), [])
 
   return (

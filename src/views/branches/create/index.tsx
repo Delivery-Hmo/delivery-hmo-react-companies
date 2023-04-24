@@ -3,7 +3,7 @@ import { Card, Form, FormRule, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SaveButton from '../../../components/saveButton';
 import DynamicContentForm from '../../../components/dynamicContentForm';
-import { initBranch, title } from '../../../constants';
+import { initBranch, titleForm } from '../../../constants';
 import { BranchOffice } from '../../../interfaces/branchOffice';
 import { CustomInput } from '../../../interfaces';
 import { post, put } from '../../../services';
@@ -95,7 +95,7 @@ const CreateBranch = () => {
   return (
     <div>
       <HeaderView
-        title={title[type]}
+        title={titleForm[type]}
         path="/sucursales"
         goBack
       />

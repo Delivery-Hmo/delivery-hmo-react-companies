@@ -1,5 +1,6 @@
 import { StringMappingType } from 'typescript';
 import { Rols } from '../types/roles'
+import { RcFile, UploadFile } from "antd/es/upload";
 export interface User {
     uid?: string;
     id?: string;
@@ -8,7 +9,7 @@ export interface User {
     phone: string; 
     description: string;
     active: boolean;
-    image?: string;
+    image?: UploadFile<any>[];
     role: Rols;
     password?: string;
     confirmPassword?: string;

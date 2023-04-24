@@ -16,7 +16,7 @@ const Branches = () => {
     <div>
       <HeaderView  
         title="Sucursales"
-        path="/sucursales/crear"
+        path="/sucursales/registrar"
       />      
       <Table 
         url="branchOffice/paginatedListByUserAdmin"
