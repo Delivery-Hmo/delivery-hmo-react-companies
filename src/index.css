@@ -48,7 +48,7 @@ input[type=number] {
 }
 
 .ant-layout-sider-trigger {
-  background-color: var(--primary) !important;
+  background-color: var(--secondary) !important;
 }
 
 .ant-menu-item {
@@ -68,5 +68,9 @@ input[type=number] {
 
 .ant-card {
   border-radius: var(--borderRadius);
+}
+
+.ant-table-tbody {
+  background-color: white;
 }
 
