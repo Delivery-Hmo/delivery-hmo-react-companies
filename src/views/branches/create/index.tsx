@@ -3,14 +3,14 @@ import { Card, Form, FormRule, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SaveButton from '../../../components/saveButton';
 import DynamicContentForm from '../../../components/dynamicContentForm';
-import { initBranch, title } from '../../../constants';
+import { initBranch, titleForm } from '../../../constants';
 import { BranchOffice } from '../../../interfaces/branchOffice';
 import { CustomInput } from '../../../interfaces';
 import { post, put } from '../../../services';
 import HeaderView from '../../../components/headerView';
 import { TypeRute } from "../../../types";
 import { sleep } from "../../../utils/functions";
-import Map from '../map';
+import Map from './map';
 
 const CreateBranch = () => {
   const [form] = Form.useForm();
@@ -95,7 +95,7 @@ const CreateBranch = () => {
   return (
     <div>
       <HeaderView
-        title={title[type]}
+        title={titleForm[type]}
         path="/sucursales"
         goBack
       />
@@ -107,7 +107,6 @@ const CreateBranch = () => {
         <Card>
           <div style={{ paddingBottom: 20, fontWeight: "bold" }}>Información principal</div>
           <DynamicContentForm
-            id={id}
             inputs={
               [
                 {
@@ -178,7 +177,7 @@ const CreateBranch = () => {
                   onChange: (value: string) => setBranch({ ...branch, facebook: value })
                 },
                 ...phones.map((phone, index) => ({
-                  required: (index === 0 || phone),
+                  required: index === 0 || phone,
                   md: 8,
                   typeControl: "phone",
                   label: `Teléfono ${index + 1}`,

@@ -1,6 +1,6 @@
 import { FormRule } from "antd";
 import { BranchOffice } from "../interfaces/branchOffice";
-import { UserAdmin, UserDeliveryMan, UserBranchOfficeSeller } from "../interfaces/user";
+import { UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
 import { TypeRute } from "../types";
 
 export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns"; //pasar a una api
@@ -23,7 +23,7 @@ export const initBranch: BranchOffice = {
   address: "",
   comments: []
 };
-export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
+export const inituserSeller: UserSeller = {
   active: true,
   description: '',
   email: '',
@@ -44,7 +44,6 @@ export const initUserAdmin: UserAdmin = {
   confirmPassword: '',
   role: ''
 };
-export const namesDaysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 export const initUserDeliveryMan: UserDeliveryMan = {
   active: true,
   description: '',
@@ -60,7 +59,7 @@ export const initUserDeliveryMan: UserDeliveryMan = {
 export const rulePhoneInput: FormRule = {
   required: true,
   message: 'El número telefónico tiene que ser de 10 dígitos.',
-  validator: (rule, value: string) => value.length !== 10 ? Promise.reject(rule.message) : Promise.resolve(),
+  validator: (rule, value?: string ) => value?.length !== 10 ? Promise.reject(rule.message) : Promise.resolve(),
 };
 export const ruleMaxLength: FormRule = {
   max: 300,
@@ -76,7 +75,7 @@ export const rulePassword: FormRule = {
   min: 6,
   message: 'La contraseña tiene que ser de 6 dígitos o más.'
 };
-export const title: Record<TypeRute, string> = {
+export const titleForm: Record<TypeRute, string> = {
   create: "Registrar",
   update: "Editar"
 };
