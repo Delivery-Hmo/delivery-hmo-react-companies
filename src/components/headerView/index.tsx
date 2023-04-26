@@ -14,14 +14,14 @@ const textButtonsCreate: Record<string, string> = {
   "Sucursales": "sucursal",
   "Vendedores": "vendedor",
   "Repartidores": "repartidores"
-};
+} as const;
 
 const HeaderView: FC<Props> = ({ title, path, goBack }) => {
   const navigate = useNavigate();
 
   return (
     <>
-      <Row justify='space-between'>
+      <Row justify='space-between' align="middle">
         <Col>
           <h1>
             {title}

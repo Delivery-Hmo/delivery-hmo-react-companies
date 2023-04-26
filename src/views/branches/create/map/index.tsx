@@ -1,10 +1,10 @@
 import { useState, useEffect, FC, Dispatch, SetStateAction, memo } from "react";
-import { BranchOffice } from "../../../interfaces/branchOffice";
+import { BranchOffice } from "../../../../interfaces/branchOffice";
 import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
-import { googleMapsApiKey } from "../../../constants";
-import { LibrariesGoogleMaps } from "../../../types";
-import FullLoader from "../../../components/fullLoader";
-import { LatLng } from "../../../interfaces";
+import { googleMapsApiKey } from "../../../../constants";
+import { LibrariesGoogleMaps } from "../../../../types";
+import FullLoader from "../../../../components/fullLoader";
+import { LatLng } from "../../../../interfaces";
 import { Button, Card, Col, Row, message } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 
@@ -43,7 +43,7 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
         position: google.maps.ControlPosition.TOP_CENTER,
       },
     });
-  }, [isLoaded, branch])
+  }, [isLoaded])
 
   if (!isLoaded) return <FullLoader />;
 

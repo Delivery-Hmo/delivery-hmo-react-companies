@@ -15,24 +15,24 @@ const RoterChecker = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(loading) return;
+    if (loading) return;
 
-    if(!user && (pathname !== "/" && pathname !== "/registrarse")) {
+    if (!user && (pathname !== "/" && pathname !== "/registrarse")) {
       navigate('/');
       return;
     }
 
-    if(user && blockedPathsWithoAuthentication.includes(pathname)) {
+    if (user && blockedPathsWithoAuthentication.includes(pathname)) {
       navigate('/sucursales');
     }
   }, [user, pathname, navigate, loading])
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      { user ? <MenuComponent /> : <HeaderComponent /> }
+      {user ? <MenuComponent /> : <HeaderComponent />}
       <Layout.Content style={{ padding: user ? "2vh" : 0 }}>
-      { user && <Breadcrumb /> }
-       <Suspense fallback={<FullLoader />}>
+        {user && <Breadcrumb />}
+        <Suspense fallback={<FullLoader />}>
           <Outlet />
         </Suspense>
       </Layout.Content>

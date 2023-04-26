@@ -38,7 +38,10 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProps, wait, placeh
 			setColumns([
 				...columns,
 				{
-					title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
+					title: 'Acciones', 
+					key: 'actions', 
+					fixed: 'right',
+					width: 100,
 					render: (_, record: Record<string, any>) => (
 						<TableActionsButtons
 							record={record}
@@ -66,6 +69,8 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProps, wait, placeh
 				placeholder={placeholderSearch}
 			/>
 			<TableAnt
+				sticky
+				scroll={{ x: 400 }}
 				columns={columns}
 				dataSource={response?.list}
 				loading={loading}
