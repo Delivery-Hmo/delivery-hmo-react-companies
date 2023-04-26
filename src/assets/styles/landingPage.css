@@ -103,4 +103,11 @@ a.ant-typography:hover {
     background-size: cover;
     background-position: center;
   }
+
+  .image-perfil {
+    min-height: 500px;
+    background-image: url('../perfil.png');
+    background-size: cover;
+    background-position: center;
+  }
 }
