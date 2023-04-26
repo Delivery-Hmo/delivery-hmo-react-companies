@@ -7,9 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
 import { initUserDeliveryMan } from '../../../constants';
 import { UserDeliveryMan } from '../../../interfaces/user';
-import useGet from '../../../hooks/useGet';
-
-type TypeRute = "create" | "update";
+import { TypeRute } from "../../../types";
 
 const title: Record<TypeRute, string> = {
   create: "Registrar",
@@ -21,12 +19,10 @@ const CreateUserDeliveryMan = () => {
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
-  const {} = useGet("branchOffice/listByUserAdmin");
   const { state, pathname } = location;
   const [type, setType] = useState<TypeRute>("create");
   const [saveLoading, setSaveLoading] = useState(false);
   const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(initUserDeliveryMan)
-
 
   useEffect(() => {
     if (pathname.includes("editar") && !state) {
@@ -157,14 +153,12 @@ const CreateUserDeliveryMan = () => {
                   md: 24
                 }
               ]} />
-              <Form.Item>
-                <SaveButton
-                  htmlType='submit'
-                  loading={saveLoading}
-                >
-                  Guardar repartidor
-                </SaveButton>
-              </Form.Item>
+              <SaveButton
+                htmlType='submit'
+                loading={saveLoading}
+              >
+                Guardar repartidor
+              </SaveButton>
             </Card>
           </Form>
         </Col>
