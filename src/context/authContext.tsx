@@ -10,6 +10,7 @@ interface Auth {
   userAdmin: UserAdmin | null;
   setUserAdmin: Dispatch<SetStateAction<UserAdmin | null>>;
   loading: boolean;
+  setCreatingUser: Dispatch<SetStateAction<Boolean>>;
 }
 
 interface Props {
@@ -20,21 +21,23 @@ const AuthContext = createContext<Auth>({
   user: null,
   userAdmin: null,
   setUserAdmin: () => {},
-  loading: true
+  loading: true,
+  setCreatingUser: () => false
 });
 
 export const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userAdmin, setUserAdmin] = useState<UserAdmin | null>(null);
   const [loading, setLoading] = useState<Boolean>(true);
+  const [creatingUser, setCreatingUser] = useState<Boolean>(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    const uns = onIdTokenChanged(auth, async (user: User | null) => {
-      if (user) {
+    const uns = onIdTokenChanged(auth, async (_user: User | null) => {
+      if (_user && !creatingUser) {
         try {
-          const userAdmin = await get<UserAdmin>('userAdmin/getByUid?uid=' + user.uid, controller);
+          const userAdmin = await get<UserAdmin>('userAdminPublic/getByUid?uid=' + _user.uid, controller);
 
           setUserAdmin(userAdmin);
         } catch (error) {
@@ -42,7 +45,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
         }
       }
 
-      setUser(user);
+      setUser(_user);
       setLoading(false);
     })
 
@@ -50,11 +53,11 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       uns();
       controller.abort();
     }
-  }, [])
+  }, [creatingUser])
 
   if (loading) return <FullLoader />;
 
-  return <AuthContext.Provider value={{ user, userAdmin, setUserAdmin, loading }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, userAdmin, setUserAdmin, loading, setCreatingUser }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);

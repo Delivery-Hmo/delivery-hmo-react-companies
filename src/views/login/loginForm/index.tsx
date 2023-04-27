@@ -7,6 +7,7 @@ import { auth } from '../../../firebaseConfig';
 import { post } from '../../../services';
 import { UserAdmin } from '../../../interfaces/user';
 import { ruleEmail, rulePassword } from '../../../constants';
+import { useAuth } from '../../../context/authContext';
 
 type KeysProviders = 'facebook' | 'google';
 
@@ -32,6 +33,7 @@ const scopes: Record<KeysProviders, string> = {
 const LoginForm: FC<Props> = ({ setCurrentForm }) => {
   const [account, setAccount] = useState<Account>({ email: '', password: '' });
   const [loading, setLoading] = useState<boolean>(false);
+  const { setCreatingUser } = useAuth();
 
   const onFinish = async () => {
     if (loading) return;
@@ -49,6 +51,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
 
   const signInWithProvider = async (keyProvider: KeysProviders) => {
     try {
+      setCreatingUser(true)
       const provider = providers[keyProvider];
       const scope = scopes[keyProvider];
       provider.addScope(scope);
@@ -69,7 +72,8 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
         role: ''
       };
 
-      await post('userAdmin/create', userInfo);
+      await post('userAdminPublic/create', userInfo);
+      setCreatingUser(false)
     } catch (e) {
       console.log(e);
       message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
@@ -78,10 +82,10 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
 
   return (
     <>
-      <div className="app-login-title" style={{display: "flex", justifyContent: "center"}}>
+      <div className="app-login-title" style={{ display: "flex", justifyContent: "center" }}>
         <span>Inicio de sesión</span>
       </div>
-      <div className="app-login-subtitle" style={{display: "flex", justifyContent: "center"}}>
+      <div className="app-login-subtitle" style={{ display: "flex", justifyContent: "center" }}>
         <p>Bienvenido</p>
       </div>
       <Form
@@ -146,7 +150,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
               cursor: 'pointer'
             }}
           >
-          Recuperar contraseña
+            Recuperar contraseña
           </p>
           <Button
             block
@@ -187,7 +191,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
           </Button>
         </div>
       </Form>
-      <br/>
+      <br />
     </>
   )
 }

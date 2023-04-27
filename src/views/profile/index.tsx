@@ -96,7 +96,7 @@ const Perfil = () => {
               md: 12,
               typeControl: 'input',
               typeInput: 'text',
-              label: 'Compañia',
+              label: 'Empresa',
               name: 'company',
               rules: [{ required: true, message: 'Favor de escribir la company.' }],
               value: user.company,
@@ -176,7 +176,8 @@ const Perfil = () => {
 
     return istPassword;
   }, [userFirebase, user, setUser, form, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword])
-
+  console.log(userFirebase)
+  console.log(userAdmin)
   useEffect(() => {
     if (!userAdmin) return;
 
@@ -189,6 +190,7 @@ const Perfil = () => {
       <Row gutter={15} style={{ marginTop: 20 }}>
         <Col md={6} >
           <Card title="Mi Perfil" bordered={false} style={{ textAlign: 'center' }}>
+          <h3 >Empresa</h3>
             {
               !userAdmin ? <Spin /> : (
                 <>
@@ -209,14 +211,14 @@ const Perfil = () => {
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.email}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Compañia: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin compañia."}</span>
+                      <b>Empresa: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin compañia."}</span>
                     </Col>
                     <Col xs={24}>
                       <b>Celular: </b>
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.phone || "Sin teléfono."}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripciòn."}</span>
+                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripción."}</span>
                     </Col>
                   </Row>
                 </>
