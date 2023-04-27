@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Card, Form, FormRule, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SaveButton from '../../../components/saveButton';
-import DynamicContentForm from '../../../components/dynamicContentForm';
+import DynamicForm from '../../../components/dynamicForm';
 import { initBranch, titleForm } from '../../../constants';
 import { BranchOffice } from '../../../interfaces/branchOffice';
 import { CustomInput } from '../../../interfaces';
@@ -99,14 +99,13 @@ const CreateBranch = () => {
         path="/sucursales"
         goBack
       />
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-      >
         <Card>
           <div style={{ paddingBottom: 20, fontWeight: "bold" }}>Información principal</div>
-          <DynamicContentForm
+          <DynamicForm
+            form={form}
+            layout="vertical"
+            onFinish={onFinish}
+            loading={saving}
             inputs={
               [
                 {
@@ -198,7 +197,6 @@ const CreateBranch = () => {
         >
           Guardar
         </SaveButton>
-      </Form>
     </div>
   )
 }

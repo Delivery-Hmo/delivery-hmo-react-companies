@@ -1,12 +1,9 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  Card, Col, Row, Avatar, Divider, Form, Tabs, message, Spin, FormRule
-} from 'antd';
-import SaveButton from './../../components/saveButton';
-import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons'
-import DynamicContentForm from '../../components/dynamicContentForm'
-import { get, put } from '../../services'
-import { useAuth } from '../../context/authContext'
+import { Card, Col, Row, Avatar, Divider, Form, Tabs, message, Spin, FormRule } from 'antd';
+import DynamicForm from '../../components/dynamicForm';
+import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons';
+import { get, put } from '../../services';
+import { useAuth } from '../../context/authContext';
 import { UserAdmin } from '../../interfaces/user';
 import { initUserAdmin } from '../../constants';
 import { updateEmail, updatePassword, User } from 'firebase/auth';
@@ -81,8 +78,10 @@ const Perfil = () => {
       {
         label: 'Actualizar datos de perfil',
         key: '1',
-        children: <Form form={form} layout="vertical" onFinish={onEditProfile}>
-          <DynamicContentForm inputs={[
+        children: <DynamicForm
+          loading={loading}
+          onFinish={onEditProfile}
+          inputs={[
             {
               md: 6,
               typeControl: 'input',
@@ -120,11 +119,8 @@ const Perfil = () => {
               value: user.description,
               onChange: (value) => setUser({ ...user, description: value })
             }
-          ]} />
-          <SaveButton htmlType="submit" loading={loading}>
-            Guardar
-          </SaveButton>
-        </Form>
+          ]}
+        />
       }
     ]
 
@@ -133,8 +129,10 @@ const Perfil = () => {
       {
         label: 'Actualizar datos de sesión',
         key: '2',
-        children: <Form form={form} layout="vertical" onFinish={onEditAuth}>
-          <DynamicContentForm inputs={[
+        children: <DynamicForm
+          loading={loading}
+          onFinish={onEditAuth}
+          inputs={[
             {
               md: 12,
               typeControl: 'input',
@@ -164,18 +162,15 @@ const Perfil = () => {
               onChange: (value: string) => setUser({ ...user, confirmPassword: value }),
               md: 6,
             },
-          ]} />
-          <SaveButton htmlType="submit" loading={loading}>
-            Guardar
-          </SaveButton>
-        </Form>
+          ]}
+        />
       }
     ]
 
     if (userFirebase?.providerData[0]?.providerId === "password") return isPassword;
 
     return istPassword;
-  }, [userFirebase, user, setUser, form, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword])
+  }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword])
 
   useEffect(() => {
     if (!userAdmin) return;

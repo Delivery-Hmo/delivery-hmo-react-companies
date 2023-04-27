@@ -3,7 +3,7 @@ import { BranchOffice } from "../interfaces/branchOffice";
 import { UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
 import { TypeRute } from "../types";
 
-export const googleMapsApiKey = "AIzaSyDAL0TdQNyLykbqiwBQInlazWDwcX9Edns"; //pasar a una api
+export const googleMapsApiKey = "AIzaSyAJZcZP0yqFEeD3roIhSRrwDyLlpUkWKb4"; //pasar a una api
 export const initBranch: BranchOffice = {
   userAdmin: "",
   name: "",

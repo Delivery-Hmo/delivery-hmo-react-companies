@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import DynamicContentForm from '../../../components/dynamicContentForm'
+import DynamicForm from '../../../components/dynamicForm'
 import { Card, Col, Form, message, Row } from 'antd'
 import SaveButton from '../../../components/saveButton';
 import { post, put } from '../../../services';
@@ -21,7 +21,7 @@ const CreateUserDeliveryMan = () => {
   const navigate = useNavigate();
   const { state, pathname } = location;
   const [type, setType] = useState<TypeRute>("create");
-  const [saveLoading, setSaveLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(initUserDeliveryMan)
 
   useEffect(() => {
@@ -41,24 +41,22 @@ const CreateUserDeliveryMan = () => {
   }, [state, form, navigate, pathname, userAdmin])
 
   const onFinish = async () => {
+    setSaving(true);
+
+    const { password, confirmPassword } = deliveryMan;
+
+    if (confirmPassword !== password) {
+      message.error('Las contraseñas no coinciden.');
+      return;
+    }
+
+    delete deliveryMan.confirmPassword;
+
     try {
-      setSaveLoading(true);
-
-      const { password, confirmPassword } = deliveryMan;
-
-      if (confirmPassword !== password) {
-        message.error('Las contraseñas no coinciden.');
-        return;
-      }
-
-      let _deliveryMan = { ...deliveryMan };
-
-      delete _deliveryMan.confirmPassword;
-
       if (type === "update") {
-        await put(`userDeliveryMan/${type}`, _deliveryMan);
+        await put(`userDeliveryMan/${type}`, deliveryMan);
       } else {
-        await post(`userDeliveryMan/${type}`, _deliveryMan);
+        await post(`userDeliveryMan/${type}`, deliveryMan);
       }
 
       message.success('Repartidor guardado con éxito.', 4);
@@ -67,9 +65,10 @@ const CreateUserDeliveryMan = () => {
       console.log(error)
       message.error('Error al guardar el repartidor.', 4);
     } finally {
-      setSaveLoading(false)
+      setSaving(false)
     }
   }
+
   return (
     <>
       <Row>
@@ -77,13 +76,13 @@ const CreateUserDeliveryMan = () => {
           <h1>{title[type]} Repartidor</h1>
         </Col>
         <Col md={24}>
-          <Form
-            form={form}
-            layout='vertical'
-            onFinish={onFinish}
-          >
-            <Card>
-              <DynamicContentForm inputs={[
+          <Card>
+            <DynamicForm
+              form={form}
+              layout='vertical'
+              loading={saving}
+              onFinish={onFinish}
+              inputs={[
                 {
                   typeControl: 'input',
                   typeInput: 'text',
@@ -147,20 +146,14 @@ const CreateUserDeliveryMan = () => {
                   typeInput: 'text',
                   label: 'Descripción',
                   name: 'description',
-                  rules: [{required: true, message: 'Favor de escribir una breve descripción del repartidor.'}],
+                  rules: [{ required: true, message: 'Favor de escribir una breve descripción del repartidor.' }],
                   value: deliveryMan.description,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, description: value}),
-                  md: 24
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, description: value }),
+                  md: 24,
                 }
-              ]} />
-              <SaveButton
-                htmlType='submit'
-                loading={saveLoading}
-              >
-                Guardar repartidor
-              </SaveButton>
-            </Card>
-          </Form>
+              ]}
+            />
+          </Card>
         </Col>
       </Row>
     </>
