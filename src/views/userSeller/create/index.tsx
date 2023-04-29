@@ -94,6 +94,7 @@ const CreateUserSeller = () => {
           layout='vertical'
           loading={saving}
           onFinish={onFinish}
+          justify="center"
           inputs={[
             {
               typeControl: 'input',
@@ -170,7 +171,8 @@ const CreateUserSeller = () => {
               value: seller.image,
               maxCount: 1,
               accept: "image/png, image/jpeg",
-              onChange: (value: UploadFile<any>[]) => setSeller({ ...seller, image: value.map(v => ({ ...v, status: "done" })) })
+              onChange: (value: UploadFile<any>[]) => setSeller({ ...seller, image: value.map(v => ({ ...v, status: "done" })) }),
+              md: 8
             }
           ]}
         />
