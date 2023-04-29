@@ -69,18 +69,6 @@ const CreateUserSeller = () => {
     delete _seller.confirmPassword;
 
     try {
-      if (_seller?.image?.length) {
-        const imageUploadFile = _seller?.image[0] as UploadFile;
-
-        if(!imageUploadFile.url?.includes("https://firebasestorage.googleapis.com/")) {
-          const imageFile = imageUploadFile.originFileObj!;
-
-          const imageUrl = await uploadFile("imagenes/vendedores", imageFile);
-  
-          _seller.image = imageUrl;
-        }
-      }
-
       if (type === "update") {
         await put(`userSeller/${type}`, _seller);
       } else {
