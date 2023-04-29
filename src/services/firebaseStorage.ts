@@ -1,7 +1,6 @@
 import { RcFile } from "antd/es/upload";
-import { ref, uploadBytes, getDownloadURL, getStorage, deleteObject } from "firebase/storage";
-
-const storage = getStorage();
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { storage } from "../firebaseConfig";
 
 export const uploadFile = async (path: string, file: RcFile) => {
   try {
@@ -11,6 +10,7 @@ export const uploadFile = async (path: string, file: RcFile) => {
     await uploadBytes(storageRef, file);
     return await getDownloadURL(storageRef);
   } catch (error) {
+    console.log(error);
     throw new Error("Error al subir el archivo.");
   }
 }
