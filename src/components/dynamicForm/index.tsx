@@ -13,9 +13,10 @@ interface Props {
   layout?: FormLayout;
   onFinish: (values: any) => Promise<void>;  
   loading: boolean;
+  justify?: "start" | "end" | "center" | "space-around" | "space-between";
 }
 
-const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, loading }) => {
+const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, loading, justify }) => {
   const [inputs, setInputs] = useState<CustomInput[]>(inputsProp);
   const [urlsToDelete, setUrlsToDelete] = useState<string[]>([]);
 
@@ -129,7 +130,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         }
       }}
     >
-      <Row gutter={10}>
+      <Row gutter={10} justify={justify}>
         {
           inputs.map((input) => {
             const { label, name, md, rules, typeControl, styleFI, show = true } = input;
