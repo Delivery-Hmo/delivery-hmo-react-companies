@@ -26,6 +26,7 @@ export interface CustomInput {
   accept?: string;
   maxCount?: number;
   multiple?: boolean;
+  loading?: boolean;
 }
 
 export interface Option {

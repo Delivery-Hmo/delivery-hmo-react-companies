@@ -1,16 +1,23 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
-import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, Button, UploadFile } from 'antd';
+import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, Button, UploadFile, message } from 'antd';
 import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
 import { UploadOutlined } from '@ant-design/icons';
+import { FormInstance, FormLayout } from "antd/es/form/Form";
+import SaveButton from "../saveButton";
+import { deleteFile } from "../../services/firebaseStorage";
 
 interface Props {
-  id?: string;
+  form?: FormInstance<any>;
   inputs: CustomInput[];
+  layout?: FormLayout;
+  onFinish: (values: any) => Promise<void>;  
+  loading: boolean;
 }
 
-const DynamicContentForm: FC<Props> = ({ inputs: inputsProp }) => {
+const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, loading }) => {
   const [inputs, setInputs] = useState<CustomInput[]>(inputsProp);
+  const [urlsToDelete, setUrlsToDelete] = useState<string[]>([]);
 
   useEffect(() => {
     const _inputs = inputsProp.map(input => {
@@ -81,6 +88,11 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp }) => {
         listType="picture-card"
         maxCount={maxCount}
         multiple={multiple}
+        onRemove={(file) => {
+          if(file.url?.includes("https://firebasestorage.googleapis.com/")) {
+            setUrlsToDelete(u => [...u, file.url!]);
+          }
+        }}
       >
         <Button
           icon={<UploadOutlined />}
@@ -91,32 +103,62 @@ const DynamicContentForm: FC<Props> = ({ inputs: inputsProp }) => {
         </Button>
       </Upload>
     }
-  }), [])
+  }), []);
+
+  const deleteFilesStorage = async () => {
+    const promisesDelete = urlsToDelete.map(url => deleteFile(url));
+
+    await Promise.all(promisesDelete);
+  }
 
   return (
-    <Row gutter={10}>
-      {
-        inputs.map((input) => {
-          const { label, name, md, rules, typeControl, styleFI, show = true } = input;
+    <Form
+      form={form}
+      layout={layout}
+      onFinish={async (values) => {
+        try {
+          await onFinish(values);
+          await deleteFilesStorage();  
+        } catch (error) {
+          if(error instanceof Error) {
+            message.error(error.message, 4);
+            return;  
+          }
 
-          return (
-            <Col xs={24} md={md} key={name}>
-              {
-                show && <Form.Item
-                  label={label}
-                  name={name}
-                  rules={rules}
-                  style={styleFI}
-                >
-                  {controls[typeControl](input)}
-                </Form.Item>
-              }
-            </Col>
-          )
-        })
-      }
-    </Row>
+          message.error(error as string, 4);  
+        }
+      }}
+    >
+      <Row gutter={10}>
+        {
+          inputs.map((input) => {
+            const { label, name, md, rules, typeControl, styleFI, show = true } = input;
+
+            return (
+              <Col xs={24} md={md} key={name}>
+                {
+                  show && <Form.Item
+                    label={label}
+                    name={name}
+                    rules={rules}
+                    style={styleFI}
+                  >
+                    {controls[typeControl](input)}
+                  </Form.Item>
+                }
+              </Col>
+            )
+          })
+        }
+      </Row>
+      <SaveButton
+        htmlType='submit'
+        loading={loading}
+      >
+        Guardar
+      </SaveButton>
+    </Form>
   )
 }
 
-export default DynamicContentForm;
+export default DynamicForm;

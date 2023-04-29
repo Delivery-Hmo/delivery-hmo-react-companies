@@ -6,7 +6,7 @@ import BackButton from '../backButton';
 
 interface Props {
   title: string;
-  path: string;
+  path?: string;
   goBack?: boolean;
 }
 
@@ -27,15 +27,17 @@ const HeaderView: FC<Props> = ({ title, path, goBack }) => {
             {title}
           </h1>
         </Col>
-        <Col>
-          {
-            goBack
-              ? <BackButton onClick={() => navigate(path)} />
-              : <CreateButton onClick={() => navigate(path)}>
-                {"Registar " + textButtonsCreate[title]}
-              </CreateButton>
-          }
-        </Col>
+        {
+          path && <Col>
+            {
+              goBack
+                ? <BackButton onClick={() => navigate(path)} />
+                : <CreateButton onClick={() => navigate(path)}>
+                  {"Registar " + textButtonsCreate[title]}
+                </CreateButton>
+            }
+          </Col>
+        }
       </Row>
       <br />
     </>
