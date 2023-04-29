@@ -10,7 +10,6 @@ import HeaderView from "../../../components/headerView";
 import { BranchOffice } from "../../../interfaces/branchOffice";
 import { Option } from "../../../interfaces";
 import useGet from "../../../hooks/useGet";
-import { uploadFile } from "../../../services/firebaseStorage";
 
 const CreateUserSeller = () => {
   const [form] = Form.useForm();
