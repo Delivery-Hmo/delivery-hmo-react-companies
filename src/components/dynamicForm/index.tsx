@@ -5,12 +5,13 @@ import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
 import { UploadOutlined } from '@ant-design/icons';
 import { FormInstance, FormLayout } from "antd/es/form/Form";
 import SaveButton from "../saveButton";
+import { deleteFile } from "../../services/firebaseStorage";
 
 interface Props {
   form?: FormInstance<any>;
   inputs: CustomInput[];
   layout?: FormLayout;
-  onFinish: (values: any) => void;  
+  onFinish: (values: any) => Promise<void>;  
   loading: boolean;
 }
 
@@ -88,7 +89,9 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         maxCount={maxCount}
         multiple={multiple}
         onRemove={(file) => {
-          console.log(file.url);
+          if(file.url?.includes("https://firebasestorage.googleapis.com/")) {
+            setUrlsToDelete(u => [...u, file.url!]);
+          }
         }}
       >
         <Button
@@ -102,13 +105,10 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
     }
   }), []);
 
-  const deleteImagesStorage = async () => {
-    try {
+  const deleteFilesStorage = async () => {
+    const promisesDelete = urlsToDelete.map(url => deleteFile(url));
 
-    } catch (error) {
-      console.log(error);
-      message.error(error as string, 4);
-    }
+    await Promise.all(promisesDelete);
   }
 
   return (
@@ -116,8 +116,17 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
       form={form}
       layout={layout}
       onFinish={async (values) => {
-        await deleteImagesStorage();
-        onFinish(values);
+        try {
+          await onFinish(values);
+          await deleteFilesStorage();  
+        } catch (error) {
+          if(error instanceof Error) {
+            message.error(error.message, 4);
+            return;  
+          }
+
+          message.error(error as string, 4);  
+        }
       }}
     >
       <Row gutter={10}>

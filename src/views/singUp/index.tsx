@@ -22,6 +22,7 @@ const SingUp = () => {
     setLoading(true);
 
     try {
+      //este error hay que sacarlo del createUserWhitEmailAndPassword
       const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + userAdmin.email);
 
       if (userAdminRegistered) {

@@ -23,7 +23,7 @@ export const initBranch: BranchOffice = {
   address: "",
   comments: []
 };
-export const inituserSeller: UserSeller = {
+export const initUserSeller: UserSeller = {
   active: true,
   description: '',
   email: '',
@@ -53,8 +53,6 @@ export const initUserDeliveryMan: UserDeliveryMan = {
   role: 'Repartidor',
   password: '',
   confirmPassword: '',
-  branchOffice: '',
-  deliveryMan: true
 };
 export const rulePhoneInput: FormRule = {
   required: true,
