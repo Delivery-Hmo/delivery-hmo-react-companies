@@ -27,30 +27,20 @@ const CreateBranch = () => {
   useEffect(() => {
     if (!staring) return;
 
-    const inti = async () => {
-      try {
-        const _brancOffice = state as BranchOffice | null;
+    const _brancOffice = state as BranchOffice | null;
 
-        setType(_brancOffice?.id ? "update" : "create");
+    setType(_brancOffice?.id ? "update" : "create");
 
-        if (!_brancOffice) return;
+    if (!_brancOffice) return;
 
-        form.setFieldsValue({
-          ..._brancOffice,
-          phone0: _brancOffice?.phones[0],
-          phone1: _brancOffice?.phones[1] || undefined,
-          phone2: _brancOffice?.phones[2] || undefined
-        });
-        setBranch(_brancOffice);
-        await sleep(300);
-        setStaring(false);
-      } catch (error) {
-        console.log(error);
-        message.error("Error al cargar la sucursal.", 4);
-      }
-    }
-
-    inti();
+    form.setFieldsValue({
+      ..._brancOffice,
+      phone0: _brancOffice?.phones[0],
+      phone1: _brancOffice?.phones[1] || undefined,
+      phone2: _brancOffice?.phones[2] || undefined
+    });
+    setBranch(_brancOffice);
+    setStaring(false);
   }, [state, staring, form])
 
   const rulesPassword: FormRule[] = useMemo(() => [

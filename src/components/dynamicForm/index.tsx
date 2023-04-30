@@ -61,6 +61,21 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
     imgWindow?.document.write(image.outerHTML);
   }, []);
 
+  //falta testear esta funcion con otros tipos de archivos
+  const validateFiles = useCallback((fileList: UploadFile<any>[], accept: string) => {
+    for (let index = 0; index < fileList.length; index++) {
+      const file = fileList[index];
+      const types = accept?.split(",").map(type => type.trim()) || [];
+    
+      if (!types.includes(file.type!)) {
+        message.error(`Formato incorrecto.`, 4);
+        return false;
+      }
+    }
+    
+    return true;
+  }, []);
+
   const controls: Record<string, (input: CustomInput) => ReactNode> = useMemo(() => ({
     input: ({ value, onChange, typeInput }: CustomInput) => <Input
       type={typeInput || 'text'}
@@ -111,7 +126,15 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             setUrlsToDelete(u => [...u, file.url!]);
           }
         },
-        onChange: ({ fileList }:  UploadChangeParam<UploadFile<any>>) => onChange(fileList)
+        onChange: ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
+          const filesValidated = validateFiles(fileList, accept!);
+
+          if(!filesValidated) {
+            return;
+          }
+
+          onChange(fileList)
+        },  
       };
 
       return accept?.includes("image")
@@ -134,7 +157,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
           <ButtonUpload />
         </Upload>
     }
-  }), [onPreview]);
+  }), [onPreview, validateFiles]);
 
   const deleteFilesStorage = async () => {
     const promisesDelete = urlsToDelete.map(url => deleteFile(url));
