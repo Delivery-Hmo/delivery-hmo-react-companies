@@ -9,7 +9,6 @@ import { CustomInput } from '../../../interfaces';
 import { post, put } from '../../../services';
 import HeaderView from '../../../components/headerView';
 import { TypeRute } from "../../../types";
-import { sleep } from "../../../utils/functions";
 import Map from './map';
 
 const CreateBranch = () => {

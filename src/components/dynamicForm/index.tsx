@@ -1,6 +1,6 @@
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
-import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, Button, UploadFile, message } from 'antd';
+import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, UploadFile, message } from 'antd';
 import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
 import { FormInstance, FormLayout } from "antd/es/form/Form";
 import SaveButton from "../saveButton";
