@@ -2,12 +2,12 @@ import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { CustomInput, Option } from '../../interfaces';
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, Button, UploadFile, message } from 'antd';
 import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
-import { UploadOutlined } from '@ant-design/icons';
 import { FormInstance, FormLayout } from "antd/es/form/Form";
 import SaveButton from "../saveButton";
 import { deleteFile } from "../../services/firebaseStorage";
 import ImgCrop from 'antd-img-crop';
-import { RcFile } from "antd/es/upload";
+import { RcFile, UploadChangeParam, UploadProps } from "antd/es/upload";
+import ButtonUpload from "./ButtonUpload";
 
 interface Props {
   form?: FormInstance<any>;
@@ -99,40 +99,40 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
     timeRangePicker: ({ value, onChange }) => <TimePicker.RangePicker value={value} onChange={onChange} />,
     file: ({ value, onChange, accept, maxCount, multiple }: CustomInput) => {
       const _value = value as UploadFile<any>[] | undefined;
+      const propsUpload: UploadProps = { 
+        fileList: _value, 
+        accept, 
+        maxCount, 
+        multiple,
+        onPreview,
+        listType: "picture-card",
+        onRemove: (file: UploadFile) => {
+          if (file.url?.includes("https://firebasestorage.googleapis.com/")) {
+            setUrlsToDelete(u => [...u, file.url!]);
+          }
+        },
+        onChange: ({ fileList }:  UploadChangeParam<UploadFile<any>>) => onChange(fileList)
+      };
 
-      return <ImgCrop
-        rotationSlider
-        aspectSlider
-        showGrid
-        showReset
-        modalTitle="Editar"
-        modalCancel="Cancelar"
-        modalOk="Aceptar"
-        resetText="Reiniciar"
-      >
-        <Upload
-          fileList={_value}
-          listType="picture-card"
-          maxCount={maxCount}
-          multiple={multiple}
-          onPreview={onPreview}
-          accept={accept}
-          onRemove={(file) => {
-            if (file.url?.includes("https://firebasestorage.googleapis.com/")) {
-              setUrlsToDelete(u => [...u, file.url!]);
-            }
-          }}
-          onChange={({ fileList }) => onChange(fileList)}
+      return accept?.includes("image")
+        ? <ImgCrop
+          quality={0.5}
+          rotationSlider
+          aspectSlider
+          showGrid
+          showReset
+          modalTitle="Editar"
+          modalCancel="Cancelar"
+          modalOk="Aceptar"
+          resetText="Reiniciar"
         >
-          <Button
-            icon={<UploadOutlined />}
-          >
-            {
-              multiple || !_value?.length ? "Subir foto/imagen" : "Cambiar foto/imagen"
-            }
-          </Button>
+          <Upload {...propsUpload}>
+            <ButtonUpload />
+          </Upload>
+        </ImgCrop>
+        : <Upload {...propsUpload}>
+          <ButtonUpload />
         </Upload>
-      </ImgCrop>
     }
   }), [onPreview]);
 
