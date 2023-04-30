@@ -171,8 +171,9 @@ const CreateUserSeller = () => {
               value: seller.image,
               maxCount: 1,
               accept: "image/png, image/jpeg",
-              onChange: (value: UploadFile<any>[]) => setSeller({ ...seller, image: value.map(v => ({ ...v, status: "done" })) }),
-              md: 8
+              onChange: (value: UploadFile<any>[]) => setSeller({ ...seller, image: value }),
+              md: 8,
+              styleFI: { display: "flex", justifyContent: "center" },
             }
           ]}
         />

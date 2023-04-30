@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, Button, UploadFile, message } from 'antd';
 import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
@@ -6,12 +6,14 @@ import { UploadOutlined } from '@ant-design/icons';
 import { FormInstance, FormLayout } from "antd/es/form/Form";
 import SaveButton from "../saveButton";
 import { deleteFile } from "../../services/firebaseStorage";
+import ImgCrop from 'antd-img-crop';
+import { RcFile } from "antd/es/upload";
 
 interface Props {
   form?: FormInstance<any>;
   inputs: CustomInput[];
   layout?: FormLayout;
-  onFinish: (values: any) => Promise<void>;  
+  onFinish: (values: any) => Promise<void>;
   loading: boolean;
   justify?: "start" | "end" | "center" | "space-around" | "space-between";
 }
@@ -42,6 +44,22 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
 
     setInputs(_inputs);
   }, [inputsProp]);
+
+  const onPreview = useCallback(async (file: UploadFile) => {
+    let src = file.url as string;
+
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as RcFile);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  }, []);
 
   const controls: Record<string, (input: CustomInput) => ReactNode> = useMemo(() => ({
     input: ({ value, onChange, typeInput }: CustomInput) => <Input
@@ -82,29 +100,41 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
     file: ({ value, onChange, accept, maxCount, multiple }: CustomInput) => {
       const _value = value as UploadFile<any>[] | undefined;
 
-      return <Upload
-        fileList={_value}
-        onChange={e => onChange(e.fileList)}
-        accept={accept}
-        listType="picture-card"
-        maxCount={maxCount}
-        multiple={multiple}
-        onRemove={(file) => {
-          if(file.url?.includes("https://firebasestorage.googleapis.com/")) {
-            setUrlsToDelete(u => [...u, file.url!]);
-          }
-        }}
+      return <ImgCrop
+        rotationSlider
+        aspectSlider
+        showGrid
+        showReset
+        modalTitle="Editar"
+        modalCancel="Cancelar"
+        modalOk="Aceptar"
+        resetText="Reiniciar"
       >
-        <Button
-          icon={<UploadOutlined />}
+        <Upload
+          fileList={_value}
+          listType="picture-card"
+          maxCount={maxCount}
+          multiple={multiple}
+          onPreview={onPreview}
+          accept={accept}
+          onRemove={(file) => {
+            if (file.url?.includes("https://firebasestorage.googleapis.com/")) {
+              setUrlsToDelete(u => [...u, file.url!]);
+            }
+          }}
+          onChange={({ fileList }) => onChange(fileList)}
         >
-          {
-            multiple || !_value?.length ? "Subir foto/imagen" : "Cambiar foto/imagen"
-          }
-        </Button>
-      </Upload>
+          <Button
+            icon={<UploadOutlined />}
+          >
+            {
+              multiple || !_value?.length ? "Subir foto/imagen" : "Cambiar foto/imagen"
+            }
+          </Button>
+        </Upload>
+      </ImgCrop>
     }
-  }), []);
+  }), [onPreview]);
 
   const deleteFilesStorage = async () => {
     const promisesDelete = urlsToDelete.map(url => deleteFile(url));
@@ -119,14 +149,14 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
       onFinish={async (values) => {
         try {
           await onFinish(values);
-          await deleteFilesStorage();  
+          await deleteFilesStorage();
         } catch (error) {
-          if(error instanceof Error) {
+          if (error instanceof Error) {
             message.error(error.message, 4);
-            return;  
+            return;
           }
 
-          message.error(error as string, 4);  
+          message.error(error as string, 4);
         }
       }}
     >

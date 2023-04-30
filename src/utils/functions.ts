@@ -1,3 +1,4 @@
+import { UploadFile } from "antd";
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
 
 export const getCurrentToken = () => new Promise<string>((resolve) => {
