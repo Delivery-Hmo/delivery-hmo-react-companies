@@ -1,13 +1,14 @@
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, UploadFile, message } from 'antd';
 import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
 import { FormInstance, FormLayout } from "antd/es/form/Form";
 import SaveButton from "../saveButton";
 import { deleteFile } from "../../services/firebaseStorage";
-import ImgCrop from 'antd-img-crop';
-import { RcFile, UploadChangeParam, UploadProps } from "antd/es/upload";
-import ButtonUpload from "./ButtonUpload";
+import { UploadChangeParam, UploadProps } from "antd/es/upload";
+import ButtonUpload from "./buttonUpload";
+import Crop from "./crop";
+import { onPreviewImage, validFiles } from "../../utils/functions";
 
 interface Props {
   form?: FormInstance<any>;
@@ -44,37 +45,6 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
 
     setInputs(_inputs);
   }, [inputsProp]);
-
-  const onPreview = useCallback(async (file: UploadFile) => {
-    let src = file.url as string;
-
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  }, []);
-
-  //falta testear esta funcion con otros tipos de archivos
-  const validateFiles = useCallback((fileList: UploadFile<any>[], accept: string) => {
-    for (let index = 0; index < fileList.length; index++) {
-      const file = fileList[index];
-      const types = accept?.split(",").map(type => type.trim()) || [];
-    
-      if (!types.includes(file.type!)) {
-        message.error(`Formato incorrecto.`, 4);
-        return false;
-      }
-    }
-    
-    return true;
-  }, []);
 
   const controls: Record<string, (input: CustomInput) => ReactNode> = useMemo(() => ({
     input: ({ value, onChange, typeInput }: CustomInput) => <Input
@@ -114,12 +84,13 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
     timeRangePicker: ({ value, onChange }) => <TimePicker.RangePicker value={value} onChange={onChange} />,
     file: ({ value, onChange, accept, maxCount, multiple }: CustomInput) => {
       const _value = value as UploadFile<any>[] | undefined;
-      const propsUpload: UploadProps = { 
-        fileList: _value, 
-        accept, 
-        maxCount, 
+
+      const propsUpload: UploadProps = {
+        fileList: _value,
+        accept,
+        maxCount,
         multiple,
-        onPreview,
+        onPreview: onPreviewImage,
         listType: "picture-card",
         onRemove: (file: UploadFile) => {
           if (file.url?.includes("https://firebasestorage.googleapis.com/")) {
@@ -127,37 +98,28 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
           }
         },
         onChange: ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
-          const filesValidated = validateFiles(fileList, accept!);
+          const isValid = validFiles(fileList.map(f => f.originFileObj!), accept!, true);
 
-          if(!filesValidated) {
-            return;
+          if(!isValid) {
+            onChange([]);
+            return
           }
-
-          onChange(fileList)
-        },  
+          
+          onChange(fileList);
+        },
       };
 
       return accept?.includes("image")
-        ? <ImgCrop
-          quality={0.5}
-          rotationSlider
-          aspectSlider
-          showGrid
-          showReset
-          modalTitle="Editar"
-          modalCancel="Cancelar"
-          modalOk="Aceptar"
-          resetText="Reiniciar"
-        >
+        ? <Crop beforeCrop={(_, fileList) => validFiles(fileList, accept)}>
           <Upload {...propsUpload}>
-            <ButtonUpload />
+            <ButtonUpload multiple={multiple} value={_value} />
           </Upload>
-        </ImgCrop>
+        </Crop>
         : <Upload {...propsUpload}>
-          <ButtonUpload />
+          <ButtonUpload multiple={multiple} value={_value} />
         </Upload>
     }
-  }), [onPreview, validateFiles]);
+  }), []);
 
   const deleteFilesStorage = async () => {
     const promisesDelete = urlsToDelete.map(url => deleteFile(url));
