@@ -105,7 +105,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             return
           }
           
-          onChange(fileList);
+          onChange(fileList.map(f => ({...f, status: "done"})));
         },
       };
 
