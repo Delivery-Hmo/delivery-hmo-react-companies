@@ -1,17 +1,20 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
-import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, Button, UploadFile, message } from 'antd';
+import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, UploadFile, message } from 'antd';
 import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
-import { UploadOutlined } from '@ant-design/icons';
 import { FormInstance, FormLayout } from "antd/es/form/Form";
 import SaveButton from "../saveButton";
 import { deleteFile } from "../../services/firebaseStorage";
+import { UploadChangeParam, UploadProps } from "antd/es/upload";
+import ButtonUpload from "./buttonUpload";
+import Crop from "./crop";
+import { onPreviewImage, validFiles } from "../../utils/functions";
 
 interface Props {
   form?: FormInstance<any>;
   inputs: CustomInput[];
   layout?: FormLayout;
-  onFinish: (values: any) => Promise<void>;  
+  onFinish: (values: any) => Promise<void>;
   loading: boolean;
   justify?: "start" | "end" | "center" | "space-around" | "space-between";
 }
@@ -82,27 +85,39 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
     file: ({ value, onChange, accept, maxCount, multiple }: CustomInput) => {
       const _value = value as UploadFile<any>[] | undefined;
 
-      return <Upload
-        fileList={_value}
-        onChange={e => onChange(e.fileList)}
-        accept={accept}
-        listType="picture-card"
-        maxCount={maxCount}
-        multiple={multiple}
-        onRemove={(file) => {
-          if(file.url?.includes("https://firebasestorage.googleapis.com/")) {
+      const propsUpload: UploadProps = {
+        fileList: _value,
+        accept,
+        maxCount,
+        multiple,
+        onPreview: onPreviewImage,
+        listType: "picture-card",
+        onRemove: (file: UploadFile) => {
+          if (file.url?.includes("https://firebasestorage.googleapis.com/")) {
             setUrlsToDelete(u => [...u, file.url!]);
           }
-        }}
-      >
-        <Button
-          icon={<UploadOutlined />}
-        >
-          {
-            multiple || !_value?.length ? "Subir foto/imagen" : "Cambiar foto/imagen"
+        },
+        onChange: ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
+          const isValid = validFiles(fileList.map(f => f.originFileObj!), accept!, true);
+
+          if(!isValid) {
+            onChange([]);
+            return
           }
-        </Button>
-      </Upload>
+          
+          onChange(fileList);
+        },
+      };
+
+      return accept?.includes("image")
+        ? <Crop beforeCrop={(_, fileList) => validFiles(fileList, accept)}>
+          <Upload {...propsUpload}>
+            <ButtonUpload multiple={multiple} value={_value} />
+          </Upload>
+        </Crop>
+        : <Upload {...propsUpload}>
+          <ButtonUpload multiple={multiple} value={_value} />
+        </Upload>
     }
   }), []);
 
@@ -119,14 +134,14 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
       onFinish={async (values) => {
         try {
           await onFinish(values);
-          await deleteFilesStorage();  
+          await deleteFilesStorage();
         } catch (error) {
-          if(error instanceof Error) {
+          if (error instanceof Error) {
             message.error(error.message, 4);
-            return;  
+            return;
           }
 
-          message.error(error as string, 4);  
+          message.error(error as string, 4);
         }
       }}
     >
