@@ -2,15 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { Card, Form, FormRule, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SaveButton from '../../../components/saveButton';
-import DynamicContentForm from '../../../components/dynamicContentForm';
-import { initBranch, title } from '../../../constants';
+import DynamicForm from '../../../components/dynamicForm';
+import { initBranch, titleForm } from '../../../constants';
 import { BranchOffice } from '../../../interfaces/branchOffice';
 import { CustomInput } from '../../../interfaces';
 import { post, put } from '../../../services';
 import HeaderView from '../../../components/headerView';
 import { TypeRute } from "../../../types";
-import { sleep } from "../../../utils/functions";
-import Map from '../map';
+import Map from './map';
 
 const CreateBranch = () => {
   const [form] = Form.useForm();
@@ -27,30 +26,20 @@ const CreateBranch = () => {
   useEffect(() => {
     if (!staring) return;
 
-    const inti = async () => {
-      try {
-        const _brancOffice = state as BranchOffice | null;
+    const _brancOffice = state as BranchOffice | null;
 
-        setType(_brancOffice?.id ? "update" : "create");
+    setType(_brancOffice?.id ? "update" : "create");
 
-        if (!_brancOffice) return;
+    if (!_brancOffice) return;
 
-        form.setFieldsValue({
-          ..._brancOffice,
-          phone0: _brancOffice?.phones[0],
-          phone1: _brancOffice?.phones[1] || undefined,
-          phone2: _brancOffice?.phones[2] || undefined
-        });
-        setBranch(_brancOffice);
-        await sleep(300);
-        setStaring(false);
-      } catch (error) {
-        console.log(error);
-        message.error("Error al cargar la sucursal.", 4);
-      }
-    }
-
-    inti();
+    form.setFieldsValue({
+      ..._brancOffice,
+      phone0: _brancOffice?.phones[0],
+      phone1: _brancOffice?.phones[1] || undefined,
+      phone2: _brancOffice?.phones[2] || undefined
+    });
+    setBranch(_brancOffice);
+    setStaring(false);
   }, [state, staring, form])
 
   const rulesPassword: FormRule[] = useMemo(() => [
@@ -95,19 +84,17 @@ const CreateBranch = () => {
   return (
     <div>
       <HeaderView
-        title={title[type]}
+        title={titleForm[type]}
         path="/sucursales"
         goBack
       />
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-      >
         <Card>
           <div style={{ paddingBottom: 20, fontWeight: "bold" }}>Información principal</div>
-          <DynamicContentForm
-            id={id}
+          <DynamicForm
+            form={form}
+            layout="vertical"
+            onFinish={onFinish}
+            loading={saving}
             inputs={
               [
                 {
@@ -178,7 +165,7 @@ const CreateBranch = () => {
                   onChange: (value: string) => setBranch({ ...branch, facebook: value })
                 },
                 ...phones.map((phone, index) => ({
-                  required: (index === 0 || phone),
+                  required: index === 0 || phone,
                   md: 8,
                   typeControl: "phone",
                   label: `Teléfono ${index + 1}`,
@@ -199,7 +186,6 @@ const CreateBranch = () => {
         >
           Guardar
         </SaveButton>
-      </Form>
     </div>
   )
 }

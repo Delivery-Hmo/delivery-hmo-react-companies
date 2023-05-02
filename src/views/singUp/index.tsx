@@ -1,22 +1,11 @@
 import { useState } from 'react';
-import { Form, Row, Col, message } from 'antd';
+import { Form, message } from 'antd';
 import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAdmin } from '../../interfaces/user';
 import { get, post } from '../../services';
-import DynamicContentForm from '../../components/dynamicContentForm';
-import SaveButton from '../../components/saveButton';
-
-const initUserAdmin: UserAdmin = {
-  active: true,
-  company: '',
-  description: '',
-  email: '',
-  name: '',
-  phone: '',
-  password: '',
-  confirmPassword: '',
-  role: ''
-};
+import DynamicForm from '../../components/dynamicForm';
+import { initUserAdmin } from "../../constants";
+import HeaderView from "../../components/headerView";
 
 const SingUp = () => {
   const [userAdmin, setUserAdmin] = useState<UserAdmin>(initUserAdmin);
@@ -24,8 +13,8 @@ const SingUp = () => {
 
   const onFinish = async () => {
     if (userAdmin.password !== userAdmin.confirmPassword) {
-      message.error('Las contraseñas no coinciden.', 4)
-      return
+      message.error('Las contraseñas no coinciden.', 4);
+      return;
     }
 
     if (loading) return;
@@ -33,6 +22,7 @@ const SingUp = () => {
     setLoading(true);
 
     try {
+      //este error hay que sacarlo del createUserWhitEmailAndPassword
       const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + userAdmin.email);
 
       if (userAdminRegistered) {
@@ -61,85 +51,77 @@ const SingUp = () => {
 
   return (
     <div style={{ padding: "10vh" }}>
-      <Row>
-        <Col>
-          <h1>
-            Registrar usuario
-          </h1>
-        </Col>
-      </Row>
+      <HeaderView
+        title="Registrar usuario"
+      />
       <br />
-      <Form layout="vertical" onFinish={onFinish}>
-        <DynamicContentForm inputs={[
-          {
-            md: 12,
-            typeControl: "input",
-            typeInput: "text",
-            label: "Nombre Vendedor",
-            name: "name",
-            rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
-            value: userAdmin.name,
-            onChange: (value) => setUserAdmin({ ...userAdmin, name: value })
-          }, {
-            md: 12,
-            typeControl: "input",
-            typeInput: "email",
-            label: "Email",
-            name: "email",
-            value: userAdmin.email,
-            onChange: (value) => setUserAdmin({ ...userAdmin, email: value })
-          }, {
-            md: 12,
-            typeControl: "input",
-            typeInput: "password",
-            label: "Contraseña",
-            name: "password",
-            value: userAdmin.password,
-            onChange: (value) => setUserAdmin({ ...userAdmin, password: value })
-          }, {
-            md: 12,
-            typeControl: "input",
-            typeInput: "password",
-            label: "Confirmar contraseña",
-            name: "confirmPassword",
-            value: userAdmin.confirmPassword,
-            onChange: (value) => setUserAdmin({ ...userAdmin, confirmPassword: value })
-          }, {
-            md: 12,
-            typeControl: "input",
-            typeInput: "text",
-            label: "Compañia",
-            name: "company",
-            rules: [{ required: true, message: 'Favor de escribir la company.' }],
-            value: userAdmin.company,
-            onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
-          }, {
-            md: 12,
-            typeControl: "phone",
-            label: "Telefono",
-            name: "phone",
-            value: userAdmin.phone,
-            onChange: (value) => setUserAdmin({ ...userAdmin, phone: value })
-          }, {
-            md: 24,
-            typeControl: "textarea",
-            typeInput: "text",
-            label: "Descripcion",
-            name: "description",
-            rules: [{ required: true, message: 'Favor de seleccionar su description.' }],
-            value: userAdmin.description,
-            onChange: (value: string) => setUserAdmin({ ...userAdmin, description: value })
-          }
-        ]} />
-
-        <Form.Item>
-          <SaveButton
-            htmlType="submit"
-            loading={loading}
-          >
-            Guardar
-          </SaveButton>
-        </Form.Item>
+      <Form >
+        <DynamicForm
+          layout="vertical"
+          onFinish={onFinish}
+          loading={loading}
+          inputs={[
+            {
+              md: 12,
+              typeControl: "input",
+              typeInput: "text",
+              label: "Nombre Vendedor",
+              name: "name",
+              rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
+              value: userAdmin.name,
+              onChange: (value) => setUserAdmin({ ...userAdmin, name: value })
+            }, {
+              md: 12,
+              typeControl: "input",
+              typeInput: "email",
+              label: "Email",
+              name: "email",
+              value: userAdmin.email,
+              onChange: (value) => setUserAdmin({ ...userAdmin, email: value })
+            }, {
+              md: 12,
+              typeControl: "input",
+              typeInput: "password",
+              label: "Contraseña",
+              name: "password",
+              value: userAdmin.password,
+              onChange: (value) => setUserAdmin({ ...userAdmin, password: value })
+            }, {
+              md: 12,
+              typeControl: "input",
+              typeInput: "password",
+              label: "Confirmar contraseña",
+              name: "confirmPassword",
+              value: userAdmin.confirmPassword,
+              onChange: (value) => setUserAdmin({ ...userAdmin, confirmPassword: value })
+            }, {
+              md: 12,
+              typeControl: "input",
+              typeInput: "text",
+              label: "Compañia",
+              name: "company",
+              rules: [{ required: true, message: 'Favor de escribir la company.' }],
+              value: userAdmin.company,
+              onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
+            }, {
+              md: 12,
+              typeControl: "phone",
+              label: "Telefono",
+              name: "phone",
+              value: userAdmin.phone,
+              onChange: (value) => setUserAdmin({ ...userAdmin, phone: value })
+            }, {
+              md: 24,
+              typeControl: "textarea",
+              typeInput: "text",
+              label: "Descripcion",
+              name: "description",
+              rules: [{ required: true, message: 'Favor de seleccionar su description.' }],
+              value: userAdmin.description,
+              onChange: (value: string) => setUserAdmin({ ...userAdmin, description: value })
+            }
+          ]}
+        />
       </Form>
     </div>
   )

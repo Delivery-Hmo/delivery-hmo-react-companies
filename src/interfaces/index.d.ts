@@ -23,6 +23,10 @@ export interface CustomInput {
   styleFI?: React.CSSProperties;
   show?: boolean;
   required?: boolean;
+  accept?: string;
+  maxCount?: number;
+  multiple?: boolean;
+  loading?: boolean;
 }
 
 export interface Option {

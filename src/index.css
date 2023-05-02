@@ -48,7 +48,7 @@ input[type=number] {
 }
 
 .ant-layout-sider-trigger {
-  background-color: var(--primary) !important;
+  background-color: var(--secondary) !important;
 }
 
 .ant-menu-item {
@@ -70,3 +70,11 @@ input[type=number] {
   border-radius: var(--borderRadius);
 }
 
+.ant-table-tbody {
+  background-color: white;
+}
+
+.ant-upload-list-item-container {
+  width: 300px !important;
+  height: 200px !important;
+}

@@ -1,10 +1,10 @@
-import { useMemo } from 'react'
+import { useMemo } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { UserSeller } from '../../interfaces/user';
-import HeaderView from '../../components/headerView';
-import Table from '../../components/table';
+import HeaderView from "../../components/headerView";
+import Table from "../../components/table";
 
-const UserBranchOfficeSellerView = () => {
+const UserSellerView = () => {
   const columns: ColumnsType<UserSeller> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Correo', dataIndex: 'email', key: 'email' }, 
@@ -13,20 +13,20 @@ const UserBranchOfficeSellerView = () => {
   ], [])
 
   return (
-    <>
-      <HeaderView
-        path='/vendedores/crear'
-        title='Vendedores'
-      />
+    <div>
+      <HeaderView  
+        title="Vendedores"
+        path="/vendedores/registrar"
+      />      
       <Table 
-        url="userBranchOfficeSeller/listByUserAdmin"
+        url="userSeller/listByUserAdmin"
         columns={columns}
         placeholderSearch="Buscar por nombre, correo ó teléfono..."
         pathEdit="/vendedores/editar"
-        urlDisabled="userBranchOfficeSeller/disable"
+        urlDisabled="userSeller/disable"
       />
-    </>
+    </div>
   )
 }
 
-export default UserBranchOfficeSellerView;
+export default UserSellerView;
