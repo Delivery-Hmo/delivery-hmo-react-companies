@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import DynamicForm from '../../../components/dynamicForm'
-import { Card, Form, FormRule, message, UploadFile } from 'antd'
+import { Card, Form, FormRule, Grid, message, UploadFile } from 'antd'
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { initUserSeller, titleForm } from '../../../constants';
@@ -11,6 +11,8 @@ import { BranchOffice } from "../../../interfaces/branchOffice";
 import { Option } from "../../../interfaces";
 import useGet from "../../../hooks/useGet";
 
+const { useBreakpoint } = Grid;
+
 const CreateUserSeller = () => {
   const [form] = Form.useForm();
   const location = useLocation();
@@ -20,6 +22,7 @@ const CreateUserSeller = () => {
   const [saving, setSaving] = useState(false);
   const [seller, setSeller] = useState<UserSeller>(initUserSeller)
   const { loading: loadingBranchOffices, response: branchOffices } = useGet<BranchOffice[]>("branchOffice/listByUserAdmin");
+  const screens = useBreakpoint();
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !seller.id && seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
@@ -161,7 +164,7 @@ const CreateUserSeller = () => {
             },
             {
               typeControl: "file",
-              label: "Foto vendedor",
+              label:  screens.xs ? "" : "Foto vendedor",
               name: "image",
               value: seller.image,
               maxCount: 1,

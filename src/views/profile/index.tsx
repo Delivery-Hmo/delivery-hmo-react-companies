@@ -182,7 +182,7 @@ const Perfil = () => {
   return (
     <>
       <Row gutter={15} style={{ marginTop: 20 }}>
-        <Col md={6} >
+        <Col md={6}>
           <Card title="Mi Perfil" bordered={false} style={{ textAlign: 'center' }}>
             {
               !userAdmin ? <Spin /> : (
@@ -219,7 +219,7 @@ const Perfil = () => {
             }
           </Card>
         </Col>
-        <Col xs={24} md={24} lg={17}>
+        <Col md={18}>
           <Card title="Editar: Datos Mi Perfil" bordered={false}>
             <Tabs
               defaultActiveKey="1"

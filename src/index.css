@@ -60,6 +60,10 @@ input[type=number] {
   background-color: var(--secondary) !important;
 }
 
+.ant-menu-submenu-title {
+  color: black !important;
+}
+
 .ant-btn-primary {
   background-color: var(--secondary) !important;
   border-color: var(--secondary) !important;
