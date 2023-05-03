@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, UploadFile, message } from 'antd';
-import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
+import { rulePhoneInput, ruleMaxLength, ruleEmail, urlImageDefaultProfile } from '../../constants';
 import { FormInstance, FormLayout } from "antd/es/form/Form";
 import SaveButton from "../saveButton";
 import { deleteFile } from "../../services/firebaseStorage";
@@ -93,7 +93,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         onPreview: onPreviewImage,
         listType: "picture-card",
         onRemove: (file: UploadFile) => {
-          if (file.url?.includes("https://firebasestorage.googleapis.com/")) {
+          if (file.url?.includes("https://firebasestorage.googleapis.com/") && file.url !== urlImageDefaultProfile) {
             setUrlsToDelete(u => [...u, file.url!]);
           }
         },
@@ -105,7 +105,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             return;
           }
 
-          onChange(fileList)
+          onChange(fileList);
         },
         action: "https://www.mocky.io/v2/5cc8019d300000980a055e76"
       };
