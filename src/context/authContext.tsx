@@ -4,6 +4,7 @@ import { User, onIdTokenChanged } from 'firebase/auth';
 import { get } from '../services';
 import { auth } from '../firebaseConfig';
 import { UserAdmin } from '../interfaces/user';
+import { message } from "antd";
 
 interface Auth {
   user: User | null;
@@ -32,18 +33,29 @@ export const AuthProvider: FC<Props> = ({ children }) => {
     const controller = new AbortController();
 
     const uns = onIdTokenChanged(auth, async (user: User | null) => {
-      if (user) {
-        try {
-          const userAdmin = await get<UserAdmin>('userAdmin/getByUid?uid=' + user.uid, controller);
-
-          setUserAdmin(userAdmin);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-
       setUser(user);
-      setLoading(false);
+
+      if (!user) {
+        setLoading(false);
+        setUserAdmin(null);
+        return;
+      };
+
+      try {
+        const userAdmin = await get<UserAdmin>('userAdmin/getByUid?uid=' + user.uid, controller);
+
+        setUserAdmin(userAdmin);
+      } catch (error) {
+        setUserAdmin(null);
+        setUser(null);
+        
+        console.log(error);
+        message.error('Error, no se pudo obtener la información del usuario.');
+
+        await auth.signOut();
+      } finally {
+        setLoading(false);
+      }
     })
 
     return () => {
