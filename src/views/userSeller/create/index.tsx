@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import DynamicForm from '../../../components/dynamicForm'
-import { Card, Form, FormRule, message, UploadFile } from 'antd'
+import { Card, Form, FormRule, Grid, message, UploadFile } from 'antd'
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { initUserSeller, titleForm } from '../../../constants';
@@ -11,6 +11,8 @@ import { BranchOffice } from "../../../interfaces/branchOffice";
 import { Option } from "../../../interfaces";
 import useGet from "../../../hooks/useGet";
 
+const { useBreakpoint } = Grid;
+
 const CreateUserSeller = () => {
   const [form] = Form.useForm();
   const location = useLocation();
@@ -19,16 +21,14 @@ const CreateUserSeller = () => {
   const [type, setType] = useState<TypeRute>("create");
   const [saving, setSaving] = useState(false);
   const [seller, setSeller] = useState<UserSeller>(initUserSeller)
-  const [staring, setStaring] = useState(true);
   const { loading: loadingBranchOffices, response: branchOffices } = useGet<BranchOffice[]>("branchOffice/listByUserAdmin");
+  const screens = useBreakpoint();
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !seller.id && seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
   ], [seller])
 
   useEffect(() => {
-    if (!staring) return;
-
     const _userSeller = { ...state } as UserSeller | null;
 
     setType(_userSeller?.id ? "update" : "create");
@@ -36,7 +36,6 @@ const CreateUserSeller = () => {
     if (!_userSeller?.id) return;
 
     const url = _userSeller.image as string;
-
     const imageUploadFile: UploadFile = {
       name: url,
       uid: url,
@@ -49,8 +48,7 @@ const CreateUserSeller = () => {
 
     form.setFieldsValue(_userSeller);
     setSeller(_userSeller);
-    setStaring(false);
-  }, [state, staring, form])
+  }, [state, form])
 
   const onFinish = async () => {
     if (saving) return;
@@ -166,7 +164,7 @@ const CreateUserSeller = () => {
             },
             {
               typeControl: "file",
-              label: "Foto vendedor",
+              label:  screens.xs ? "" : "Foto vendedor",
               name: "image",
               value: seller.image,
               maxCount: 1,
@@ -174,6 +172,7 @@ const CreateUserSeller = () => {
               onChange: (value: UploadFile<any>[]) => setSeller({ ...seller, image: value }),
               md: 8,
               styleFI: { display: "flex", justifyContent: "center" },
+              multiple: false,
             }
           ]}
         />

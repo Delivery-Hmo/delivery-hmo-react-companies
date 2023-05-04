@@ -31,6 +31,8 @@ const Breadcrumb = () => {
       to += ("/" + path)
     });
 
+    if(to.includes("configuracion")) return;
+
     navigate(to);
   }
 
@@ -42,7 +44,7 @@ const Breadcrumb = () => {
       {
         paths.map((path) => (
           <BreadcrumbAnt.Item 
-            href="#"
+            href=""
             key={path}
             onClick={() => toPath(path)}
           >
