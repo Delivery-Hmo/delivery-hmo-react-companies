@@ -17,6 +17,7 @@ const Login: FC<Props> = ({ open }) => {
 
   const DynamicForm = () => {
     if (currentForm === 'recovery') return <RecoveryForm />;
+    
     return <LoginForm setCurrentForm={setCurrentForm} />;
   }
 
