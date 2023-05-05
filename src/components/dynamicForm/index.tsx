@@ -105,6 +105,10 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             return;
           }
 
+          setUrlsToDelete(u => [
+            ...u, 
+            ...fileList.map(f => f.url!).filter(url => !url?.includes("https://firebasestorage.googleapis.com/") && url !== urlImageDefaultProfile) 
+          ]);
           onChange(fileList);
         },
         action: "https://www.mocky.io/v2/5cc8019d300000980a055e76"
