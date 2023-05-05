@@ -15,7 +15,7 @@ const Perfil = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { password, confirmPassword, email } = user;
-  console.log(user)
+
   const onEditProfile = useCallback(async () => {
     setLoading(true);
 
@@ -197,8 +197,8 @@ const Perfil = () => {
     };
 
     _userAdmin.image = [imageUploadFile];
+
     setUser(_userAdmin);
-    console.log("////////////////")
     form.setFieldsValue(_userAdmin);
   }, [userAdmin, form])
 
