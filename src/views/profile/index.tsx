@@ -198,7 +198,6 @@ const Perfil = () => {
 
     _userAdmin.image = [imageUploadFile];
 
-    console.log(_userAdmin)
     setUser(_userAdmin);
     form.setFieldsValue(_userAdmin);
   }, [userAdmin, form])
