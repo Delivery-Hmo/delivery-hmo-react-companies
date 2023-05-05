@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Card, Col, Row, Avatar, Divider, Form, Tabs, message, Spin, FormRule } from 'antd';
+import { Card, Col, Row, Avatar, Divider, Form, Tabs, message, Spin, FormRule, UploadFile } from 'antd';
 import DynamicForm from '../../components/dynamicForm';
 import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons';
 import { get, put } from '../../services';
@@ -15,15 +15,12 @@ const Perfil = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { password, confirmPassword, email } = user;
-
+  console.log(user)
   const onEditProfile = useCallback(async () => {
     setLoading(true);
 
     try {
-      const _userAdmin = await put<UserAdmin>("userAdmin/update", user);
-
-      setUserAdmin(_userAdmin);
-
+      await put<UserAdmin>("userAdmin/update", {...user});
       message.success("Datos de perfil actualizados con éxito.", 4);
 
     } catch (error) {
@@ -32,7 +29,7 @@ const Perfil = () => {
     } finally {
       setLoading(false);
     }
-  }, [setUserAdmin, user])
+  }, [user])
 
   const onEditAuth = useCallback(async () => {
     setLoading(true);
@@ -79,6 +76,7 @@ const Perfil = () => {
         label: 'Actualizar datos de perfil',
         key: '1',
         children: <DynamicForm
+          form={form}
           loading={loading}
           onFinish={onEditProfile}
           inputs={[
@@ -95,7 +93,7 @@ const Perfil = () => {
               md: 12,
               typeControl: 'input',
               typeInput: 'text',
-              label: 'Compañia',
+              label: 'Empresa',
               name: 'company',
               rules: [{ required: true, message: 'Favor de escribir la company.' }],
               value: user.company,
@@ -118,6 +116,17 @@ const Perfil = () => {
               rules: [{ required: true, message: 'Favor de seleccionar su descripción.' }],
               value: user.description,
               onChange: (value) => setUser({ ...user, description: value })
+            },
+            {
+              typeControl: "file",
+              label: "Foto perfil",
+              name: "image",
+              value: user.image,
+              maxCount: 1,
+              accept: "image/png, image/jpeg",
+              onChange: (value: UploadFile<any>[]) => setUser({ ...user, image: value }),
+              md: 24,
+              styleFI: { display: "flex", justifyContent: "center" },
             }
           ]}
         />
@@ -130,6 +139,7 @@ const Perfil = () => {
         label: 'Actualizar datos de sesión',
         key: '2',
         children: <DynamicForm
+          form={form}
           loading={loading}
           onFinish={onEditAuth}
           inputs={[
@@ -172,11 +182,24 @@ const Perfil = () => {
     return istPassword;
   }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword])
 
+  
   useEffect(() => {
     if (!userAdmin) return;
+    const _userAdmin = {...userAdmin}
+    const url = _userAdmin.image as string;
 
-    setUser(userAdmin);
-    form.setFieldsValue(userAdmin);
+    const imageUploadFile: UploadFile = {
+      name: url,
+      uid: url,
+      thumbUrl: url,
+      url,
+      status: "done",
+    };
+
+    _userAdmin.image = [imageUploadFile];
+    setUser(_userAdmin);
+    console.log("////////////////")
+    form.setFieldsValue(_userAdmin);
   }, [userAdmin, form])
 
   return (
@@ -184,6 +207,7 @@ const Perfil = () => {
       <Row gutter={15} style={{ marginTop: 20 }}>
         <Col md={6}>
           <Card title="Mi Perfil" bordered={false} style={{ textAlign: 'center' }}>
+            <h3 >Empresa</h3>
             {
               !userAdmin ? <Spin /> : (
                 <>
@@ -204,14 +228,14 @@ const Perfil = () => {
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.email}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Compañia: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin compañia."}</span>
+                      <b>Empresa: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin compañia."}</span>
                     </Col>
                     <Col xs={24}>
                       <b>Celular: </b>
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.phone || "Sin teléfono."}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripciòn."}</span>
+                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripción."}</span>
                     </Col>
                   </Row>
                 </>
