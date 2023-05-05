@@ -46,12 +46,16 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
         setUserAdmin(userAdmin);
       } catch (error) {
+        //este if hay que quitarlo en producción
+        if(error instanceof Error && error.message === "Failed to execute 'fetch' on 'Window': The user aborted a request.") {
+          return;
+        }
+
         setUserAdmin(null);
         setUser(null);
-        
+
         console.log(error);
         message.error('Error, no se pudo obtener la información del usuario.');
-
         await auth.signOut();
       } finally {
         setLoading(false);
