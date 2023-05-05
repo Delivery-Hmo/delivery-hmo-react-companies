@@ -111,7 +111,11 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
           ]);
           onChange(fileList);
         },
-        action: "https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        customRequest: ({ onSuccess }) => {
+          setTimeout(() => {
+            onSuccess!("ok");
+          }, 0);
+        }
       };
 
       return accept?.includes("image")
