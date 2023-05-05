@@ -40,7 +40,6 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
 
     try {
       setLoading(true);
-
       await signInWithEmailAndPassword(auth, account.email, account.password);
     } catch (error) {
       console.log(error);
@@ -51,7 +50,6 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
 
   const signInWithProvider = async (keyProvider: KeysProviders) => {
     try {
-      setCreatingUser(true)
       const provider = providers[keyProvider];
       const scope = scopes[keyProvider];
       provider.addScope(scope);
@@ -73,7 +71,6 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
       };
 
       await post('userAdminPublic/create', userInfo);
-      setCreatingUser(false)
     } catch (e) {
       console.log(e);
       message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
