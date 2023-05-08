@@ -7,9 +7,10 @@ import { useAuth } from '../../context/authContext';
 import { UserAdmin } from '../../interfaces/user';
 import { initUserAdmin } from '../../constants';
 import { updateEmail, updatePassword, User } from 'firebase/auth';
+import { setImagesToState } from "../../utils/functions";
 
 const Perfil = () => {
-  const { user: userFirebase, userAdmin } = useAuth();
+  const { user: userFirebase, userAdmin, loading: loadingUserAdmin } = useAuth();
   const [form] = Form.useForm();
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,6 +42,7 @@ const Perfil = () => {
       }
 
       if (userFirebase?.email !== email) {
+        //esta validacion hay que hacerla en el back en branchOffice ya se hace
         const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + email);
 
         if (userAdminRegistered) {
@@ -184,23 +186,13 @@ const Perfil = () => {
 
   
   useEffect(() => {
-    if (!userAdmin) return;
-    const _userAdmin = {...userAdmin}
-    const url = _userAdmin.image as string;
+    if (loadingUserAdmin) return;
 
-    const imageUploadFile: UploadFile = {
-      name: url,
-      uid: url,
-      thumbUrl: url,
-      url,
-      status: "done",
-    };
-
-    _userAdmin.image = [imageUploadFile];
+    const _userAdmin = setImagesToState({...userAdmin!});
 
     setUser(_userAdmin);
     form.setFieldsValue(_userAdmin);
-  }, [userAdmin, form])
+  }, [userAdmin, form, loadingUserAdmin])
 
   return (
     <>

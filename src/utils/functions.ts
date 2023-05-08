@@ -16,10 +16,9 @@ export const getCurrentToken = () => new Promise<string>((resolve) => {
   });
 });
 
-
 export const sleep = (time: number) => new Promise((resolve) => setTimeout(() => resolve(null), time));
 
-export const getSrcFromFile = (file: File) => new Promise<string>((resolve, reject) => {
+export const getSrcFromFile = (file: File) => new Promise<string>((resolve) => {
   const reader = new FileReader();
   
   reader.readAsDataURL(file);
@@ -66,4 +65,38 @@ export const onPreviewImage = async (file: UploadFile) => {
   image.src = src;
   const imgWindow = window.open(src);
   imgWindow?.document.write(image.outerHTML);
+}
+
+export const setImagesToState = <T extends { image?: string | UploadFile[], images?: string[] | UploadFile[] }>(state: T) => {
+  if (state.image) {
+    const url = state.image as string;
+    
+    const imageUploadFile: UploadFile = {
+      name: url,
+      uid: url,
+      thumbUrl: url,
+      url,
+      status: "done"
+    };
+
+    state.image = [imageUploadFile];
+  }
+
+  if (state.images?.length) {
+    state.images = state.images.map(url => {
+      url = state.image as string;
+
+      const imageUploadFile: UploadFile = {
+        name: url,
+        uid: url,
+        thumbUrl: url,
+        url,
+        status: "done"
+      };
+
+      return imageUploadFile;
+    });
+  }
+
+  return state;
 }

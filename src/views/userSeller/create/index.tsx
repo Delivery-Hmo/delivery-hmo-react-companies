@@ -10,6 +10,7 @@ import HeaderView from "../../../components/headerView";
 import { BranchOffice } from "../../../interfaces/branchOffice";
 import { Option } from "../../../interfaces";
 import useGet from "../../../hooks/useGet";
+import { setImagesToState } from "../../../utils/functions";
 
 const { useBreakpoint } = Grid;
 
@@ -29,23 +30,13 @@ const CreateUserSeller = () => {
   ], [seller])
 
   useEffect(() => {
-    const _userSeller = { ...state } as UserSeller | null;
+    let _userSeller = { ...state } as UserSeller | null;
 
     setType(_userSeller?.id ? "update" : "create");
 
     if (!_userSeller?.id) return;
 
-    const url = _userSeller.image as string;
-    const imageUploadFile: UploadFile = {
-      name: url,
-      uid: url,
-      thumbUrl: url,
-      url,
-      status: "done",
-    };
-
-    _userSeller.image = [imageUploadFile];
-
+    _userSeller = setImagesToState(_userSeller);
     form.setFieldsValue(_userSeller);
     setSeller(_userSeller);
   }, [state, form])
