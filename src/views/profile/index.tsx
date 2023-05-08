@@ -9,7 +9,7 @@ import { initUserAdmin } from '../../constants';
 import { updateEmail, updatePassword, User } from 'firebase/auth';
 
 const Perfil = () => {
-  const { user: userFirebase, userAdmin, setUserAdmin } = useAuth();
+  const { user: userFirebase, userAdmin } = useAuth();
   const [form] = Form.useForm();
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState<boolean>(false);
@@ -180,7 +180,7 @@ const Perfil = () => {
     if (userFirebase?.providerData[0]?.providerId === "password") return isPassword;
 
     return istPassword;
-  }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword])
+  }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword, form])
 
   
   useEffect(() => {

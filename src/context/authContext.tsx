@@ -4,12 +4,14 @@ import { User, onIdTokenChanged } from 'firebase/auth';
 import { get } from '../services';
 import { auth } from '../firebaseConfig';
 import { UserAdmin } from '../interfaces/user';
+import { message } from "antd";
 
 interface Auth {
   user: User | null;
   userAdmin: UserAdmin | null;
   setUserAdmin: Dispatch<SetStateAction<UserAdmin | null>>;
   loading: boolean;
+  creatingUser: Boolean;
   setCreatingUser: Dispatch<SetStateAction<Boolean>>;
 }
 
@@ -22,6 +24,7 @@ const AuthContext = createContext<Auth>({
   userAdmin: null,
   setUserAdmin: () => {},
   loading: true,
+  creatingUser: false,
   setCreatingUser: () => false
 });
 
@@ -32,22 +35,37 @@ export const AuthProvider: FC<Props> = ({ children }) => {
   const [creatingUser, setCreatingUser] = useState<Boolean>(false);
 
   useEffect(() => {
+    if (creatingUser) return;
+
     const controller = new AbortController();
+    const uns = onIdTokenChanged(auth, async (user: User | null) => {
+      setUser(user);
 
-    const uns = onIdTokenChanged(auth, async (_user: User | null) => {
-      if (_user && !creatingUser) {
-        try {
-   
-          const userAdmin = await get<UserAdmin>('userAdmin/getByUid?uid=' + _user.uid, controller);
+      if (!user) {
+        setLoading(false);
+        setUserAdmin(null);
+        return;
+      };
 
-          setUserAdmin(userAdmin);
-        } catch (error) {
-          console.log(error);
+      try {
+        const userAdmin = await get<UserAdmin>('userAdmin/getByUid?uid=' + user.uid, controller);
+
+        setUserAdmin(userAdmin);
+      } catch (error) {
+        //este if hay que quitarlo en producción
+        if(error instanceof Error && error.message === "Failed to execute 'fetch' on 'Window': The user aborted a request.") {
+          return;
         }
-      }
 
-      setUser(_user);
-      setLoading(false);
+        setUserAdmin(null);
+        setUser(null);
+
+        console.log(error);
+        message.error('Error, no se pudo obtener la información del usuario.');
+        await auth.signOut();
+      } finally {
+        setLoading(false);
+      }
     })
 
     return () => {
@@ -58,7 +76,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
   if (loading) return <FullLoader />;
 
-  return <AuthContext.Provider value={{ user, userAdmin, setUserAdmin, loading, setCreatingUser }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, userAdmin, setUserAdmin, loading, creatingUser, setCreatingUser }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);

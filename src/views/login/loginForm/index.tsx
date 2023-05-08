@@ -33,7 +33,7 @@ const scopes: Record<KeysProviders, string> = {
 const LoginForm: FC<Props> = ({ setCurrentForm }) => {
   const [account, setAccount] = useState<Account>({ email: '', password: '' });
   const [loading, setLoading] = useState<boolean>(false);
-  const { setCreatingUser } = useAuth();
+  const { creatingUser, setCreatingUser } = useAuth();
 
   const onFinish = async () => {
     if (loading) return;
@@ -49,6 +49,10 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
   }
 
   const signInWithProvider = async (keyProvider: KeysProviders) => {
+    if(creatingUser) return;
+
+    setCreatingUser(true);
+
     try {
       const provider = providers[keyProvider];
       const scope = scopes[keyProvider];
@@ -74,6 +78,8 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
     } catch (e) {
       console.log(e);
       message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
+    } finally {
+      setCreatingUser(false);
     }
   }
 
