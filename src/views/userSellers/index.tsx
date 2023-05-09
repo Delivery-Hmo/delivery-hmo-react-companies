@@ -4,7 +4,7 @@ import { UserSeller } from '../../interfaces/user';
 import HeaderView from "../../components/headerView";
 import Table from "../../components/table";
 
-const UserSellerView = () => {
+const UserSellersView = () => {
   const columns: ColumnsType<UserSeller> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Correo', dataIndex: 'email', key: 'email' }, 
@@ -29,4 +29,4 @@ const UserSellerView = () => {
   )
 }
 
-export default UserSellerView;
+export default UserSellersView;

@@ -1,6 +1,8 @@
 import { StringMappingType } from 'typescript';
 import { RcFile, UploadFile } from "antd/es/upload";
 import { LatLng } from ".";
+import { Rols } from "../types";
+
 export interface User {
     uid?: string;
     id?: string;

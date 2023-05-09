@@ -78,6 +78,7 @@ const Perfil = () => {
         label: 'Actualizar datos de perfil',
         key: '1',
         children: <DynamicForm
+          layout="vertical"
           form={form}
           loading={loading}
           onFinish={onEditProfile}
@@ -121,7 +122,7 @@ const Perfil = () => {
             },
             {
               typeControl: "file",
-              label: "Foto perfil",
+              label: "Logo empresa",
               name: "image",
               value: user.image,
               maxCount: 1,
@@ -184,7 +185,6 @@ const Perfil = () => {
     return istPassword;
   }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword, form])
 
-  
   useEffect(() => {
     if (loadingUserAdmin) return;
 

@@ -6,11 +6,19 @@ import MenuComponent from '../../components/menu';
 import Breadcrumb from '../../components/breadcrumb';
 import HeaderComponent from '../../components/header';
 import FullLoader from "../../components/fullLoader";
+import { Rols } from "../../types";
 
 const blockedPathsWithoAuthentication = ["/registrarse", "/"];
+const initUrlByRole: Record<Rols, string> = {
+  "" : "/",
+  "Administrador": "/sucursales",
+  "Administrador sucursal": "/panel-sucursal",
+  "Repartidor": "/pedidos-repartidor",
+  "Vendedor": "/pedidos-sucursal"
+};
 
 const RoterChecker = () => {
-  const { user, loading } = useAuth();
+  const { user, userAdmin, loading } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
@@ -23,9 +31,9 @@ const RoterChecker = () => {
     }
 
     if (user && blockedPathsWithoAuthentication.includes(pathname)) {
-      navigate('/sucursales');
+      navigate(initUrlByRole[userAdmin!.role]);
     }
-  }, [user, pathname, navigate, loading])
+  }, [user, pathname, navigate, loading, userAdmin])
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

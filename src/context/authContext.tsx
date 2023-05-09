@@ -48,6 +48,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       };
 
       try {
+        //este endpoint hacerlo para todos los tipos de usaurios
         const userAdmin = await get<UserAdmin>('userAdmin/getByUid?uid=' + user.uid, controller);
 
         setUserAdmin(userAdmin);
@@ -72,7 +73,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       uns();
       controller.abort();
     }
-  }, [creatingUser])
+  }, [creatingUser]);
 
   if (loading) return <FullLoader />;
 
