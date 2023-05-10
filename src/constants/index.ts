@@ -1,10 +1,18 @@
 import { FormRule } from "antd";
-import { BranchOffice } from "../interfaces/branchOffice";
-import { UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
-import { TypeRute } from "../types";
+import { BranchOffice, UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
+import { Rols, TypeRute } from "../types";
+import menuItems from "../components/menu/menuItems";
 
+export const blockedPathsBranchOffice: readonly string[] = ["/sucursales"] as const;
+export const bloquedPathsUsers: Record<Rols, readonly string[]> = {
+  "": menuItems.map(item => item.key), 
+  "Administrador": [],
+  "Administrador sucursal": blockedPathsBranchOffice,
+  "Vendedor": [],
+  "Repartidor": []
+} as const;
 export const urlImageDefaultProfile = "https://firebasestorage.googleapis.com/v0/b/delivery-hmo.appspot.com/o/imagenesPerfil%2Fperfil.jpg?alt=media&token=a07f8154-7aaa-4397-a8cf-4aeaee5b0f5e";
-export const googleMapsApiKey = "AIzaSyAJZcZP0yqFEeD3roIhSRrwDyLlpUkWKb4"; //pasar a una api
+export const googleMapsApiKey = "AIzaSyAJZcZP0yqFEeD3roIhSRrwDyLlpUkWKb4";
 export const initBranch: BranchOffice = {
   userAdmin: "",
   name: "",
@@ -22,7 +30,9 @@ export const initBranch: BranchOffice = {
     lng: 0
   },
   address: "",
-  comments: []
+  role: "Administrador sucursal",
+  active: true,
+  description: ""
 };
 export const initUserSeller: UserSeller = {
   active: true,

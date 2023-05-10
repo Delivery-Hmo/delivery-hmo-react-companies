@@ -1,8 +1,8 @@
-import { BranchOffice } from '../../interfaces/branchOffice';
 import { ColumnsType } from 'antd/es/table';
 import { useMemo } from 'react';
 import HeaderView from '../../components/headerView';
 import Table from '../../components/table';
+import { BranchOffice } from "../../interfaces/user";
 
 const Branches = () => {
   const columns: ColumnsType<BranchOffice> = useMemo(() => [

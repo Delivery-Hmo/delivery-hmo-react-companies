@@ -8,10 +8,7 @@ const { Header: HeaderAnt } = Layout;
 const Header: React.FC = () => {
   const [open, setOpen] = useState(false);
 
-  const showDrawer = () => {
-    setOpen(!open);
-  };
-
+  const showDrawer = () => setOpen(!open);
 
   return (
     <>

@@ -1,5 +1,4 @@
 import { useState, useEffect, FC, Dispatch, SetStateAction, memo } from "react";
-import { BranchOffice } from "../../../../interfaces/branchOffice";
 import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../../../constants";
 import { LibrariesGoogleMaps } from "../../../../types";
@@ -7,6 +6,7 @@ import FullLoader from "../../../../components/fullLoader";
 import { LatLng } from "../../../../interfaces";
 import { Button, Card, Col, Row, message } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
+import { BranchOffice } from "../../../../interfaces/user";
 
 interface Props {
   branch: BranchOffice;

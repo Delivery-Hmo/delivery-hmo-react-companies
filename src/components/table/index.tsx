@@ -3,7 +3,7 @@ import { Empty, Table as TableAnt } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import useGet from '../../hooks/useGet';
 import SearchTable from '../searchTable';
-import TableActionsButtons from "../tableActionsButtons";
+import TableActionsButtons from "./tableActionsButtons";
 import { patch } from "../../services";
 
 interface Props<T> {
@@ -56,7 +56,6 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProps, wait, placeh
 			setString(false);
 		}
 	}, [columnsProps, string, columns, urlDisabled, pathEdit, limit, search, urlProp])
-
 
 	return (
 		<div>

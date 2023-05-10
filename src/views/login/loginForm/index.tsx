@@ -188,7 +188,6 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
             size="large"
             style={{ backgroundColor: '#eeeeee' }}
             type='default'
-
           >
             Continuar con Facebook
           </Button>

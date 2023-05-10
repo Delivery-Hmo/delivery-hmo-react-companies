@@ -1,6 +1,8 @@
 import { UploadFile, message } from "antd";
 import { RcFile } from "antd/es/upload";
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
+import { BranchOffice, UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
+import { Users } from "../types";
 
 export const getCurrentToken = () => new Promise<string>((resolve) => {
   const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {
@@ -16,10 +18,9 @@ export const getCurrentToken = () => new Promise<string>((resolve) => {
   });
 });
 
-
 export const sleep = (time: number) => new Promise((resolve) => setTimeout(() => resolve(null), time));
 
-export const getSrcFromFile = (file: File) => new Promise<string>((resolve, reject) => {
+export const getSrcFromFile = (file: File) => new Promise<string>((resolve) => {
   const reader = new FileReader();
   
   reader.readAsDataURL(file);
@@ -66,4 +67,54 @@ export const onPreviewImage = async (file: UploadFile) => {
   image.src = src;
   const imgWindow = window.open(src);
   imgWindow?.document.write(image.outerHTML);
+}
+
+export const setImagesToState = <T extends { image?: string | UploadFile[], images?: string[] | UploadFile[] }>(state: T) => {
+  if (state.image) {
+    const url = state.image as string;
+    
+    const imageUploadFile: UploadFile = {
+      name: url,
+      uid: url,
+      thumbUrl: url,
+      url,
+      status: "done"
+    };
+
+    state.image = [imageUploadFile];
+  }
+
+  if (state.images?.length) {
+    state.images = state.images.map(url => {
+      url = state.image as string;
+
+      const imageUploadFile: UploadFile = {
+        name: url,
+        uid: url,
+        thumbUrl: url,
+        url,
+        status: "done"
+      };
+
+      return imageUploadFile;
+    });
+  }
+
+  return state;
+}
+
+export const isUserAdmin = (user: Users): user is UserAdmin => {
+  return user.role === "Administrador";
+}
+
+export const isBranchOffice = (user: Users): user is BranchOffice => {
+  return user.role === "Administrador sucursal";
+}
+
+export const isSeller = (user: Users): user is UserDeliveryMan => {
+  return user.role === "Repartidor";
+}
+
+export const isUserDeliveryMan = (user: Users): user is UserSeller => {
+  return user.role === "Vendedor";
 }

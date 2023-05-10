@@ -7,14 +7,16 @@ import { useAuth } from '../../context/authContext';
 import { UserAdmin } from '../../interfaces/user';
 import { initUserAdmin } from '../../constants';
 import { updateEmail, updatePassword, User } from 'firebase/auth';
+import { setImagesToState } from "../../utils/functions";
 
 const Perfil = () => {
-  const { user: userFirebase, userAdmin } = useAuth();
+  const { user: userFirebase, userAuth, loading: loadingUserAdmin } = useAuth();
   const [form] = Form.useForm();
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { password, confirmPassword, email } = user;
+  const userAdmin = userAuth as UserAdmin;
 
   const onEditProfile = useCallback(async () => {
     setLoading(true);
@@ -41,6 +43,7 @@ const Perfil = () => {
       }
 
       if (userFirebase?.email !== email) {
+        //esta validacion hay que hacerla en el back en branchOffice ya se hace
         const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + email);
 
         if (userAdminRegistered) {
@@ -76,6 +79,7 @@ const Perfil = () => {
         label: 'Actualizar datos de perfil',
         key: '1',
         children: <DynamicForm
+          layout="vertical"
           form={form}
           loading={loading}
           onFinish={onEditProfile}
@@ -113,13 +117,13 @@ const Perfil = () => {
               typeInput: 'text',
               label: 'Descripción',
               name: 'description',
-              rules: [{ required: true, message: 'Favor de seleccionar su descripción.' }],
+              rules: [{ required: true, message: 'Favor de escribir la descripción.' }],
               value: user.description,
               onChange: (value) => setUser({ ...user, description: value })
             },
             {
               typeControl: "file",
-              label: "Foto perfil",
+              label: "Logo empresa",
               name: "image",
               value: user.image,
               maxCount: 1,
@@ -182,25 +186,14 @@ const Perfil = () => {
     return istPassword;
   }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword, form])
 
-  
   useEffect(() => {
-    if (!userAdmin) return;
-    const _userAdmin = {...userAdmin}
-    const url = _userAdmin.image as string;
+    if (loadingUserAdmin) return;
 
-    const imageUploadFile: UploadFile = {
-      name: url,
-      uid: url,
-      thumbUrl: url,
-      url,
-      status: "done",
-    };
-
-    _userAdmin.image = [imageUploadFile];
+    const _userAdmin = setImagesToState({...userAdmin!});
 
     setUser(_userAdmin);
     form.setFieldsValue(_userAdmin);
-  }, [userAdmin, form])
+  }, [userAdmin, form, loadingUserAdmin])
 
   return (
     <>

@@ -57,7 +57,7 @@ export const post = async <T>(url: string, body: Record<string, any>) => {
 
     return response.json() as Promise<T>;
   } catch (error) {
-    return handleError(error);
+    throw handleError(error);
   }
 }
 
@@ -85,7 +85,7 @@ export const put = async <T>(url: string, body: Record<string, any>) => {
   
     return response.json() as Promise<T>;
   } catch (error) {
-    return handleError(error);
+    throw handleError(error);
   }
 }
 

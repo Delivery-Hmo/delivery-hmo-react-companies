@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Card, Form, FormRule, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import SaveButton from '../../../components/saveButton';
 import DynamicForm from '../../../components/dynamicForm';
 import { initBranch, titleForm } from '../../../constants';
-import { BranchOffice } from '../../../interfaces/branchOffice';
 import { CustomInput } from '../../../interfaces';
 import { post, put } from '../../../services';
 import HeaderView from '../../../components/headerView';
 import { TypeRute } from "../../../types";
+import { BranchOffice } from "../../../interfaces/user";
 import Map from './map';
 
 const CreateBranch = () => {
@@ -21,7 +20,7 @@ const CreateBranch = () => {
   const [type, setType] = useState<TypeRute>("create");
   const [staring, setStaring] = useState(true);
 
-  const { name, email, facebook, salesGoalByMonth, phones, latLng, radius, center, password, confirmPassword, id } = branch;
+  const { name, email, facebook, salesGoalByMonth, phones, latLng, radius, center, password, confirmPassword, description, id } = branch;
 
   useEffect(() => {
     if (!staring) return;
@@ -71,11 +70,7 @@ const CreateBranch = () => {
       }
 
       message.success("Sucursal guardada con exito.", 4);
-
       navigate("/sucursales");
-    } catch (error) {
-      console.log(error);
-      message.error(error as string, 4);
     } finally {
       setSaving(false);
     }
@@ -88,104 +83,106 @@ const CreateBranch = () => {
         path="/sucursales"
         goBack
       />
-        <Card>
-          <div style={{ paddingBottom: 20, fontWeight: "bold" }}>Información principal</div>
-          <DynamicForm
-            form={form}
-            layout="vertical"
-            onFinish={onFinish}
-            loading={saving}
-            inputs={
-              [
-                {
-                  md: 12,
-                  typeControl: "input",
-                  typeInput: "text",
-                  label: "Nombre",
-                  name: "name",
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Favor de escribir el Nombre.',
-                    }
-                  ],
-                  value: name,
-                  onChange: (value: string) => setBranch({ ...branch, name: value })
-                },
-                {
-                  md: 12,
-                  typeControl: "input",
-                  typeInput: "email",
-                  label: "Correo electrónico",
-                  name: "email",
-                  value: email,
-                  onChange: (value: string) => setBranch({ ...branch, email: value })
-                },
-                {
-                  md: 12,
-                  typeControl: "input",
-                  typeInput: "password",
-                  label: "Contraseña",
-                  name: "password",
-                  rules: rulesPassword,
-                  value: password,
-                  onChange: (value) => setBranch({ ...branch, password: value })
-                },
-                {
-                  md: 12,
-                  typeControl: "input",
-                  typeInput: "password",
-                  label: "Confirmar contraseña",
-                  name: "confirmPassword",
-                  rules: rulesPassword,
-                  value: confirmPassword,
-                  onChange: (value) => setBranch({ ...branch, confirmPassword: value })
-                },
-                {
-                  md: 12,
-                  typeControl: "input",
-                  typeInput: "number",
-                  label: "Meta ventas / mes",
-                  name: "salesGoalByMonth",
-                  value: salesGoalByMonth,
-                  rules: [
-                    {
-                      message: 'La meta de ventas no puede ser mayor a 50,000.',
-                      validator: (rule, value) => value > 50000 ? Promise.reject(rule.message) : Promise.resolve(),
-                    }
-                  ],
-                  onChange: (value: string) => setBranch({ ...branch, salesGoalByMonth: +value })
-                },
-                {
-                  md: 12,
-                  typeControl: "input",
-                  label: "Facebook",
-                  name: "faceebok",
-                  value: facebook,
-                  onChange: (value: string) => setBranch({ ...branch, facebook: value })
-                },
-                ...phones.map((phone, index) => ({
-                  required: index === 0 || phone,
-                  md: 8,
-                  typeControl: "phone",
-                  label: `Teléfono ${index + 1}`,
-                  name: `phone${index}`,
-                  value: phone,
-                  onChange: (value: string) => setBranch({ ...branch, phones: phones.map((p, i) => i === index ? +value : p) }),
-                }) as CustomInput)
-              ] as CustomInput[]
-            }
-          />
-        </Card>
-        <br />
-        <Map branch={branch} setBranch={setBranch} />
-        <br />
-        <SaveButton
-          htmlType="submit"
+      <Card>
+        <div style={{ paddingBottom: 20, fontWeight: "bold" }}>Información principal</div>
+        <DynamicForm
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
           loading={saving}
-        >
-          Guardar
-        </SaveButton>
+          inputs={
+            [
+              {
+                md: 12,
+                typeControl: "input",
+                typeInput: "text",
+                label: "Nombre",
+                name: "name",
+                rules: [
+                  {
+                    required: true,
+                    message: 'Favor de escribir el Nombre.',
+                  }
+                ],
+                value: name,
+                onChange: (value: string) => setBranch({ ...branch, name: value })
+              },
+              {
+                md: 12,
+                typeControl: "input",
+                typeInput: "email",
+                label: "Correo electrónico",
+                name: "email",
+                value: email,
+                onChange: (value: string) => setBranch({ ...branch, email: value })
+              },
+              {
+                md: 12,
+                typeControl: "input",
+                typeInput: "password",
+                label: "Contraseña",
+                name: "password",
+                rules: rulesPassword,
+                value: password,
+                onChange: (value) => setBranch({ ...branch, password: value })
+              },
+              {
+                md: 12,
+                typeControl: "input",
+                typeInput: "password",
+                label: "Confirmar contraseña",
+                name: "confirmPassword",
+                rules: rulesPassword,
+                value: confirmPassword,
+                onChange: (value) => setBranch({ ...branch, confirmPassword: value })
+              },
+              {
+                md: 12,
+                typeControl: "input",
+                typeInput: "number",
+                label: "Meta ventas / mes",
+                name: "salesGoalByMonth",
+                value: salesGoalByMonth,
+                rules: [
+                  {
+                    message: 'La meta de ventas no puede ser mayor a 50,000.',
+                    validator: (rule, value) => value > 50000 ? Promise.reject(rule.message) : Promise.resolve(),
+                  }
+                ],
+                onChange: (value: string) => setBranch({ ...branch, salesGoalByMonth: +value })
+              },
+              {
+                md: 12,
+                typeControl: "input",
+                label: "Facebook",
+                name: "faceebok",
+                value: facebook,
+                onChange: (value: string) => setBranch({ ...branch, facebook: value })
+              },
+              ...phones.map((phone, index) => ({
+                required: index === 0 || phone,
+                md: 8,
+                typeControl: "phone",
+                label: `Teléfono ${index + 1}`,
+                name: `phone${index}`,
+                value: phone,
+                onChange: (value: string) => setBranch({ ...branch, phones: phones.map((p, i) => i === index ? +value : p) })
+              }) as CustomInput),
+              {
+                md: 24,
+                typeControl: 'textarea',
+                typeInput: 'text',
+                label: 'Descripción',
+                name: 'description',
+                value: description,
+                onChange: (value) => setBranch({ ...branch, description: value })
+              },
+            ] as CustomInput[]
+          }
+        />
+      </Card>
+      <br />
+      <Map branch={branch} setBranch={setBranch} />
     </div>
   )
 }
