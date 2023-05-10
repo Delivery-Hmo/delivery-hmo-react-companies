@@ -30,12 +30,6 @@ const menuItems = [
     icon: <MdOutlineDeliveryDining style={styleIcon} />
   },
   {
-    key: '/usuarios',
-    title: '',
-    label: <Link to="/usuarios">Usuarios</Link>,
-    icon: <UserOutlined style={styleIcon} />
-  },
-  {
     key: '/configuracion',
     title: '',
     icon: <SettingOutlined style={styleIcon} />,

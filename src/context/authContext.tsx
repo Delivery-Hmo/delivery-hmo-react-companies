@@ -6,6 +6,7 @@ import { auth } from '../firebaseConfig';
 import { BranchOffice, UserAdmin } from '../interfaces/user';
 import { message } from "antd";
 import { Rols, Users } from "../types";
+import { sleep } from "../utils/functions";
 
 interface Auth {
   user: User | null;
@@ -73,6 +74,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
         message.error('Error, no se pudo obtener la información del usuario.');
         await auth.signOut();
       } finally {
+        await sleep(500);
         setLoading(false);
       }
     })
