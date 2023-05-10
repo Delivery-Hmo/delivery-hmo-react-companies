@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Card, Form, FormRule, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import SaveButton from '../../../components/saveButton';
 import DynamicForm from '../../../components/dynamicForm';
 import { initBranch, titleForm } from '../../../constants';
-import { BranchOffice } from '../../../interfaces/branchOffice';
 import { CustomInput } from '../../../interfaces';
 import { post, put } from '../../../services';
 import HeaderView from '../../../components/headerView';
 import { TypeRute } from "../../../types";
+import { BranchOffice } from "../../../interfaces/user";
 import Map from './map';
 
 const CreateBranch = () => {
@@ -21,7 +20,7 @@ const CreateBranch = () => {
   const [type, setType] = useState<TypeRute>("create");
   const [staring, setStaring] = useState(true);
 
-  const { name, email, facebook, salesGoalByMonth, phones, latLng, radius, center, password, confirmPassword, id } = branch;
+  const { name, email, facebook, salesGoalByMonth, phones, latLng, radius, center, password, confirmPassword, description, id } = branch;
 
   useEffect(() => {
     if (!staring) return;
@@ -71,11 +70,7 @@ const CreateBranch = () => {
       }
 
       message.success("Sucursal guardada con exito.", 4);
-
       navigate("/sucursales");
-    } catch (error) {
-      console.log(error);
-      message.error(error as string, 4);
     } finally {
       setSaving(false);
     }
@@ -171,21 +166,23 @@ const CreateBranch = () => {
                   label: `Teléfono ${index + 1}`,
                   name: `phone${index}`,
                   value: phone,
-                  onChange: (value: string) => setBranch({ ...branch, phones: phones.map((p, i) => i === index ? +value : p) }),
-                }) as CustomInput)
+                  onChange: (value: string) => setBranch({ ...branch, phones: phones.map((p, i) => i === index ? +value : p) })
+                }) as CustomInput),
+                {
+                  md: 24,
+                  typeControl: 'textarea',
+                  typeInput: 'text',
+                  label: 'Descripción',
+                  name: 'description',
+                  value: description,
+                  onChange: (value) => setBranch({ ...branch, description: value })
+                },
               ] as CustomInput[]
             }
           />
         </Card>
         <br />
         <Map branch={branch} setBranch={setBranch} />
-        <br />
-        <SaveButton
-          htmlType="submit"
-          loading={saving}
-        >
-          Guardar
-        </SaveButton>
     </div>
   )
 }

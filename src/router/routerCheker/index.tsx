@@ -18,7 +18,7 @@ const initUrlByRole: Record<Rols, string> = {
 };
 
 const RoterChecker = () => {
-  const { user, userAdmin, loading } = useAuth();
+  const { user, userAuth, loading } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
@@ -31,9 +31,9 @@ const RoterChecker = () => {
     }
 
     if (user && blockedPathsWithoAuthentication.includes(pathname)) {
-      navigate(initUrlByRole[userAdmin!.role]);
+      navigate(initUrlByRole[userAuth?.role || ""]);
     }
-  }, [user, pathname, navigate, loading, userAdmin])
+  }, [user, pathname, navigate, loading, userAuth])
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

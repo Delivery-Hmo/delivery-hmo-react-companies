@@ -11,7 +11,7 @@ interface Props {
 const { useBreakpoint } = Grid;
 
 const RowHeader: FC<Props> = ({ collapsed }) => {
-  const { userAdmin } = useAuth();
+  const { userAuth } = useAuth();
   const screens = useBreakpoint();
 
   return (
@@ -27,10 +27,10 @@ const RowHeader: FC<Props> = ({ collapsed }) => {
       {
         !collapsed && <div style={screens.xs ? { color: "black" } : { color: "white" }}>
           <div style={{ margin: 10 }}>
-            <b>{userAdmin?.email}</b>
+            <b>{userAuth?.email}</b>
           </div>
           <div>
-            {userAdmin?.role}
+            {userAuth?.role}
           </div>
         </div>
       }

@@ -5,19 +5,21 @@ import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
 import { initUserDeliveryMan, titleForm } from '../../../constants';
-import { UserDeliveryMan } from '../../../interfaces/user';
+import { UserAdmin, UserDeliveryMan } from '../../../interfaces/user';
 import { TypeRute } from "../../../types";
 import HeaderView from "../../../components/headerView";
 
 const CreateUserDeliveryMan = () => {
-  const { userAdmin } = useAuth();
+  const { userAuth } = useAuth();
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
   const { state, pathname } = location;
   const [type, setType] = useState<TypeRute>("create");
   const [saving, setSaving] = useState(false);
-  const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(initUserDeliveryMan)
+  const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(initUserDeliveryMan);
+  
+  const userAdmin = userAuth as UserAdmin;
 
   useEffect(() => {
     if (pathname.includes("editar") && !state) {

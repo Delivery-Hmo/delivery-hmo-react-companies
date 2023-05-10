@@ -10,12 +10,13 @@ import { updateEmail, updatePassword, User } from 'firebase/auth';
 import { setImagesToState } from "../../utils/functions";
 
 const Perfil = () => {
-  const { user: userFirebase, userAdmin, loading: loadingUserAdmin } = useAuth();
+  const { user: userFirebase, userAuth, loading: loadingUserAdmin } = useAuth();
   const [form] = Form.useForm();
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { password, confirmPassword, email } = user;
+  const userAdmin = userAuth as UserAdmin;
 
   const onEditProfile = useCallback(async () => {
     setLoading(true);
@@ -116,7 +117,7 @@ const Perfil = () => {
               typeInput: 'text',
               label: 'Descripción',
               name: 'description',
-              rules: [{ required: true, message: 'Favor de seleccionar su descripción.' }],
+              rules: [{ required: true, message: 'Favor de escribir la descripción.' }],
               value: user.description,
               onChange: (value) => setUser({ ...user, description: value })
             },
