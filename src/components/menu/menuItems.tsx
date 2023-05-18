@@ -1,4 +1,4 @@
-import { DollarCircleOutlined, UserOutlined, SettingOutlined, ShopOutlined, LogoutOutlined, AuditOutlined} from '@ant-design/icons';
+import { DollarCircleOutlined, SettingOutlined, ShopOutlined, LogoutOutlined, AuditOutlined} from '@ant-design/icons';
 import { getAuth } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 import { MdOutlineDeliveryDining } from 'react-icons/md';

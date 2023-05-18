@@ -5,7 +5,7 @@ import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons';
 import { get, put } from '../../services';
 import { useAuth } from '../../context/authContext';
 import { UserAdmin } from '../../interfaces/user';
-import { initUserAdmin } from '../../constants';
+import { initUserAdmin, rulePhoneInput } from '../../constants';
 import { updateEmail, updatePassword, User } from 'firebase/auth';
 import { setImagesToState } from "../../utils/functions";
 
@@ -22,12 +22,9 @@ const Perfil = () => {
     setLoading(true);
 
     try {
-      await put<UserAdmin>("userAdmin/update", {...user});
+      await put<UserAdmin>("userAdmin/update", { ...user });
       message.success("Datos de perfil actualizados con éxito.", 4);
 
-    } catch (error) {
-      console.log(error);
-      message.error("Error al actualizar los datos.");
     } finally {
       setLoading(false);
     }
@@ -76,7 +73,7 @@ const Perfil = () => {
   const items = useMemo(() => {
     const istPassword = [
       {
-        label: 'Actualizar datos de perfil',
+        label: 'Datos de la empresa',
         key: '1',
         children: <DynamicForm
           layout="vertical"
@@ -85,23 +82,24 @@ const Perfil = () => {
           onFinish={onEditProfile}
           inputs={[
             {
-              md: 6,
-              typeControl: 'input',
-              typeInput: 'text',
-              label: 'Nombre vendedor',
-              name: 'name',
-              rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
-              value: user.name,
-              onChange: (value) => setUser({ ...user, name: value })
-            }, {
               md: 12,
               typeControl: 'input',
               typeInput: 'text',
-              label: 'Empresa',
+              label: 'Empresa ',
               name: 'company',
-              rules: [{ required: true, message: 'Favor de escribir la company.' }],
+              rules: [{ required: true, message: 'Favor de escribir nombre de la empresa.' }],
               value: user.company,
               onChange: (value) => setUser({ ...user, company: value })
+            },
+            {
+              md: 6,
+              typeControl: 'input',
+              typeInput: 'text',
+              label: 'RFC',
+              name: 'rfc',
+              value: user.rfc,
+              onChange: (value) => setUser({ ...user, rfc: value }),
+              rules: [{ required: true, message: 'Favor de escribir el RFC de la empresa.' }],
             },
             {
               md: 6,
@@ -109,7 +107,8 @@ const Perfil = () => {
               label: 'Teléfono',
               name: 'phone',
               value: user.phone,
-              onChange: (value) => setUser({ ...user, phone: value })
+              onChange: (value) => setUser({ ...user, phone: value }),
+              required: true
             },
             {
               md: 24,
@@ -117,13 +116,13 @@ const Perfil = () => {
               typeInput: 'text',
               label: 'Descripción',
               name: 'description',
-              rules: [{ required: true, message: 'Favor de escribir la descripción.' }],
               value: user.description,
-              onChange: (value) => setUser({ ...user, description: value })
+              onChange: (value) => setUser({ ...user, description: value }),
+              styleFI: { marginTop: 20 },
             },
             {
               typeControl: "file",
-              label: "Logo empresa",
+              label: "Logo de la empresa ",
               name: "image",
               value: user.image,
               maxCount: 1,
@@ -140,7 +139,7 @@ const Perfil = () => {
     const isPassword = [
       istPassword[0],
       {
-        label: 'Actualizar datos de sesión',
+        label: 'Datos de sesión',
         key: '2',
         children: <DynamicForm
           form={form}
@@ -189,7 +188,7 @@ const Perfil = () => {
   useEffect(() => {
     if (loadingUserAdmin) return;
 
-    const _userAdmin = setImagesToState({...userAdmin!});
+    const _userAdmin = setImagesToState({ ...userAdmin! });
 
     setUser(_userAdmin);
     form.setFieldsValue(_userAdmin);
@@ -199,8 +198,7 @@ const Perfil = () => {
     <>
       <Row gutter={15} style={{ marginTop: 20 }}>
         <Col md={6}>
-          <Card title="Mi Perfil" bordered={false} style={{ textAlign: 'center' }}>
-            <h3 >Empresa</h3>
+          <Card title={<h2>Perfil empresa </h2>} bordered={false} style={{ textAlign: 'center' }}>
             {
               !userAdmin ? <Spin /> : (
                 <>
@@ -221,7 +219,7 @@ const Perfil = () => {
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.email}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Empresa: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin compañia."}</span>
+                      <b>Empresa : </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin empresa ."}</span>
                     </Col>
                     <Col xs={24}>
                       <b>Celular: </b>
@@ -237,7 +235,7 @@ const Perfil = () => {
           </Card>
         </Col>
         <Col md={18}>
-          <Card title="Editar: Datos Mi Perfil" bordered={false}>
+          <Card title={<h4>Editar perfil</h4>} bordered={false}>
             <Tabs
               defaultActiveKey="1"
               items={items}

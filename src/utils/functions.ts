@@ -118,3 +118,10 @@ export const isSeller = (user: Users): user is UserDeliveryMan => {
 export const isUserDeliveryMan = (user: Users): user is UserSeller => {
   return user.role === "Vendedor";
 }
+
+export const fileToBase64 = (file: File) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = reject;
+});

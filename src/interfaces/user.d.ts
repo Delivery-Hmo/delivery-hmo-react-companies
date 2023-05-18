@@ -7,7 +7,7 @@ export interface User {
     id?: string;
     uid?: string;
     role: Rols;
-    name: string; 
+    name?: string; 
     email: string;
     phone?: string; 
     description: string;
