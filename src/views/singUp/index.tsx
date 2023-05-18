@@ -98,9 +98,9 @@ const SingUp = () => {
               md: 12,
               typeControl: "input",
               typeInput: "text",
-              label: "Compañia",
+              label: "Empresa ",
               name: "company",
-              rules: [{ required: true, message: 'Favor de escribir la company.' }],
+              rules: [{ required: true, message: 'Favor de escribir el nombre de la empresa .' }],
               value: userAdmin.company,
               onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
             }, {
@@ -116,7 +116,6 @@ const SingUp = () => {
               typeInput: "text",
               label: "Descripcion",
               name: "description",
-              rules: [{ required: true, message: 'Favor de seleccionar su description.' }],
               value: userAdmin.description,
               onChange: (value: string) => setUserAdmin({ ...userAdmin, description: value })
             }

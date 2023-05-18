@@ -9,9 +9,10 @@ export const bloquedPathsUsers: Record<Rols, readonly string[]> = {
   "Administrador": [],
   "Administrador sucursal": blockedPathsBranchOffice,
   "Vendedor": [],
-  "Repartidor": []
+  "Repartidor": [],
 } as const;
 export const urlImageDefaultProfile = "https://firebasestorage.googleapis.com/v0/b/delivery-hmo.appspot.com/o/imagenesPerfil%2Fperfil.jpg?alt=media&token=a07f8154-7aaa-4397-a8cf-4aeaee5b0f5e";
+export const baseUrlStorage = "https://firebasestorage.googleapis.com/v0/b/delivery-hmo.appspot.com/o/";
 export const googleMapsApiKey = "AIzaSyAJZcZP0yqFEeD3roIhSRrwDyLlpUkWKb4";
 export const initBranch: BranchOffice = {
   userAdmin: "",
@@ -49,7 +50,6 @@ export const initUserAdmin: UserAdmin = {
   company: '',
   description: '',
   email: '',
-  name: '',
   phone: '',
   password: '',
   confirmPassword: '',

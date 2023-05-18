@@ -1,6 +1,6 @@
 import { UploadFile } from "antd";
-import { getCurrentToken } from '../utils/functions';
-import { uploadFile } from "./firebaseStorage";
+import { fileToBase64, getCurrentToken } from '../utils/functions';
+import { baseUrlStorage } from "../constants";
 
 const baseUrl = "http://localhost:3001/";
 //const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
@@ -14,7 +14,7 @@ const getHeaders = (token: string) => ({
 export const get = async <T>(url: string, controller?: AbortController) => {
   const token = await getCurrentToken();
 
-  if(!token) throw new Error("Error al obtener el token.");
+  if (!token) throw new Error("Error al obtener el token.");
 
   const response = await fetch(
     baseUrl + url,
@@ -37,9 +37,9 @@ export const post = async <T>(url: string, body: Record<string, any>) => {
   try {
     const token = await getCurrentToken();
 
-    if(!token) throw new Error("Error al obtener el token.");
+    if (!token) throw new Error("Error al obtener el token.");
 
-    body = await uploadFileStorage(url, body);
+    body = await getBodyWithBase64Files(body);
 
     const response = await fetch(
       baseUrl + url,
@@ -49,7 +49,7 @@ export const post = async <T>(url: string, body: Record<string, any>) => {
         headers: getHeaders(token)
       }
     )
-  
+
     if (!response.ok) {
       const error = await response.json();
       throw error;
@@ -65,9 +65,9 @@ export const put = async <T>(url: string, body: Record<string, any>) => {
   try {
     const token = await getCurrentToken();
 
-    if(!token) throw new Error("Error al obtener el token.");
+    if (!token) throw new Error("Error al obtener el token.");
 
-    body = await uploadFileStorage(url, body);
+    body = await getBodyWithBase64Files(body);
 
     const response = await fetch(
       baseUrl + url,
@@ -77,12 +77,12 @@ export const put = async <T>(url: string, body: Record<string, any>) => {
         headers: getHeaders(token)
       }
     )
-  
+
     if (!response.ok) {
       const error = await response.json();
       throw error;
     }
-  
+
     return response.json() as Promise<T>;
   } catch (error) {
     throw handleError(error);
@@ -92,7 +92,7 @@ export const put = async <T>(url: string, body: Record<string, any>) => {
 export const patch = async <T>(url: string, body: Record<string, any>) => {
   const token = await getCurrentToken();
 
-  if(!token) throw new Error("Error al obtener el token.");
+  if (!token) throw new Error("Error al obtener el token.");
 
   const response = await fetch(
     baseUrl + url,
@@ -108,7 +108,7 @@ export const patch = async <T>(url: string, body: Record<string, any>) => {
     throw error;
   }
 
-  return response.json() as Promise<T>; 
+  return response.json() as Promise<T>;
 }
 
 const handleError = (error: any) => {
@@ -119,23 +119,37 @@ const handleError = (error: any) => {
   throw new Error(error as string);
 }
 
-const uploadFileStorage = async (url: string, body: Record<string, any>) => {
+const getBodyWithBase64Files = async (body: Record<string, any>) => {
   try {
     if (body?.image?.length) {
       const imageUploadFile = body?.image[0] as UploadFile;
-  
-      if(!imageUploadFile.url?.includes("https://firebasestorage.googleapis.com/")) {
-        const imageFile = imageUploadFile.originFileObj!;
-  
-        const imageUrl = await uploadFile("images/" + url.split("/")[0], imageFile);
-  
-        body.image = imageUrl;
+
+      if (imageUploadFile.url?.includes(baseUrlStorage)) {
+        body.image = imageUploadFile.url;
       }
+      
+      const imageFile = imageUploadFile.originFileObj!;
+  
+      body.image = await fileToBase64(imageFile);
+    };
+
+    if (body?.images?.length) {
+      const images = body.images as UploadFile[];
+
+      body.images = await Promise.all(images.map((image) => {
+        if (image.url?.includes(baseUrlStorage)) {
+          body.image = image.url;
+        }
+        
+        const imageFile = image.originFileObj!;
+    
+        return fileToBase64(imageFile);
+      }));
     }
 
     return body;
   } catch (error) {
     console.log(error);
-    throw new Error("Error al subir el archivo.");
+    throw new Error("Error al formatear los archivos.");
   }
 }

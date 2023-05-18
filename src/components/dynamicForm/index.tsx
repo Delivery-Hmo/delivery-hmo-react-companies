@@ -1,11 +1,10 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, UploadFile, message } from 'antd';
-import { rulePhoneInput, ruleMaxLength, ruleEmail, urlImageDefaultProfile } from '../../constants';
+import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
 import { FormInstance, FormLayout } from "antd/es/form/Form";
-import SaveButton from "../saveButton";
-import { deleteFile } from "../../services/firebaseStorage";
 import { UploadChangeParam, UploadProps } from "antd/es/upload";
+import SaveButton from "../saveButton";
 import ButtonUpload from "./buttonUpload";
 import Crop from "./crop";
 import { onPreviewImage, validFiles } from "../../utils/functions";
@@ -21,7 +20,6 @@ interface Props {
 
 const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, loading, justify }) => {
   const [inputs, setInputs] = useState<CustomInput[]>(inputsProp);
-  const [urlsToDelete, setUrlsToDelete] = useState<string[]>([]);
 
   useEffect(() => {
     const _inputs = inputsProp.map(input => {
@@ -32,7 +30,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         _rules.push(ruleMaxLength);
       }
 
-      if (typeControl === "phone" && required && (value as number).toString().length !== 10) {
+      if (typeControl === "phone" && required && (value as number)?.toString().length !== 10) {
         _rules.push(rulePhoneInput);
       }
 
@@ -92,11 +90,6 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         multiple,
         onPreview: onPreviewImage,
         listType: "picture-card",
-        onRemove: (file: UploadFile) => {
-          if (file.url?.includes("https://firebasestorage.googleapis.com/") && file.url !== urlImageDefaultProfile) {
-            setUrlsToDelete(u => [...u, file.url!]);
-          }
-        },
         onChange: ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
           const isValid = validFiles(fileList.map(f => f.originFileObj!), accept!, true);
 
@@ -105,19 +98,6 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             return;
           }
 
-          const _imagesToDelete: string[] = [];
-
-          _value?.forEach((file) => {
-            if(file.url && file.url !== urlImageDefaultProfile) {
-              const urlInFileList = fileList.find(f => f.uid === file.uid)?.url;
-
-              if(!urlInFileList) {
-                _imagesToDelete.push(file.url!);
-              }
-            }
-          });
-          
-          setUrlsToDelete(u => [...u, ..._imagesToDelete]);
           onChange(fileList);
         },
         customRequest: ({ onSuccess }) => {
@@ -139,12 +119,6 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
     }
   }), []);
 
-  const deleteFilesStorage = async () => {
-    const promisesDelete = urlsToDelete.map(url => deleteFile(url));
-
-    await Promise.all(promisesDelete);
-  }
-
   return (
     <Form
       form={form}
@@ -152,7 +126,6 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
       onFinish={async (values) => {
         try {
           await onFinish(values);
-          await deleteFilesStorage();
         } catch (error) {
           if (error instanceof Error) {
             message.error(error.message, 4);

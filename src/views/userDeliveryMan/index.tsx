@@ -9,7 +9,7 @@ const UserDeliveryManView = () => {
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Correo', dataIndex: 'email', key: 'email' },
     { title: 'Teléfono', dataIndex: 'phone', key: 'phone' },
-    { title: 'Compañia', dataIndex: 'company', key: 'company' },
+    { title: 'Empresa ', dataIndex: 'company', key: 'company' },
     { title: 'Sucursal', dataIndex: 'branchOffice', key: 'branchOffice' },
   ], [])
 
