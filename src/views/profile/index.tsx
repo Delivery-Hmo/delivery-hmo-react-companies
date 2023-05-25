@@ -5,7 +5,7 @@ import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons';
 import { get, put } from '../../services';
 import { useAuth } from '../../context/authContext';
 import { UserAdmin } from '../../interfaces/user';
-import { initUserAdmin, rulePhoneInput } from '../../constants';
+import { initUserAdmin } from '../../constants';
 import { updateEmail, updatePassword, User } from 'firebase/auth';
 import { setImagesToState } from "../../utils/functions";
 
@@ -118,7 +118,6 @@ const Perfil = () => {
               name: 'description',
               value: user.description,
               onChange: (value) => setUser({ ...user, description: value }),
-              styleFI: { marginTop: 20 },
             },
             {
               typeControl: "file",
