@@ -88,6 +88,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         accept,
         maxCount,
         multiple,
+        
         onPreview: onPreviewImage,
         listType: "picture-card",
         onChange: ({ fileList }: UploadChangeParam<UploadFile<any>>) => {

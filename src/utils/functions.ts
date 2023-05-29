@@ -18,15 +18,7 @@ export const getCurrentToken = () => new Promise<string>((resolve) => {
   });
 });
 
-export const sleep = (time: number) => new Promise((resolve) => setTimeout(() => resolve(null), time));
-
-export const getSrcFromFile = (file: File) => new Promise<string>((resolve) => {
-  const reader = new FileReader();
-  
-  reader.readAsDataURL(file);
-  reader.onload = () => resolve(reader.result as string);
-  reader.onerror = () => resolve("");
-});
+export const sleep = (time: number) => new Promise<void>((resolve) => setTimeout(() => resolve(), time));
 
 export const validFiles = (fileList: RcFile[], accept: string, showMessageError?: boolean) => {
   for (let index = 0; index < fileList.length; index++) {
@@ -125,3 +117,11 @@ export const fileToBase64 = (file: File) => new Promise((resolve, reject) => {
   reader.onload = () => resolve(reader.result);
   reader.onerror = reject;
 });
+
+export const handleError = (error: any) => {
+  if (error instanceof Error) {
+    throw new Error(error.message);
+  }
+
+  throw new Error(error as string);
+}
