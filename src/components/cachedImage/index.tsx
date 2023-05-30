@@ -27,7 +27,7 @@ const CachedImage: FC<Props> = ({ imageUrl, style }) => {
   const styleImage = useMemo(() => ({ borderRadius: 20, ...style }), [style]);
 
   if (imageError) {
-    return (<img src={errorImageUrl} alt="error-image" style={styleImage} />);
+    return (<img src={errorImageUrl} alt="err-img" style={styleImage} />);
   }
 
   if (loading) {
