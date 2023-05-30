@@ -5,7 +5,6 @@ const Crop: FC<ImgCropProps> = (props) => {
   return (
     <ImgCrop
       rotationSlider
-      aspectSlider
       showGrid
       showReset
       modalTitle="Editar"
