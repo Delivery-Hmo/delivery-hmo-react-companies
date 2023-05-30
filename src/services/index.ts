@@ -1,5 +1,5 @@
 import { UploadFile } from "antd";
-import { fileToBase64, getCurrentToken } from '../utils/functions';
+import { fileToBase64, getCurrentToken, handleError } from '../utils/functions';
 import { baseUrlStorage } from "../constants";
 
 const baseUrl = "http://localhost:3001/";
@@ -109,14 +109,6 @@ export const patch = async <T>(url: string, body: Record<string, any>) => {
   }
 
   return response.json() as Promise<T>;
-}
-
-const handleError = (error: any) => {
-  if (error instanceof Error) {
-    throw new Error(error.message);
-  }
-
-  throw new Error(error as string);
 }
 
 const getBodyWithBase64Files = async (body: Record<string, any>) => {

@@ -4,9 +4,7 @@ import ImgCrop, { ImgCropProps } from "antd-img-crop";
 const Crop: FC<ImgCropProps> = (props) => {
   return (
     <ImgCrop
-      quality={0.7}
       rotationSlider
-      aspectSlider
       showGrid
       showReset
       modalTitle="Editar"
