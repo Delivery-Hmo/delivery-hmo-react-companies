@@ -32,9 +32,6 @@ const MenuComponent = () => {
             <div>
               {userAdmin?.email}
             </div>
-            <div>
-              <b>{userAdmin?.role}</b>
-            </div>
           </div>
         }
       </Row>

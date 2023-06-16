@@ -9,7 +9,6 @@ export interface User {
     description: string;
     active: boolean;
     image?: string;
-    role: Rols;
     password?: string;
     confirmPassword?: string;
   }
@@ -21,6 +20,7 @@ export interface User {
   
   export interface UserAdmin extends User {
     company: string;
+    rfc: string;
   }
 
   export interface UserDeliveryMan extends User {

@@ -15,7 +15,7 @@ const initUserAdmin: UserAdmin = {
   phone: '',
   password: '',
   confirmPassword: '',
-  role: ''
+  rfc: '',
 };
 
 const SingUp = () => {
@@ -111,6 +111,15 @@ const SingUp = () => {
             label: "Compañia",
             name: "company",
             rules: [{ required: true, message: 'Favor de escribir la company.' }],
+            value: userAdmin.company,
+            onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
+          }, {
+            md: 12,
+            typeControl: "input",
+            typeInput: "text",
+            label: "Registro Federal de Contribuyentes",
+            name: "rfc",
+            rules: [{ required: true, message: 'Favor de escribir el RFC.' }],
             value: userAdmin.company,
             onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
           }, {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Empty, Table as TableAnt } from 'antd';
+import { Empty, Table as TableAntd } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import useGet from '../../hooks/useGet';
 import SearchTable from '../searchTable';
@@ -65,7 +65,7 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProps, wait, placeh
 				}}
 				placeholder={placeholderSearch}
 			/>
-			<TableAnt
+			<TableAntd
 				columns={columns}
 				dataSource={response?.list}
 				loading={loading}

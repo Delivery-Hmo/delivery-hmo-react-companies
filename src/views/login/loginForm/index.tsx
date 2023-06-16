@@ -66,7 +66,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
         phone: user?.phoneNumber || '',
         description: '',
         company: '',
-        role: ''
+        rfc: ''
       };
 
       await post('userAdmin/create', userInfo);

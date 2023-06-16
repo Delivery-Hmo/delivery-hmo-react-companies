@@ -29,7 +29,6 @@ export const initUserBranchOfficeSeller: UserBranchOfficeSeller = {
   email: '',
   name: '',
   phone: '',
-  role: 'Vendedor'
 };
 export const initUserAdmin: UserAdmin = {
   id: '',
@@ -42,7 +41,7 @@ export const initUserAdmin: UserAdmin = {
   phone: '',
   password: '',
   confirmPassword: '',
-  role: ''
+  rfc: ''
 };
 export const namesDaysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 export const initUserDeliveryMan: UserDeliveryMan = {
@@ -51,7 +50,6 @@ export const initUserDeliveryMan: UserDeliveryMan = {
   email: '',
   name: '',
   phone: '',
-  role: 'Repartidor',
   password: '',
   confirmPassword: '',
   branchOffice: '',
