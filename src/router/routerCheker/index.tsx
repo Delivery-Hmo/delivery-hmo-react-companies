@@ -9,7 +9,7 @@ import FullLoader from "../../components/fullLoader";
 import { Rols } from "../../types";
 import { blockedPathsBranchOffice } from "../../constants";
 
-const blockedPathsWithoAuthentication: readonly string[] = ["/registrarse", "/"] as const;
+const blockedPathsWithAuthentication: readonly string[] = ["/registrarse", "/"] as const;
 const initUrlByRole: Record<Rols, string> = {
   "" : "/",
   "Administrador": "/sucursales",
@@ -36,7 +36,7 @@ const RoterChecker = () => {
       return;
     }
 
-    if (blockedPathsWithoAuthentication.includes(pathname)) {
+    if (user && blockedPathsWithAuthentication.includes(pathname)) {
       navigate(initUrlByRole[userAuth?.role || ""]);
     }
   }, [user, pathname, navigate, loading, userAuth])
