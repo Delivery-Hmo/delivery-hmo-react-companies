@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Card, Col, Form, Row, message } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
+import { Card, Col, Form, message, Row, FormRule } from 'antd'
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { initUserDeliveryMan } from '../../../constants';
@@ -41,9 +41,13 @@ const CreateUserDeliveryMan = () => {
     form.setFieldsValue(_deliveryMan);
   }, [state, form, navigate, pathname])
 
+  const rulesPassword: FormRule[] = useMemo(() => [
+    { required: !deliveryMan.id && deliveryMan.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o más.' },
+  ], [deliveryMan.password, deliveryMan.id])
+
   const onFinish = async () => {
-    if(saving) return;
-    
+    if (saving) return;
+
     setSaving(true);
 
     const { password, confirmPassword } = deliveryMan;
@@ -110,7 +114,7 @@ const CreateUserDeliveryMan = () => {
                   typeInput: 'password',
                   label: 'Contraseña',
                   name: 'password',
-                  rules: [{ required: type === "create", message: 'Favor de escribir la contraseña del repartidor.' }],
+                  rules: rulesPassword,
                   value: deliveryMan.password,
                   onChange: (value: string) => setDeliveryMan({ ...deliveryMan, password: value }),
                   md: 8
@@ -120,7 +124,7 @@ const CreateUserDeliveryMan = () => {
                   typeInput: 'password',
                   label: 'Confirmar Contraseña',
                   name: 'confirmPassword',
-                  rules: [{ required: type === "create", message: 'Favor de confirmar la contraseña del repartidor.' }],
+                  rules: rulesPassword,
                   value: deliveryMan.confirmPassword,
                   onChange: (value: string) => setDeliveryMan({ ...deliveryMan, confirmPassword: value }),
                   md: 8
@@ -136,7 +140,7 @@ const CreateUserDeliveryMan = () => {
                 {
                   typeControl: 'select',
                   loading,
-                  options: branchOffices?.map(b => ({text: b.name, value: b.id})) as Option[],
+                  options: branchOffices?.map(b => ({ text: b.name, value: b.id })) as Option[],
                   label: 'Sucursal',
                   name: 'branchOffice',
                   rules: [{ required: true, message: 'Favor de escribir la sucursal que pertenece el repartidor.' }],
@@ -149,9 +153,9 @@ const CreateUserDeliveryMan = () => {
                   typeInput: 'text',
                   label: 'Descripción',
                   name: 'description',
-                  rules: [{required: true, message: 'Favor de escribir una breve descripción del repartidor.'}],
+                  rules: [{ message: 'Favor de escribir una breve descripción del repartidor.' }],
                   value: deliveryMan.description,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, description: value}),
+                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, description: value }),
                   md: 24
                 }
               ]} />

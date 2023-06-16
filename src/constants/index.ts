@@ -41,7 +41,8 @@ export const initUserSeller: UserSeller = {
   email: '',
   name: '',
   phone: '',
-  role: 'Vendedor'
+  role: 'Vendedor',
+  rfc: ""
 } as const;
 export const initUserAdmin: UserAdmin = {
   id: '',
@@ -53,17 +54,19 @@ export const initUserAdmin: UserAdmin = {
   phone: '',
   password: '',
   confirmPassword: '',
-  role: ''
+  role: 'Administrador',
+  rfc: ''
 } as const;
+export const namesDaysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 export const initUserDeliveryMan: UserDeliveryMan = {
   active: true,
   description: '',
   email: '',
   name: '',
   phone: '',
-  role: 'Repartidor',
   password: '',
   confirmPassword: '',
+  role: "Repartidor"
 } as const;
 export const rulePhoneInput: FormRule = {
   required: true,
