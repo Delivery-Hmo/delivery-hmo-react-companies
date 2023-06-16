@@ -2,11 +2,10 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, Col, Row, Avatar, Divider, Form, Tabs, message, Spin, FormRule, UploadFile } from 'antd';
 import DynamicForm from '../../components/dynamicForm';
 import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons';
-import { get, put } from '../../services';
+import { put } from '../../services';
 import { useAuth } from '../../context/authContext';
 import { UserAdmin } from '../../interfaces/user';
 import { initUserAdmin } from '../../constants';
-import { updateEmail, updatePassword, User } from 'firebase/auth';
 import { setImagesToState } from "../../utils/functions";
 
 const Perfil = () => {
@@ -21,54 +20,23 @@ const Perfil = () => {
   const onEditProfile = useCallback(async () => {
     setLoading(true);
 
+    if (password && password !== confirmPassword) {
+      message.error('Las contraseñas no coinciden.', 4);
+      return;
+    }
+
     try {
-      await put<UserAdmin>("userAdmin/update", { ...user });
+      await put("userAdmin/update", user);
       message.success("Datos de perfil actualizados con éxito.", 4);
 
     } finally {
       setLoading(false);
     }
-  }, [user])
-
-  const onEditAuth = useCallback(async () => {
-    setLoading(true);
-
-    try {
-      if (password && password !== confirmPassword) {
-        message.error('Las contraseñas no coinciden.', 4);
-        return;
-      }
-
-      if (userFirebase?.email !== email) {
-        //esta validacion hay que hacerla en el back en branchOffice ya se hace
-        const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + email);
-
-        if (userAdminRegistered) {
-          message.error('El usuario ya esta registrado.', 4);
-          return;
-        }
-
-        await updateEmail(userFirebase as User, email);
-        await put("userAdmin/update", { email });
-      }
-
-      if (password) {
-        await updatePassword(userFirebase as User, password);
-      }
-
-      message.success("Datos de sesión actualizados con éxito.", 4);
-    } catch (error) {
-      console.log(error);
-      message.error('Error al actualizar los datos.');
-      setLoading(false);
-    } finally {
-      setLoading(false)
-    }
-  }, [email, password, userFirebase, confirmPassword])
+  }, [user]);
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
-  ], [password])
+  ], [password]);
 
   const items = useMemo(() => {
     const istPassword = [
@@ -143,7 +111,7 @@ const Perfil = () => {
         children: <DynamicForm
           form={form}
           loading={loading}
-          onFinish={onEditAuth}
+          onFinish={onEditProfile}
           inputs={[
             {
               md: 12,
@@ -182,7 +150,7 @@ const Perfil = () => {
     if (userFirebase?.providerData[0]?.providerId === "password") return isPassword;
 
     return istPassword;
-  }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword, form])
+  }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditProfile, rulesPassword, form]);
 
   useEffect(() => {
     if (loadingUserAdmin) return;
@@ -191,7 +159,7 @@ const Perfil = () => {
 
     setUser(_userAdmin);
     form.setFieldsValue(_userAdmin);
-  }, [userAdmin, form, loadingUserAdmin])
+  }, [userAdmin, form, loadingUserAdmin]);
 
   return (
     <>

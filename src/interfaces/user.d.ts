@@ -8,7 +8,7 @@ export interface User {
     uid?: string;
     role: Rols;
     name?: string; 
-    email: string;
+    email?: string;
     phone?: string; 
     description: string;
     active: boolean;
