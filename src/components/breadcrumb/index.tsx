@@ -1,8 +1,7 @@
-
 import { Breadcrumb as BreadcrumbAnt } from 'antd';
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import menuItems  from "../menu/menuItems";
+import menuItems from "../menu/menuItems";
 
 const Breadcrumb = () => {
   const { pathname } = useLocation();
@@ -32,26 +31,26 @@ const Breadcrumb = () => {
       to += ("/" + path)
     });
 
+    if (to.includes("configuracion")) return;
+
     navigate(to);
   }
 
   return (
-    <BreadcrumbAnt>
-      <BreadcrumbAnt.Item>
-        { icon }
-      </BreadcrumbAnt.Item>
-      {
-        paths.map((path) => (
-          <BreadcrumbAnt.Item 
-            href="#"
-            key={path}
-            onClick={() => toPath(path)}
-          >
-            {path.charAt(0).toUpperCase() + path.slice(1)}
-          </BreadcrumbAnt.Item>
-        ))
-      }
-    </BreadcrumbAnt>
+    <div style={{ display: "flex" }}>
+      <div style={{ marginRight: 10 }}>
+        {icon}
+      </div>
+      <BreadcrumbAnt
+        items={
+          paths.map(path => ({
+            title: path.charAt(0).toUpperCase() + path.slice(1),
+            href: "",
+            onClick: () => toPath(path)
+          }))
+        }
+      />
+    </div>
   )
 }
 

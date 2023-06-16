@@ -8,7 +8,7 @@ const useGet = <T extends {}>(url: string, wait?: boolean) => {
 	const [response, setResponse] = useState<T>();
 
 	useEffect(() => {
-		if(wait) return;
+		if (wait) return;
 
 		const controller = new AbortController();
 
@@ -20,7 +20,7 @@ const useGet = <T extends {}>(url: string, wait?: boolean) => {
 
 				setResponse(_response);
 			} catch (error) {
-				if(typeof error === "string") {
+				if (typeof error === "string") {
 					message.error(error as string, 4);
 					return;
 				}
@@ -38,7 +38,7 @@ const useGet = <T extends {}>(url: string, wait?: boolean) => {
 			controller.abort();
 		}
 	}, [url, wait]);
-	
+
 	return { loading, response }
 }
 

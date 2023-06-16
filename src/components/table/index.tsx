@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Empty, Table as TableAnt } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import useGet from '../../hooks/useGet';
 import SearchTable from '../searchTable';
-import TableActionsButtons from "../tableActionsButtons";
+import TableActionsButtons from "./tableActionsButtons";
 import { patch } from "../../services";
 
 interface Props<T> {
@@ -22,38 +22,37 @@ interface Get<T> {
 
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 
-const Table = <T extends {}>({ url: urlProp, columns: columnsProps, wait, placeholderSearch, pathEdit, urlDisabled }: Props<T>) => {
+const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeholderSearch, pathEdit, urlDisabled }: Props<T>) => {
 	const [url, setUrl] = useState(`${urlProp}?page=1&limit=10`);
 	const { loading, response } = useGet<Get<T>>(url, wait);
 	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState(10);
 	const [search, setSearch] = useState("");
-	const [columns, setColumns] = useState<ColumnsType<T>>(columnsProps);
-	const [string, setString] = useState(true);
 
-	useEffect(() => {
-		if(!string) return;
+	const columns = useMemo<ColumnsType<T>>(() => {
+		return [
+			...columnsProp,
+			{
+				title: 'Acciones',
+				key: 'actions',
+				fixed: 'right',
+				width: 100,
+				render: (_, record: T) => {
+					const r = record as T & { id: string };
 
-		if (columns.length && !columns.some(c => c.key === "actions")) {
-			setColumns([
-				...columns,
-				{
-					title: 'Acciones', dataIndex: 'actions', key: 'actions', width: '5%',
-					render: (_, record: Record<string, any>) => (
+					return (
 						<TableActionsButtons
 							record={record}
-							onDeleted={ () => setUrl(`${urlProp}?page=1&limit=${limit}&search=${search}`)}
-							fun={() => patch(urlDisabled, { id: record.id })}
+							onDeleted={() => setUrl(`${urlProp}?page=1&limit=${limit}&search=${search}`)}
+							fun={() => patch(urlDisabled, { id: r.id })}
 							messageError="Registro eliminado con éxito."
 							pathEdit={pathEdit}
 						/>
-					),
-				}
-			]);
-			setString(false);
-		}
-	}, [columnsProps, string, columns, urlDisabled, pathEdit, limit, search, urlProp])
-
+					)
+				},
+			}
+		];
+	}, [columnsProp, urlDisabled, pathEdit, limit, search, urlProp]);
 
 	return (
 		<div>
@@ -66,6 +65,8 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProps, wait, placeh
 				placeholder={placeholderSearch}
 			/>
 			<TableAnt
+				sticky
+				scroll={{ x: 400 }}
 				columns={columns}
 				dataSource={response?.list}
 				loading={loading}

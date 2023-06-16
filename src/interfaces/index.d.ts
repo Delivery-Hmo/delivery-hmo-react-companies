@@ -21,8 +21,10 @@ export interface CustomInput {
   rules?: FormRule[];
   onChange: (value: any) => void;
   styleFI?: React.CSSProperties;
-  show?: boolean;
   required?: boolean;
+  accept?: string;
+  maxCount?: number;
+  multiple?: boolean;
   loading?: boolean;
 }
 

@@ -1,106 +1,73 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  Card, Col, Row, Avatar, Divider, Form, Tabs, message, Spin, FormRule
-} from 'antd';
-import SaveButton from './../../components/saveButton';
-import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons'
-import DynamicContentForm from '../../components/dynamicContentForm'
-import { get, put } from '../../services'
-import { useAuth } from '../../context/authContext'
+import { Card, Col, Row, Avatar, Divider, Form, Tabs, message, Spin, FormRule, UploadFile } from 'antd';
+import DynamicForm from '../../components/dynamicForm';
+import { UserOutlined, AliwangwangOutlined } from '@ant-design/icons';
+import { put } from '../../services';
+import { useAuth } from '../../context/authContext';
 import { UserAdmin } from '../../interfaces/user';
 import { initUserAdmin } from '../../constants';
-import { updateEmail, updatePassword, User } from 'firebase/auth';
+import { setImagesToState } from "../../utils/functions";
 
 const Perfil = () => {
-  const { user: userFirebase, userAdmin, setUserAdmin } = useAuth();
+  const { user: userFirebase, userAuth, loading: loadingUserAdmin } = useAuth();
   const [form] = Form.useForm();
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { password, confirmPassword, email } = user;
+  const userAdmin = userAuth as UserAdmin;
 
   const onEditProfile = useCallback(async () => {
     setLoading(true);
 
+    if (password && password !== confirmPassword) {
+      message.error('Las contraseñas no coinciden.', 4);
+      return;
+    }
+
     try {
-      const _userAdmin = await put<UserAdmin>("userAdmin/update", user);
-
-      setUserAdmin(_userAdmin);
-
+      await put("userAdmin/update", user);
       message.success("Datos de perfil actualizados con éxito.", 4);
 
-    } catch (error) {
-      console.log(error);
-      message.error("Error al actualizar los datos.");
     } finally {
       setLoading(false);
     }
-  }, [setUserAdmin, user])
-
-  const onEditAuth = useCallback(async () => {
-    setLoading(true);
-
-    try {
-      if (password && password !== confirmPassword) {
-        message.error('Las contraseñas no coinciden.', 4);
-        return;
-      }
-
-      if (userFirebase?.email !== email) {
-        const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + email);
-
-        if (userAdminRegistered) {
-          message.error('El usuario ya esta registrado.', 4);
-          return;
-        }
-
-        await updateEmail(userFirebase as User, email);
-        await put("userAdmin/update", { email });
-      }
-
-      if (password) {
-        await updatePassword(userFirebase as User, password);
-      }
-
-      message.success("Datos de sesión actualizados con éxito.", 4);
-    } catch (error) {
-      console.log(error);
-      message.error('Error al actualizar los datos.');
-      setLoading(false);
-    } finally {
-      setLoading(false)
-    }
-  }, [email, password, userFirebase, confirmPassword])
+  }, [user]);
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
-  ], [password])
+  ], [password]);
 
   const items = useMemo(() => {
     const istPassword = [
       {
-        label: 'Actualizar datos de perfil',
+        label: 'Datos de la empresa',
         key: '1',
-        children: <Form form={form} layout="vertical" onFinish={onEditProfile}>
-          <DynamicContentForm inputs={[
+        children: <DynamicForm
+          layout="vertical"
+          form={form}
+          loading={loading}
+          onFinish={onEditProfile}
+          inputs={[
+            {
+              md: 12,
+              typeControl: 'input',
+              typeInput: 'text',
+              label: 'Empresa ',
+              name: 'company',
+              rules: [{ required: true, message: 'Favor de escribir nombre de la empresa.' }],
+              value: user.company,
+              onChange: (value) => setUser({ ...user, company: value })
+            },
             {
               md: 6,
               typeControl: 'input',
               typeInput: 'text',
-              label: 'Nombre vendedor',
-              name: 'name',
-              rules: [{ required: true, message: 'Favor de escribir el nombre del vendedor.' }],
-              value: user.name,
-              onChange: (value) => setUser({ ...user, name: value })
-            }, {
-              md: 12,
-              typeControl: 'input',
-              typeInput: 'text',
-              label: 'Compañia',
-              name: 'company',
-              rules: [{ required: true, message: 'Favor de escribir la company.' }],
-              value: user.company,
-              onChange: (value) => setUser({ ...user, company: value })
+              label: 'RFC',
+              name: 'rfc',
+              value: user.rfc,
+              onChange: (value) => setUser({ ...user, rfc: value }),
+              rules: [{ required: true, message: 'Favor de escribir el RFC de la empresa.' }],
             },
             {
               md: 6,
@@ -108,7 +75,8 @@ const Perfil = () => {
               label: 'Teléfono',
               name: 'phone',
               value: user.phone,
-              onChange: (value) => setUser({ ...user, phone: value })
+              onChange: (value) => setUser({ ...user, phone: value }),
+              required: true
             },
             {
               md: 24,
@@ -116,25 +84,35 @@ const Perfil = () => {
               typeInput: 'text',
               label: 'Descripción',
               name: 'description',
-              rules: [{ required: true, message: 'Favor de seleccionar su descripción.' }],
               value: user.description,
-              onChange: (value) => setUser({ ...user, description: value })
+              onChange: (value) => setUser({ ...user, description: value }),
+            },
+            {
+              typeControl: "file",
+              label: "Logo de la empresa ",
+              name: "image",
+              value: user.image,
+              maxCount: 1,
+              accept: "image/png, image/jpeg",
+              onChange: (value: UploadFile<any>[]) => setUser({ ...user, image: value }),
+              md: 24,
+              styleFI: { display: "flex", justifyContent: "center" },
             }
-          ]} />
-          <SaveButton htmlType="submit" loading={loading}>
-            Guardar
-          </SaveButton>
-        </Form>
+          ]}
+        />
       }
     ]
 
     const isPassword = [
       istPassword[0],
       {
-        label: 'Actualizar datos de sesión',
+        label: 'Datos de sesión',
         key: '2',
-        children: <Form form={form} layout="vertical" onFinish={onEditAuth}>
-          <DynamicContentForm inputs={[
+        children: <DynamicForm
+          form={form}
+          loading={loading}
+          onFinish={onEditProfile}
+          inputs={[
             {
               md: 12,
               typeControl: 'input',
@@ -164,31 +142,30 @@ const Perfil = () => {
               onChange: (value: string) => setUser({ ...user, confirmPassword: value }),
               md: 6,
             },
-          ]} />
-          <SaveButton htmlType="submit" loading={loading}>
-            Guardar
-          </SaveButton>
-        </Form>
+          ]}
+        />
       }
     ]
 
     if (userFirebase?.providerData[0]?.providerId === "password") return isPassword;
 
     return istPassword;
-  }, [userFirebase, user, setUser, form, loading, email, password, confirmPassword, onEditAuth, onEditProfile, rulesPassword])
+  }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditProfile, rulesPassword, form]);
 
   useEffect(() => {
-    if (!userAdmin) return;
+    if (loadingUserAdmin) return;
 
-    setUser(userAdmin);
-    form.setFieldsValue(userAdmin);
-  }, [userAdmin, form])
+    const _userAdmin = setImagesToState({ ...userAdmin! });
+
+    setUser(_userAdmin);
+    form.setFieldsValue(_userAdmin);
+  }, [userAdmin, form, loadingUserAdmin]);
 
   return (
     <>
       <Row gutter={15} style={{ marginTop: 20 }}>
-        <Col md={6} >
-          <Card title="Mi Perfil" bordered={false} style={{ textAlign: 'center' }}>
+        <Col md={6}>
+          <Card title={<h2>Perfil empresa </h2>} bordered={false} style={{ textAlign: 'center' }}>
             {
               !userAdmin ? <Spin /> : (
                 <>
@@ -209,14 +186,14 @@ const Perfil = () => {
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.email}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Compañia: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin compañia."}</span>
+                      <b>Empresa : </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin empresa ."}</span>
                     </Col>
                     <Col xs={24}>
                       <b>Celular: </b>
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.phone || "Sin teléfono."}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripciòn."}</span>
+                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripción."}</span>
                     </Col>
                   </Row>
                 </>
@@ -224,8 +201,8 @@ const Perfil = () => {
             }
           </Card>
         </Col>
-        <Col xs={24} md={24} lg={17}>
-          <Card title="Editar: Datos Mi Perfil" bordered={false}>
+        <Col md={18}>
+          <Card title={<h4>Editar perfil</h4>} bordered={false}>
             <Tabs
               defaultActiveKey="1"
               items={items}

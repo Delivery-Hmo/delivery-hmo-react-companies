@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react'
-import DynamicContentForm from '../../../components/dynamicContentForm'
-import { Card, Col, Form, message, Row } from 'antd'
-import SaveButton from '../../../components/saveButton';
+import { Card, Col, Form, Row, message } from 'antd'
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../../context/authContext';
 import { initUserDeliveryMan } from '../../../constants';
-import { UserDeliveryMan } from '../../../interfaces/user';
+import { BranchOffice, UserDeliveryMan } from '../../../interfaces/user';
 import useGet from '../../../hooks/useGet';
-import { BranchOffice } from '../../../interfaces/branchOffice';
 import { Option } from '../../../interfaces';
+import DynamicContentForm from "../../../components/dynamicContentForm";
 
 type TypeRute = "create" | "update";
 
@@ -19,14 +16,13 @@ const title: Record<TypeRute, string> = {
 };
 
 const CreateUserDeliveryMan = () => {
-  const { userAdmin } = useAuth();
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
   const { loading, response: branchOffices } = useGet<BranchOffice[]>("branchOffice/listByUserAdmin");
   const { state, pathname } = location;
   const [type, setType] = useState<TypeRute>("create");
-  const [saveLoading, setSaveLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [deliveryMan, setDeliveryMan] = useState<UserDeliveryMan>(initUserDeliveryMan);
 
   useEffect(() => {
@@ -43,27 +39,27 @@ const CreateUserDeliveryMan = () => {
 
     setDeliveryMan(_deliveryMan);
     form.setFieldsValue(_deliveryMan);
-  }, [state, form, navigate, pathname, userAdmin])
+  }, [state, form, navigate, pathname])
 
   const onFinish = async () => {
+    if(saving) return;
+    
+    setSaving(true);
+
+    const { password, confirmPassword } = deliveryMan;
+
+    if (confirmPassword !== password) {
+      message.error('Las contraseñas no coinciden.');
+      return;
+    }
+
+    delete deliveryMan.confirmPassword;
+
     try {
-      setSaveLoading(true);
-
-      const { password, confirmPassword } = deliveryMan;
-
-      if (confirmPassword !== password) {
-        message.error('Las contraseñas no coinciden.');
-        return;
-      }
-
-      let _deliveryMan = { ...deliveryMan };
-
-      delete _deliveryMan.confirmPassword;
-
       if (type === "update") {
-        await put(`userDeliveryMan/${type}`, _deliveryMan);
+        await put(`userDeliveryMan/${type}`, deliveryMan);
       } else {
-        await post(`userDeliveryMan/${type}`, _deliveryMan);
+        await post(`userDeliveryMan/${type}`, deliveryMan);
       }
 
       message.success('Repartidor guardado con éxito.', 4);
@@ -72,9 +68,10 @@ const CreateUserDeliveryMan = () => {
       console.log(error)
       message.error('Error al guardar el repartidor.', 4);
     } finally {
-      setSaveLoading(false)
+      setSaving(false)
     }
   }
+
   return (
     <>
       <Row>
@@ -158,14 +155,6 @@ const CreateUserDeliveryMan = () => {
                   md: 24
                 }
               ]} />
-              <Form.Item>
-                <SaveButton
-                  htmlType='submit'
-                  loading={saveLoading}
-                >
-                  Guardar repartidor
-                </SaveButton>
-              </Form.Item>
             </Card>
           </Form>
         </Col>
@@ -174,4 +163,4 @@ const CreateUserDeliveryMan = () => {
   )
 }
 
-export default CreateUserDeliveryMan
+export default CreateUserDeliveryMan;
