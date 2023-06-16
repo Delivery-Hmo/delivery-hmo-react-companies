@@ -1,4 +1,4 @@
-import { OptionsValue, TypeControl, TypeInput } from "../types";
+import { TypeControl, TypeInput } from "../types";
 import { FormRule } from 'antd';
 
 export interface LatLng {
@@ -21,7 +21,6 @@ export interface CustomInput {
   rules?: FormRule[];
   onChange: (value: any) => void;
   styleFI?: React.CSSProperties;
-  show?: boolean;
   required?: boolean;
   accept?: string;
   maxCount?: number;

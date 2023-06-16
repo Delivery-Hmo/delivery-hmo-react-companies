@@ -6,6 +6,8 @@ import { get, post } from '../../services';
 import DynamicForm from '../../components/dynamicForm';
 import { initUserAdmin } from "../../constants";
 import HeaderView from "../../components/headerView";
+import DynamicContentForm from '../../components/dynamicContentForm';
+import SaveButton from '../../components/saveButton';
 
 const SingUp = () => {
   const [userAdmin, setUserAdmin] = useState<UserAdmin>(initUserAdmin);
@@ -30,7 +32,7 @@ const SingUp = () => {
         return
       }
 
-      const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email, userAdmin.password as string);
+      const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email!, userAdmin.password as string);
       const user = result.user
       const additional = getAdditionalUserInfo(result)
 

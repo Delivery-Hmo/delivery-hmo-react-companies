@@ -39,6 +39,7 @@ export interface User {
   export interface UserSeller extends User {
     branchOffice?: string | BranchOffice;
     userAdmin?: string | UserAdmin;
+    rfc: string;
   }
 
   export interface UserDeliveryMan extends User {
