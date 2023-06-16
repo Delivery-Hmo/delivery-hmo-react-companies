@@ -60,7 +60,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       try {
         const userAdmin = await getUserDatas[(user?.displayName || "") as Rols](user.uid, controller);
 
-        setUserAuth(userAdmin);
+        setUserAuth({ ...userAdmin, email: user.email! });
       } catch (error) {
         //este if hay que quitarlo en producción
         if(error instanceof Error && error.message === "Failed to execute 'fetch' on 'Window': The user aborted a request.") {

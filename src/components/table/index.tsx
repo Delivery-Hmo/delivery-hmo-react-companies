@@ -33,26 +33,26 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 		return [
 			...columnsProp,
 			{
-				title: 'Acciones', 
-				key: 'actions', 
+				title: 'Acciones',
+				key: 'actions',
 				fixed: 'right',
 				width: 100,
 				render: (_, record: T) => {
-					const r = record as T & { id: number };
-					
+					const r = record as T & { id: string };
+
 					return (
 						<TableActionsButtons
 							record={record}
-							onDeleted={ () => setUrl(`${urlProp}?page=1&limit=${limit}&search=${search}`)}
+							onDeleted={() => setUrl(`${urlProp}?page=1&limit=${limit}&search=${search}`)}
 							fun={() => patch(urlDisabled, { id: r.id })}
 							messageError="Registro eliminado con éxito."
 							pathEdit={pathEdit}
 						/>
 					)
-				} ,
+				},
 			}
 		];
-	}, [columnsProp, urlDisabled, pathEdit, limit, search, urlProp])
+	}, [columnsProp, urlDisabled, pathEdit, limit, search, urlProp]);
 
 	return (
 		<div>

@@ -9,7 +9,7 @@ const Branches = () => {
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Correo', dataIndex: 'email', key: 'email' },
     { title: 'Meta ventas / mes', dataIndex: 'salesGoalByMonth', key: 'salesGoalByMonth' }
-  ], [])
+  ], []);
 
   return (
     <div>
