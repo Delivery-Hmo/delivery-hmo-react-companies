@@ -9,7 +9,7 @@ interface Props {
 }
 
 const Comments: FC<Props> = ({ open, onClose }) => {
-  const { loading, response } = useGet<CommentsBranchOffice[]>('commentsBranchOffice/list');
+  const { loading } = useGet<CommentsBranchOffice[]>('commentsBranchOffice/list');
   return (
     <Modal
       title="Comentarios"

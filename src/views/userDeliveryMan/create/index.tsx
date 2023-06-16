@@ -6,7 +6,7 @@ import { initUserDeliveryMan } from '../../../constants';
 import { BranchOffice, UserDeliveryMan } from '../../../interfaces/user';
 import useGet from '../../../hooks/useGet';
 import { Option } from '../../../interfaces';
-import DynamicContentForm from "../../../components/dynamicContentForm";
+import DynamicForm from "../../../components/dynamicForm";
 
 type TypeRute = "create" | "update";
 
@@ -89,7 +89,12 @@ const CreateUserDeliveryMan = () => {
             onFinish={onFinish}
           >
             <Card>
-              <DynamicContentForm inputs={[
+              <DynamicForm 
+                form={form}
+                layout="vertical"
+                onFinish={onFinish}
+                loading={saving}
+                inputs={[
                 {
                   typeControl: 'input',
                   typeInput: 'text',

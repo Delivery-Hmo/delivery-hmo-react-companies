@@ -6,7 +6,6 @@ import { BranchOffice } from "../../interfaces/user";
 import { Button } from 'antd';
 import { CommentOutlined } from "@ant-design/icons";
 import Comments from './comments';
-import { useAuth } from "../../context/authContext";
 
 const Branches = () => {
   const [open, setOpen] = useState(false);

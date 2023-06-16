@@ -32,7 +32,7 @@ const Perfil = () => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, password, confirmPassword]);
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
