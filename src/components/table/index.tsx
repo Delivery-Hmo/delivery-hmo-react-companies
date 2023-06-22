@@ -15,7 +15,7 @@ interface Props<T> {
 	urlDisabled: string;
 }
 
-interface Get<T> {
+export interface Get<T> {
 	total: number;
 	list: Array<T>;
 }
