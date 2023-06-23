@@ -9,13 +9,13 @@ interface Props {
 }
 
 const Comments: FC<Props> = ({ open, onClose }) => {
-  const { loading } = useGet<CommentsBranchOffice[]>('commentsBranchOffice/list');
+  //const { loading } = useGet<CommentsBranchOffice[]>('commentsBranchOffice/list');
   return (
     <Modal
       title="Comentarios"
       open={open}
       onCancel={onClose}
-      confirmLoading={loading}
+      //confirmLoading={loading}
       okButtonProps={{
         style: {
           display: "none"

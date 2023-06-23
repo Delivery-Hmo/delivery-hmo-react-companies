@@ -1,6 +1,6 @@
 import { UploadFile } from "antd";
 import { fileToBase64, getCurrentToken, handleError } from '../utils/functions';
-import { baseUrlStorage } from "../constants";
+import { baseUrlStorage, baseUrlStorageGCP } from "../constants";
 
 const baseUrl = "http://localhost:3001/";
 //const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
@@ -39,7 +39,7 @@ export const post = async <T>(url: string, body: Record<string, any>) => {
 
     if (!token) throw new Error("Error al obtener el token.");
 
-    body = await getBodyWithBase64Files(body);
+    body = await getBodyWithBase64Files({ ...body });
 
     const response = await fetch(
       baseUrl + url,
@@ -67,7 +67,7 @@ export const put = async <T>(url: string, body: Record<string, any>) => {
 
     if (!token) throw new Error("Error al obtener el token.");
 
-    body = await getBodyWithBase64Files(body);
+    body = await getBodyWithBase64Files({ ...body });
 
     const response = await fetch(
       baseUrl + url,
@@ -113,28 +113,28 @@ export const patch = async <T>(url: string, body: Record<string, any>) => {
 
 const getBodyWithBase64Files = async (body: Record<string, any>) => {
   try {
-    if (body?.image?.length) {
+    if (body?.image?.length && typeof body?.image[0] !== "string") {
       const imageUploadFile = body?.image[0] as UploadFile;
 
-      if (imageUploadFile.url?.includes(baseUrlStorage)) {
+      if (imageUploadFile.url?.includes(baseUrlStorage) || imageUploadFile.url?.includes(baseUrlStorageGCP)) {
         body.image = imageUploadFile.url;
+      } else {
+        const imageFile = imageUploadFile.originFileObj!;
+
+        body.image = await fileToBase64(imageFile);
       }
-      
-      const imageFile = imageUploadFile.originFileObj!;
-  
-      body.image = await fileToBase64(imageFile);
     };
 
     if (body?.images?.length) {
       const images = body.images as UploadFile[];
 
       body.images = await Promise.all(images.map((image) => {
-        if (image.url?.includes(baseUrlStorage)) {
-          body.image = image.url;
+        if (typeof image === "string" || image.url?.includes(baseUrlStorage) || image.url?.includes(baseUrlStorageGCP)) {
+          return image;
         }
-        
+
         const imageFile = image.originFileObj!;
-    
+
         return fileToBase64(imageFile);
       }));
     }

@@ -96,15 +96,6 @@ const SingUp = () => {
               onChange: (value) => setUserAdmin({ ...userAdmin, confirmPassword: value })
             }, {
               md: 12,
-              typeControl: "input",
-              typeInput: "text",
-              label: "Empresa ",
-              name: "company",
-              rules: [{ required: true, message: 'Favor de escribir el nombre de la empresa .' }],
-              value: userAdmin.company,
-              onChange: (value) => setUserAdmin({ ...userAdmin, company: value })
-            }, {
-              md: 12,
               typeControl: "phone",
               label: "Telefono",
               name: "phone",

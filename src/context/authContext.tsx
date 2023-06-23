@@ -21,6 +21,8 @@ interface Props {
   children: ReactNode;
 }
 
+type AC = AbortController;
+
 const AuthContext = createContext<Auth>({
   user: null,
   userAuth: null,
@@ -30,12 +32,12 @@ const AuthContext = createContext<Auth>({
   setCreatingUser: () => false
 });
 
-const getUserDatas: Record<Rols, (uid: string, controller: AbortController) => Promise<Users>> = {
+const getUserDatas: Record<Rols, (uid: string, controller: AC) => Promise<Users>> = {
   "": () => Promise.reject('Error, no se pudo obtener la información del usuario.'),
-  "Administrador": (uid: string, controller: AbortController) => get<UserAdmin>('userAdmin/getByUid?uid=' + uid, controller),
-  "Administrador sucursal": (uid: string, controller: AbortController) => get<BranchOffice>('branchOffice/getByUid?uid=' + uid, controller),
-  "Vendedor": (uid: string, controller: AbortController) => Promise.reject('Error, no se pudo obtener la información del usuario.'),
-  "Repartidor": (uid: string, controller: AbortController) => Promise.reject('Error, no se pudo obtener la información del usuario.'),
+  "Administrador": (uid: string, controller: AC) => get<UserAdmin>('userAdmin/getByUid?uid=' + uid, controller),
+  "Administrador sucursal": (uid: string, controller: AC) => get<BranchOffice>('branchOffice/getByUid?uid=' + uid, controller),
+  "Vendedor": (uid: string, controller: AC) => Promise.reject('Error, no se pudo obtener la información del usuario.'),
+  "Repartidor": (uid: string, controller: AC) => Promise.reject('Error, no se pudo obtener la información del usuario.')
 };
 
 export const AuthProvider: FC<Props> = ({ children }) => {
@@ -58,9 +60,9 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       };
 
       try {
-        const userAdmin = await getUserDatas[(user?.displayName || "") as Rols](user.uid, controller);
+        const _userAuth = await getUserDatas[(user?.displayName || "") as Rols](user.uid, controller);
 
-        setUserAuth({ ...userAdmin, email: user.email! });
+        setUserAuth(_userAuth);
       } catch (error) {
         //este if hay que quitarlo en producción
         if(error instanceof Error && error.message === "Failed to execute 'fetch' on 'Window': The user aborted a request.") {

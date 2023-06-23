@@ -13,7 +13,6 @@ const Perfil = () => {
   const [form] = Form.useForm();
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState<boolean>(false);
-
   const { password, confirmPassword, email } = user;
   const userAdmin = userAuth as UserAdmin;
 
@@ -26,7 +25,7 @@ const Perfil = () => {
     }
 
     try {
-      await put("userAdmin/update", user);
+      await put("userAdmin/update", {...user});
       message.success("Datos de perfil actualizados con éxito.", 4);
 
     } finally {
@@ -54,10 +53,10 @@ const Perfil = () => {
               typeControl: 'input',
               typeInput: 'text',
               label: 'Empresa ',
-              name: 'company',
+              name: 'name',
               rules: [{ required: true, message: 'Favor de escribir nombre de la empresa.' }],
-              value: user.company,
-              onChange: (value) => setUser({ ...user, company: value })
+              value: user.name,
+              onChange: (value) => setUser({ ...user, name: value })
             },
             {
               md: 6,
@@ -151,11 +150,11 @@ const Perfil = () => {
 
     return istPassword;
   }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditProfile, rulesPassword, form]);
-
+  
   useEffect(() => {
     if (loadingUserAdmin) return;
 
-    const _userAdmin = setImagesToState({ ...userAdmin! });
+    const _userAdmin = setImagesToState(userAdmin!);
 
     setUser(_userAdmin);
     form.setFieldsValue(_userAdmin);
@@ -165,7 +164,7 @@ const Perfil = () => {
     <>
       <Row gutter={15} style={{ marginTop: 20 }}>
         <Col md={6}>
-          <Card title={<h2>Perfil empresa </h2>} bordered={false} style={{ textAlign: 'center' }}>
+          <Card title={<h1>Perfil empresa </h1>} bordered={false} style={{ textAlign: 'center' }}>
             {
               !userAdmin ? <Spin /> : (
                 <>
@@ -186,14 +185,14 @@ const Perfil = () => {
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.email}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Empresa : </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin empresa ."}</span>
+                      <b>Empresa : </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.name || "Sin empresa."}</span>
                     </Col>
                     <Col xs={24}>
                       <b>Celular: </b>
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.phone || "Sin teléfono."}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripción."}</span>
+                      <b>Descripción: </b><span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripción."}</span>
                     </Col>
                   </Row>
                 </>

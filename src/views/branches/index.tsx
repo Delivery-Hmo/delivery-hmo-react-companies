@@ -8,7 +8,7 @@ import { CommentOutlined } from "@ant-design/icons";
 import Comments from './comments';
 
 const Branches = () => {
-  const [open, setOpen] = useState(false);
+  const [openComments, setOpenComments] = useState(false);
 
   const columns: ColumnsType<BranchOffice> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
@@ -21,11 +21,11 @@ const Branches = () => {
           shape="round"
           icon={<CommentOutlined />}
           type="primary"
-          onClick={() => setOpen(true)}
+          onClick={() => setOpenComments(true)}
         />
       ),
     }
-  ], [setOpen])
+  ], [setOpenComments]);
 
   return (
     <div>
@@ -41,8 +41,8 @@ const Branches = () => {
         urlDisabled="branchOffice/disable"
       />
       <Comments
-        open={open}
-        onClose={() => setOpen(false)}
+        open={openComments}
+        onClose={() => setOpenComments(false)}
       />
     </div>
   )

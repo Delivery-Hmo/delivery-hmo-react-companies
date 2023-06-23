@@ -145,8 +145,8 @@ const CreateBranch = () => {
                 value: salesGoalByMonth,
                 rules: [
                   {
-                    message: 'La meta de ventas no puede ser mayor a 50,000.',
-                    validator: (rule, value) => value > 50000 ? Promise.reject(rule.message) : Promise.resolve(),
+                    message: 'La meta de ventas no puede ser mayor a 100,000.',
+                    validator: (rule, value) => value > 100000 ? Promise.reject(rule.message) : Promise.resolve(),
                   }
                 ],
                 onChange: (value: string) => setBranch({ ...branch, salesGoalByMonth: +value })

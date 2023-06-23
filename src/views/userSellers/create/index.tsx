@@ -4,10 +4,9 @@ import { Card, Form, FormRule, Grid, message, UploadFile } from 'antd'
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { initUserSeller, titleForm } from '../../../constants';
-import { UserSeller } from '../../../interfaces/user';
+import { BranchOffice, UserSeller } from '../../../interfaces/user';
 import { TypeRute } from '../../../types';
 import HeaderView from "../../../components/headerView";
-import { BranchOffice } from "../../../interfaces/branchOffice";
 import { Option } from "../../../interfaces";
 import useGet from "../../../hooks/useGet";
 import { setImagesToState } from "../../../utils/functions";

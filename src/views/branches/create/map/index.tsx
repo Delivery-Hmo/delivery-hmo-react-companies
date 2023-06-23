@@ -105,6 +105,7 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
   }
 
   const onMarkerComplete = (_marker: google.maps.Marker) => {
+    console.log("hola")
     marker?.setMap(null);
 
     const positionMarker = _marker.getPosition() as google.maps.LatLng;
@@ -157,7 +158,6 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
             options={options}
           />
         }
-
       </GoogleMap>
     </Card>
   )

@@ -26,10 +26,10 @@ export const validFiles = (fileList: RcFile[], accept: string, showMessageError?
     const types = accept.split(",").map(type => type.trim()) || [];
 
     if (!types.includes(file.type!)) {
-      if(showMessageError) {
+      if (showMessageError) {
         message.error(`Formato incorrecto.`, 4);
       }
-      
+
       return false;
     }
   }
@@ -43,7 +43,7 @@ export const onPreviewImage = async (file: UploadFile) => {
   if (!src) {
     src = await new Promise((resolve) => {
       const reader = new FileReader();
-      
+
       reader.readAsDataURL(file.originFileObj!);
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = () => resolve("");
@@ -62,9 +62,11 @@ export const onPreviewImage = async (file: UploadFile) => {
 }
 
 export const setImagesToState = <T extends { image?: string | UploadFile[], images?: string[] | UploadFile[] }>(state: T) => {
-  if (state.image) {
-    const url = state.image as string;
-    
+  const _state = { ...state };
+
+  if (_state.image) {
+    const url = _state.image as string;
+
     const imageUploadFile: UploadFile = {
       name: url,
       uid: url,
@@ -73,12 +75,12 @@ export const setImagesToState = <T extends { image?: string | UploadFile[], imag
       status: "done"
     };
 
-    state.image = [imageUploadFile];
+    _state.image = [imageUploadFile];
   }
 
-  if (state.images?.length) {
-    state.images = state.images.map(url => {
-      url = state.image as string;
+  if (_state.images?.length) {
+    _state.images = _state.images.map(url => {
+      url = _state.image as string;
 
       const imageUploadFile: UploadFile = {
         name: url,
@@ -92,7 +94,7 @@ export const setImagesToState = <T extends { image?: string | UploadFile[], imag
     });
   }
 
-  return state;
+  return _state;
 }
 
 export const isUserAdmin = (user: Users): user is UserAdmin => {
