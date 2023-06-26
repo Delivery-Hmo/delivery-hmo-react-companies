@@ -20,6 +20,8 @@ const initCenter: LatLng = {
 const initZoom = 11;
 const libraries: LibrariesGoogleMaps = ["drawing"];
 
+
+//Este componente es buena idea probarlo sin el react stric mode del index principal para no tener problemas con los renders de los componentes
 const Map: FC<Props> = ({ branch, setBranch }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey,
@@ -28,22 +30,7 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
   const [center, setCenter] = useState<LatLng>(initCenter);
   const [circle, setCircle] = useState<google.maps.Circle>();
   const [marker, setMarker] = useState<google.maps.Marker>();
-  const [options, setOptions] = useState<google.maps.drawing.DrawingManagerOptions>();
-  const [showControls, setShowControls] = useState(true);
-
-  useEffect(() => {
-    if (!isLoaded) return;
-
-    const { CIRCLE, MARKER } = window.google.maps.drawing?.OverlayType;
-
-    setOptions({
-      drawingControl: true,
-      drawingControlOptions: {
-        drawingModes: [MARKER, CIRCLE],
-        position: google.maps.ControlPosition.TOP_CENTER,
-      },
-    });
-  }, [isLoaded])
+  const [showControls, setShowControls] = useState(false);
 
   if (!isLoaded) return <FullLoader />;
 
@@ -54,7 +41,10 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
   )
 
   const onLoad = (map: google.maps.Map) => {
-    if (!branch.id) return;
+    if (!branch.id) {
+      setShowControls(true);
+      return
+    };
 
     const _circle = new google.maps.Circle({
       center: branch.center,
@@ -155,7 +145,17 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
           showControls && <DrawingManagerF
             onCircleComplete={onCircleComplete}
             onMarkerComplete={onMarkerComplete}
-            options={options}
+            onLoad={dm => {
+              const { CIRCLE, MARKER } = window.google.maps.drawing?.OverlayType;
+
+              dm.setOptions({
+                drawingControl: true,
+                drawingControlOptions: {
+                  drawingModes: [MARKER, CIRCLE],
+                  position: google.maps.ControlPosition.TOP_CENTER,
+                },
+              });
+            }}
           />
         }
       </GoogleMap>
