@@ -7,12 +7,11 @@ interface Props {
   record: any;
   onDeleted: () => void;
   fun: () => Promise<any>;
-  messageError: string;
   pathEdit: string;
 }
 
-const dialogDelete = (fun: () => Promise<any>, messageError: string): Promise<boolean> =>
-  new Promise((resolve, reject) => Modal.confirm({
+const dialogDelete = (fun: () => Promise<any>) =>
+  new Promise<void>((resolve) => Modal.confirm({
     title: 'Eliminar',
     icon: <ExclamationCircleOutlined />,
     content: '¿Seguro que deseas eliminar este registro?',
@@ -21,28 +20,21 @@ const dialogDelete = (fun: () => Promise<any>, messageError: string): Promise<bo
     onOk: async () => {
       try {
         await fun();
-        message.success(messageError);
-        resolve(true);
+        message.success("Registro eliminado con exito!");
+        resolve();
       } catch (error) {
-        console.log(error);
-        message.error("Error al eliminar el registro.", 4)
-        reject(false)
+        console.error(error);
+        message.error("Error al eliminar el registro.", 4);
       }
     },
   }));
 
-
-const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError, pathEdit }) => {
+const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, pathEdit }) => {
   const navigate = useNavigate();
 
   const del = async () => {
-    try {
-      await dialogDelete(fun, messageError);
-      onDeleted();
-    } catch (error) {
-      console.error(error);
-      message.error("Error al eliminar el registro.");
-    }
+    await dialogDelete(fun);
+    onDeleted();
   }
 
   return (

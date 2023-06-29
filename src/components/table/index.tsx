@@ -15,7 +15,7 @@ interface Props<T> {
 	urlDisabled: string;
 }
 
-interface Get<T> {
+export interface Get<T> {
 	total: number;
 	list: Array<T>;
 }
@@ -45,7 +45,6 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 							record={record}
 							onDeleted={() => setUrl(`${urlProp}?page=1&limit=${limit}&search=${search}`)}
 							fun={() => patch(urlDisabled, { id: r.id })}
-							messageError="Registro eliminado con éxito."
 							pathEdit={pathEdit}
 						/>
 					)

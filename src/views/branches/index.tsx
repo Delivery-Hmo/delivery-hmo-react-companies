@@ -9,6 +9,7 @@ import Comments from './comments';
 
 const Branches = () => {
   const [openComments, setOpenComments] = useState(false);
+  const [idBranchOffice, setIdBranchOffice] = useState("");
 
   const columns: ColumnsType<BranchOffice> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
@@ -16,12 +17,15 @@ const Branches = () => {
     { title: 'Meta ventas / mes', dataIndex: 'salesGoalByMonth', key: 'salesGoalByMonth' },
     {
       title: 'Comentarios', key: 'comment',
-      render: () => (
+      render: (_, { id }) => (
         <Button
           shape="round"
           icon={<CommentOutlined />}
           type="primary"
-          onClick={() => setOpenComments(true)}
+          onClick={() => {
+            setIdBranchOffice(id!)
+            setOpenComments(true)
+          }}
         />
       ),
     }
@@ -43,6 +47,7 @@ const Branches = () => {
       <Comments
         open={openComments}
         onClose={() => setOpenComments(false)}
+        idBranchOffice={idBranchOffice}
       />
     </div>
   )

@@ -1,4 +1,4 @@
-import { UploadFile, message } from "antd";
+import { Modal, UploadFile, message } from "antd";
 import { RcFile } from "antd/es/upload";
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
 import { BranchOffice, UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
@@ -127,3 +127,23 @@ export const handleError = (error: any) => {
 
   throw new Error(error as string);
 }
+
+export const confirmDialog = <T>(fun: () => Promise<T>) =>
+  new Promise<T>((resolve, reject) => Modal.confirm({
+    title: 'Eliminar',
+    icon: '\u26A0',
+    content: '¿Seguro que deseas eliminar este registro?',
+    okText: 'Aceptar',
+    cancelText: 'Cancelar',
+    onOk: async () => {
+      try {
+        const res = await fun();
+        message.success("Registro eliminado con éxito!");
+        resolve(res);
+      } catch (error) {
+        console.log(error);
+        message.error("Error al eliminar el registro.", 4)
+        reject(error)
+      }
+    },
+  }));

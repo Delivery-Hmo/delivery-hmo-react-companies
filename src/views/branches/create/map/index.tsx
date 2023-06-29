@@ -1,25 +1,19 @@
-import { useState, useEffect, FC, Dispatch, SetStateAction, memo } from "react";
+import { useState, FC, Dispatch, SetStateAction, memo } from "react";
 import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../../../constants";
-import { LibrariesGoogleMaps } from "../../../../types";
 import FullLoader from "../../../../components/fullLoader";
 import { LatLng } from "../../../../interfaces";
-import { Button, Card, Col, Row, message } from "antd";
-import { ReloadOutlined } from "@ant-design/icons";
+import { Card, message } from "antd";
 import { BranchOffice } from "../../../../interfaces/user";
+import HeaderMap from "./headerMap";
+import { LibrariesGoogleMaps } from "../../../../types";
 
 interface Props {
   branch: BranchOffice;
   setBranch: Dispatch<SetStateAction<BranchOffice>>;
 }
 
-const initCenter: LatLng = {
-  lat: 29.0965000,
-  lng: -110.960000
-};
-const initZoom = 11;
 const libraries: LibrariesGoogleMaps = ["drawing"];
-
 
 //Este componente es buena idea probarlo sin el react stric mode del index principal para no tener problemas con los renders de los componentes
 const Map: FC<Props> = ({ branch, setBranch }) => {
@@ -27,7 +21,10 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
     googleMapsApiKey,
     libraries
   });
-  const [center, setCenter] = useState<LatLng>(initCenter);
+  const [center, setCenter] = useState<LatLng>({
+    lat: 29.0965000,
+    lng: -110.960000
+  });
   const [circle, setCircle] = useState<google.maps.Circle>();
   const [marker, setMarker] = useState<google.maps.Marker>();
   const [showControls, setShowControls] = useState(false);
@@ -122,23 +119,14 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
 
   return (
     <Card>
-      <Row justify="space-between">
-        <Col>
-          <b>Ubicación y radio de entrega</b>
-        </Col>
-        <Button
-          icon={<ReloadOutlined />}
-          onClick={clearMap}
-        />
-      </Row>
-      <br />
+      <HeaderMap clearMap={clearMap} />
       <GoogleMap
+        zoom={11}
         mapContainerStyle={{
           width: '100%',
           height: '400px'
         }}
         center={center}
-        zoom={initZoom}
         onLoad={onLoad}
       >
         {
