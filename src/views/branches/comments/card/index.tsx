@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { CalendarOutlined, DeleteOutlined, LineOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Row } from 'antd';
+import { Avatar, Button, Card, Col, Row } from 'antd';
 import { CommentsBranchOffice } from "../../../../interfaces/commentBranchOffice";
 import dayjs from "dayjs";
 
@@ -21,24 +21,31 @@ const CardComments: FC<Props> = ({ comment: objectComment }) => {
         description={comment}
       />
 
-
-      <Row >
-        <Col xs={10}>
-          <Row gutter={10} justify="center">
-            <Col>
+      <hr />
+      <Row align="middle">
+        <Col xs={11}>
+          <Row gutter={10} justify="space-evenly">
+            <Col xs={3}>
               <CalendarOutlined />
             </Col>
-            <Col>
+            <Col xs={19}>
               {dayjs(date).format('DD/MM/YYYY hh:mm a')}
             </Col>
           </Row>
         </Col>
-        {/* <Col xs={2}>
-          |
+        <Col xs={2}>
+          <Row justify="space-evenly">
+            |
+          </Row>
         </Col>
         <Col xs={11}>
-          <DeleteOutlined key="delete" />
-        </Col> */}
+          <Row justify="space-evenly">
+            <Button 
+              shape="circle"
+              icon={<DeleteOutlined />}
+            />
+          </Row>
+        </Col>
       </Row>
     </Card>
   );
