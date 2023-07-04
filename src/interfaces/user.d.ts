@@ -1,16 +1,16 @@
-import { StringMappingType } from 'typescript';
-import { RcFile, UploadFile } from "antd/es/upload";
+import { UploadFile } from "antd/es/upload";
 import { LatLng } from ".";
 import { Rols } from "../types";
+import { CommentsBranchOffice } from "./commentBranchOffice";
 
 export interface User {
   readonly id?: string;
-  uid?: string;
+  readonly uid?: string;
   readonly role?: Rols;
   name?: string;
   email: string;
   description: string;
-  active: boolean;
+  readonly active: boolean;
   image?: UploadFile<any>[] | string;
   password?: string;
   confirmPassword?: string;
@@ -22,30 +22,32 @@ export interface UserAdmin extends User {
 }
 
 export interface BranchOffice extends User {
-  userAdmin: string | UserAdmin;
+  readonly userAdmin: string | UserAdmin;
   salesGoalByMonth: number;
   facebook: string;
-  phones: readonly number[];
+  readonly phones: number[];
   latLng: LatLng;
   center: LatLng;
   radius: number;
   address: string;
-  showingInApp?: boolean;
   comments?: CommentsBranchOffice[];
   totolSales?: number;
+  readonly showingInApp: boolean;
+  readonly validatedImages: boolean;
+  readonly validatingImages: boolean;
 }
 
 export interface UserSeller extends User {
   phone?: string;
-  branchOffice?: string | BranchOffice;
-  userAdmin?: string | UserAdmin;
+  readonly branchOffice?: string | BranchOffice;
+  readonly userAdmin?: string | UserAdmin;
   rfc: string;
 }
 
 export interface UserDeliveryMan extends User {
   phone?: string;
-  branchOffice?: string | BranchOffice;
-  userAdmin?: string | UserAdmin;
+  readonly branchOffice?: string | BranchOffice;
+  readonly userAdmin?: string | UserAdmin;
   latLng?: LatLng;
 }
 

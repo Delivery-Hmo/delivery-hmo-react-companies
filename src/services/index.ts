@@ -12,25 +12,29 @@ const getHeaders = (token: string) => ({
 });
 
 export const get = async <T>(url: string, controller?: AbortController) => {
-  const token = await getCurrentToken();
+  try {
+    const token = await getCurrentToken();
 
-  if (!token) throw new Error("Error al obtener el token.");
-
-  const response = await fetch(
-    baseUrl + url,
-    {
-      method: 'GET',
-      headers: getHeaders(token),
-      signal: controller?.signal
+    if (!token) throw new Error("Error al obtener el token.");
+  
+    const response = await fetch(
+      baseUrl + url,
+      {
+        method: 'GET',
+        headers: getHeaders(token),
+        signal: controller?.signal
+      }
+    );
+  
+    if (!response.ok) {
+      const error = await response.json();
+      throw handleError(error);
     }
-  );
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw error;
+  
+    return response.json() as Promise<T>;
+  } catch (error) {
+    throw handleError(error);
   }
-
-  return response.json() as Promise<T>;
 }
 
 export const post = async <T>(url: string, body: Record<string, any>) => {
@@ -52,7 +56,7 @@ export const post = async <T>(url: string, body: Record<string, any>) => {
 
     if (!response.ok) {
       const error = await response.json();
-      throw error;
+      throw handleError(error);
     }
 
     return response.json() as Promise<T>;
@@ -65,7 +69,7 @@ export const put = async <T>(url: string, body: Record<string, any>) => {
   try {
     const token = await getCurrentToken();
 
-    if (!token) throw new Error("Error al obtener el token.");
+    if (!token) throw handleError("Error al obtener el token.");
 
     body = await getBodyWithBase64Files({ ...body });
 
@@ -80,7 +84,7 @@ export const put = async <T>(url: string, body: Record<string, any>) => {
 
     if (!response.ok) {
       const error = await response.json();
-      throw error;
+      throw handleError(error);
     }
 
     return response.json() as Promise<T>;
@@ -141,7 +145,6 @@ const getBodyWithBase64Files = async (body: Record<string, any>) => {
 
     return body;
   } catch (error) {
-    console.log(error);
-    throw new Error("Error al formatear los archivos.");
+    throw handleError("Error al formatear los archivos.");
   }
 }

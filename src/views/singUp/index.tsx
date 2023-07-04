@@ -31,12 +31,9 @@ const SingUp = () => {
       }
 
       const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email!, userAdmin.password as string);
-      const user = result.user
       const additional = getAdditionalUserInfo(result)
 
       if (!additional?.isNewUser) return;
-
-      userAdmin.uid = user.uid;
 
       delete userAdmin.confirmPassword;
 

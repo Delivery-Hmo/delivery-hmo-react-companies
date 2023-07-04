@@ -3,6 +3,7 @@ import { RcFile } from "antd/es/upload";
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
 import { BranchOffice, UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
 import { Users } from "../types";
+import { ReactNode } from "react";
 
 export const getCurrentToken = () => new Promise<string>((resolve) => {
   const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {
@@ -121,6 +122,8 @@ export const fileToBase64 = (file: File) => new Promise((resolve, reject) => {
 });
 
 export const handleError = (error: any) => {
+  console.log(error);
+  
   if (error instanceof Error) {
     throw new Error(error.message);
   }
@@ -128,22 +131,24 @@ export const handleError = (error: any) => {
   throw new Error(error as string);
 }
 
-export const confirmDialog = <T>(fun: () => Promise<T>) =>
+export const confirmDialog = <T>(content: ReactNode, fun: () => Promise<T>, textSuccess?: string) =>
   new Promise<T>((resolve, reject) => Modal.confirm({
-    title: 'Eliminar',
-    icon: '\u26A0',
-    content: '¿Seguro que deseas eliminar este registro?',
+    title: `Espera!`,
+    content,
     okText: 'Aceptar',
     cancelText: 'Cancelar',
     onOk: async () => {
       try {
         const res = await fun();
-        message.success("Registro eliminado con éxito!");
+
+        if(textSuccess) {
+          message.success(textSuccess);
+        }
+
         resolve(res);
       } catch (error) {
         console.log(error);
-        message.error("Error al eliminar el registro.", 4)
-        reject(error)
+        reject(error);
       }
     },
   }));

@@ -1,4 +1,4 @@
-import { useState, FC, Dispatch, SetStateAction, memo } from "react";
+import { useState, FC, Dispatch, SetStateAction, memo, useEffect } from "react";
 import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../../../constants";
 import FullLoader from "../../../../components/fullLoader";
@@ -7,6 +7,7 @@ import { Card, message } from "antd";
 import { BranchOffice } from "../../../../interfaces/user";
 import HeaderMap from "./headerMap";
 import { LibrariesGoogleMaps } from "../../../../types";
+import { confirmDialog } from "../../../../utils/functions";
 
 interface Props {
   branch: BranchOffice;
@@ -27,21 +28,24 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
   });
   const [circle, setCircle] = useState<google.maps.Circle>();
   const [marker, setMarker] = useState<google.maps.Marker>();
-  const [showControls, setShowControls] = useState(false);
+  const [options, setOptions] = useState<google.maps.drawing.DrawingManagerOptions>();
+  const [isLoadedDM, setIsLoadedDM] = useState(false);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
 
-  if (!isLoaded) return <FullLoader />;
+  useEffect(() => {
+    if (!isLoaded || !isLoadedDM || !map) return;
 
-  if (loadError) return (
-    <div style={{ textAlign: "center" }}>
-      Error al cargar el mapa, recarga la pagina!
-    </div>
-  )
+    const { MARKER, CIRCLE } = window.google.maps.drawing?.OverlayType;
 
-  const onLoad = (map: google.maps.Map) => {
-    if (!branch.id) {
-      setShowControls(true);
-      return
-    };
+    setOptions({
+      drawingControl: !Boolean(branch.id),
+      drawingControlOptions: {
+        drawingModes: [MARKER, CIRCLE],
+        position: google.maps.ControlPosition.TOP_CENTER,
+      }
+    });
+
+    if (!branch.id) return;
 
     const _circle = new google.maps.Circle({
       center: branch.center,
@@ -58,8 +62,13 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
     setCenter(branch.latLng);
     setCircle(_circle);
     setMarker(_marker);
-    setShowControls(false);
-  }
+  }, [isLoadedDM, isLoadedDM, branch.id, map]);
+
+  if (!isLoaded) return <FullLoader />;
+
+  if (loadError) return <div style={{ textAlign: "center" }}>
+    Error al cargar el mapa, recarga la pagina!
+  </div>;
 
   const onCircleComplete = (_circle: google.maps.Circle) => {
     circle?.setMap(null);
@@ -92,7 +101,6 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
   }
 
   const onMarkerComplete = (_marker: google.maps.Marker) => {
-    console.log("hola")
     marker?.setMap(null);
 
     const positionMarker = _marker.getPosition() as google.maps.LatLng;
@@ -108,18 +116,57 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
     setMarker(_marker);
   }
 
-  const clearMap = () => {
-    circle?.setMap(null);
+  const showModalConfirmClear = async () => {
+    if (branch.validatedImages) {
+      await confirmDialog("¿Seguro que quieres cambiar de ubicación? Deberás volver a verificar las fotos de la sucursal.", async () => clearUbication());
+      return;
+    }
+
+    clearUbication();
+  }
+
+  const clearUbication = () => {
+    const { MARKER } = window.google.maps.drawing?.OverlayType;
+
     marker?.setMap(null);
-    setBranch(b => ({ ...b, latLng: { lat: 0, lng: 0 }, center: { lat: 0, lng: 0 }, radius: 0 }));
-    setCircle(undefined);
+
+    setBranch(b => ({
+      ...b,
+      latLng: { lat: 0, lng: 0 },
+    }));
     setMarker(undefined);
-    setShowControls(true);
+    setOptions(opts => ({
+      drawingControl: true,
+      drawingControlOptions: {
+        drawingModes: [MARKER, ...opts?.drawingControlOptions?.drawingModes?.filter(d => d !== MARKER) || []],
+        position: google.maps.ControlPosition.TOP_CENTER,
+      },
+    }));
+  }
+
+  const clearRadius = () => {
+    const { CIRCLE } = window.google.maps.drawing?.OverlayType;
+
+    circle?.setMap(null);
+
+    setBranch(b => ({
+      ...b,
+      center: { lat: 0, lng: 0 },
+      radius: 0
+    }));
+    setCircle(undefined);
+    setOptions(opts => ({
+      drawingControl: true,
+      drawingControlOptions: {
+        drawingModes: [...opts?.drawingControlOptions?.drawingModes?.filter(d => d !== CIRCLE) || [], CIRCLE],
+        position: google.maps.ControlPosition.TOP_CENTER,
+      },
+    }));
   }
 
   return (
     <Card>
-      <HeaderMap clearMap={clearMap} />
+      <HeaderMap clearUbication={showModalConfirmClear} clearRadius={clearRadius} />
       <GoogleMap
         zoom={11}
         mapContainerStyle={{
@@ -127,23 +174,14 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
           height: '400px'
         }}
         center={center}
-        onLoad={onLoad}
+        onLoad={_map => setMap(_map)}
       >
         {
-          showControls && <DrawingManagerF
+          <DrawingManagerF
             onCircleComplete={onCircleComplete}
             onMarkerComplete={onMarkerComplete}
-            onLoad={dm => {
-              const { CIRCLE, MARKER } = window.google.maps.drawing?.OverlayType;
-
-              dm.setOptions({
-                drawingControl: true,
-                drawingControlOptions: {
-                  drawingModes: [MARKER, CIRCLE],
-                  position: google.maps.ControlPosition.TOP_CENTER,
-                },
-              });
-            }}
+            options={options}
+            onLoad={() => setIsLoadedDM(true)}
           />
         }
       </GoogleMap>
