@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Empty, Table as TableAnt } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import useGet from '../../hooks/useGet';
@@ -29,9 +29,13 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 	const [limit, setLimit] = useState(10);
 	const [search, setSearch] = useState("");
 
+	useEffect(() => {
+		setUrl(urlProp);
+	}, [urlProp]);
+ 
 	const columns = useMemo<ColumnsType<T>>(() => {
 		return [
-			...columnsProp,
+			...columnsProp.map(c => ({ ...c, width: c.width || 150 })),
 			{
 				title: 'Acciones',
 				key: 'actions',

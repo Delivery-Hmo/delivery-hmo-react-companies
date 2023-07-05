@@ -8,7 +8,7 @@ const useGet = <T extends {}>(url: string, wait?: boolean) => {
 	const [response, setResponse] = useState<T>();
 
 	useEffect(() => {
-		if (wait) return;
+		if (wait || !url) return;
 
 		const controller = new AbortController();
 

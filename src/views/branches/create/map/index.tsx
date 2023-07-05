@@ -1,16 +1,16 @@
-import { useState, FC, Dispatch, SetStateAction, memo, useEffect } from "react";
+import { useState, FC, memo, useEffect } from "react";
 import { Card, message } from "antd";
 import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../../../constants";
 import FullLoader from "../../../../components/fullLoader";
 import { LatLng } from "../../../../interfaces";
 import { BranchOffice } from "../../../../interfaces/user";
-import { LibrariesGoogleMaps } from "../../../../types";
+import { DS, LibrariesGoogleMaps } from "../../../../types";
 import HeaderMap from "./headerMap";
 
 interface Props {
   branch: BranchOffice;
-  setBranch: Dispatch<SetStateAction<BranchOffice>>;
+  setBranch: DS<BranchOffice>;
 }
 
 const libraries: LibrariesGoogleMaps = ["drawing"];
@@ -63,7 +63,7 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
     setMarker(_marker);
     setStaring(false);
   }
-  , [isLoaded, isLoadedDM, branch, map]);
+  , [staring, isLoaded, isLoadedDM, branch, map]);
 
   if (!isLoaded) return <FullLoader />;
 

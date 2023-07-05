@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { FC, useState } from 'react';
 import { Avatar, Button, Form, Input, message } from 'antd';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, getAdditionalUserInfo, FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
@@ -8,11 +8,12 @@ import { post } from '../../../services';
 import { UserAdmin } from '../../../interfaces/user';
 import { ruleEmail, rulePassword } from '../../../constants';
 import { useAuth } from '../../../context/authContext';
+import { DS } from "../../../types";
 
 type KeysProviders = 'facebook' | 'google';
 
 interface Props {
-  setCurrentForm: Dispatch<SetStateAction<string>>;
+  setCurrentForm: DS<string>;
 }
 
 interface Account {

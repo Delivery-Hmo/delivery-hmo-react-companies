@@ -1,20 +1,20 @@
-import { useEffect, useState, useContext, createContext, FC, ReactNode, Dispatch, SetStateAction } from 'react';
+import { useEffect, useState, useContext, createContext, FC, ReactNode } from 'react';
 import FullLoader from '../components/fullLoader';
 import { User, onIdTokenChanged } from 'firebase/auth';
 import { get } from '../services';
 import { auth } from '../firebaseConfig';
 import { BranchOffice, UserAdmin } from '../interfaces/user';
 import { message } from "antd";
-import { Rols, Users } from "../types";
+import { DS, Rols, Users } from "../types";
 import { sleep } from "../utils/functions";
 
 interface Auth {
   user: User | null;
   userAuth: Users | null;
-  setUserAuth: Dispatch<SetStateAction<UserAdmin | null>>;
+  setUserAuth: DS<UserAdmin | null>;
   loading: boolean;
   creatingUser: Boolean;
-  setCreatingUser: Dispatch<SetStateAction<Boolean>>;
+  setCreatingUser: DS<Boolean>;
 }
 
 interface Props {

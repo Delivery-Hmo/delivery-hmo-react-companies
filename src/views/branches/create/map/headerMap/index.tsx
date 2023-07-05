@@ -1,17 +1,18 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import { Button, Col, Row } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import { BranchOffice } from "../../../../../interfaces/user";
 import { confirmDialog } from "../../../../../utils/functions";
+import { DS } from "../../../../../types";
 
 interface Props {
   branch: BranchOffice;
   marker?: google.maps.Marker;
   circle?: google.maps.Circle;
-  setBranch: Dispatch<SetStateAction<BranchOffice>>;
-  setMarker: Dispatch<SetStateAction<google.maps.Marker | undefined>>;
-  setOptions: Dispatch<SetStateAction<google.maps.drawing.DrawingManagerOptions | undefined>>;
-  setCircle: Dispatch<SetStateAction<google.maps.Circle | undefined>>;
+  setBranch: DS<BranchOffice>;
+  setMarker: DS<google.maps.Marker | undefined>;
+  setOptions: DS<google.maps.drawing.DrawingManagerOptions | undefined>;
+  setCircle: DS<google.maps.Circle | undefined>;
 }
 
 const HeaderMap: FC<Props> = ({ branch, marker, circle, setBranch, setMarker, setCircle, setOptions }) => {

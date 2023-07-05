@@ -32,9 +32,12 @@ export interface BranchOffice extends User {
   address: string;
   comments?: CommentsBranchOffice[];
   totolSales?: number;
-  readonly showingInApp: boolean;
+  readonly showInApp: boolean;
   readonly validatedImages: boolean;
   readonly validatingImages: boolean;
+
+  //solo front
+  changingShowInApp: boolean;
 }
 
 export interface UserSeller extends User {
