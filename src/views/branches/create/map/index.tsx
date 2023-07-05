@@ -1,13 +1,12 @@
 import { useState, FC, Dispatch, SetStateAction, memo, useEffect } from "react";
+import { Card, message } from "antd";
 import { GoogleMap, DrawingManagerF, useJsApiLoader } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../../../constants";
 import FullLoader from "../../../../components/fullLoader";
 import { LatLng } from "../../../../interfaces";
-import { Card, message } from "antd";
 import { BranchOffice } from "../../../../interfaces/user";
-import HeaderMap from "./headerMap";
 import { LibrariesGoogleMaps } from "../../../../types";
-import { confirmDialog } from "../../../../utils/functions";
+import HeaderMap from "./headerMap";
 
 interface Props {
   branch: BranchOffice;
@@ -16,12 +15,12 @@ interface Props {
 
 const libraries: LibrariesGoogleMaps = ["drawing"];
 
-//Este componente es buena idea probarlo sin el react stric mode del index principal para no tener problemas con los renders de los componentes
 const Map: FC<Props> = ({ branch, setBranch }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey,
     libraries
   });
+  const [staring, setStaring] = useState(true);
   const [center, setCenter] = useState<LatLng>({
     lat: 29.0965000,
     lng: -110.960000
@@ -33,14 +32,14 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
   useEffect(() => {
-    if (!isLoaded || !isLoadedDM || !map) return;
+    if (!staring || !isLoaded || !isLoadedDM || !map) return;
 
     const { MARKER, CIRCLE } = window.google.maps.drawing?.OverlayType;
 
     setOptions({
       drawingControl: !Boolean(branch.id),
       drawingControlOptions: {
-        drawingModes: [MARKER, CIRCLE],
+        drawingModes: branch.id ? [] : [MARKER, CIRCLE],
         position: google.maps.ControlPosition.TOP_CENTER,
       }
     });
@@ -51,7 +50,7 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
       center: branch.center,
       radius: branch.radius
     });
-
+    
     const _marker = new google.maps.Marker({
       position: branch.latLng
     });
@@ -62,7 +61,9 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
     setCenter(branch.latLng);
     setCircle(_circle);
     setMarker(_marker);
-  }, [isLoadedDM, isLoadedDM, branch.id, map]);
+    setStaring(false);
+  }
+  , [isLoaded, isLoadedDM, branch, map]);
 
   if (!isLoaded) return <FullLoader />;
 
@@ -116,57 +117,17 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
     setMarker(_marker);
   }
 
-  const showModalConfirmClear = async () => {
-    if (branch.validatedImages) {
-      await confirmDialog("¿Seguro que quieres cambiar de ubicación? Deberás volver a verificar las fotos de la sucursal.", async () => clearUbication());
-      return;
-    }
-
-    clearUbication();
-  }
-
-  const clearUbication = () => {
-    const { MARKER } = window.google.maps.drawing?.OverlayType;
-
-    marker?.setMap(null);
-
-    setBranch(b => ({
-      ...b,
-      latLng: { lat: 0, lng: 0 },
-    }));
-    setMarker(undefined);
-    setOptions(opts => ({
-      drawingControl: true,
-      drawingControlOptions: {
-        drawingModes: [MARKER, ...opts?.drawingControlOptions?.drawingModes?.filter(d => d !== MARKER) || []],
-        position: google.maps.ControlPosition.TOP_CENTER,
-      },
-    }));
-  }
-
-  const clearRadius = () => {
-    const { CIRCLE } = window.google.maps.drawing?.OverlayType;
-
-    circle?.setMap(null);
-
-    setBranch(b => ({
-      ...b,
-      center: { lat: 0, lng: 0 },
-      radius: 0
-    }));
-    setCircle(undefined);
-    setOptions(opts => ({
-      drawingControl: true,
-      drawingControlOptions: {
-        drawingModes: [...opts?.drawingControlOptions?.drawingModes?.filter(d => d !== CIRCLE) || [], CIRCLE],
-        position: google.maps.ControlPosition.TOP_CENTER,
-      },
-    }));
-  }
-
   return (
     <Card>
-      <HeaderMap clearUbication={showModalConfirmClear} clearRadius={clearRadius} />
+      <HeaderMap 
+        branch={branch}
+        marker={marker}
+        circle={circle}
+        setBranch={setBranch}
+        setMarker={setMarker}
+        setCircle={setCircle}
+        setOptions={setOptions}
+      />
       <GoogleMap
         zoom={11}
         mapContainerStyle={{
