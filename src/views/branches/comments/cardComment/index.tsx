@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { CalendarOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Avatar, Card, Col, Row } from 'antd';
-import { CommentsBranchOffice } from "../../../../interfaces/commentBranchOffice";
+import { CommentsBranchOffice } from "../../../../interfaces/branchOffice/commentBranchOffice";
 import dayjs from "dayjs";
 
 const { Meta } = Card;

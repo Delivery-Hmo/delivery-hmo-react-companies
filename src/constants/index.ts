@@ -33,8 +33,14 @@ export const initBranch: BranchOffice = {
   },
   address: "",
   active: true,
-  description: ""
-} as const;
+  description: "",
+  comments: [],
+  products: [],
+  changingShowInApp: false,
+  showInApp: false,
+  validatedImages: false,
+  validatingImages: false,
+};
 export const initUserSeller: UserSeller = {
   active: true,
   description: '',

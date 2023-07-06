@@ -5,11 +5,14 @@ import { CommentOutlined } from "@ant-design/icons";
 import HeaderView from '../../components/headerView';
 import Table from '../../components/table';
 import { BranchOffice } from "../../interfaces/user";
+import { confirmDialog } from "../../utils/functions";
 import Comments from './comments';
+import ModalValidateImages from "./modalValidateImages";
 
 const Branches = () => {
   const [urlTable, setUrlTable] = useState("branchOffice/paginatedListByUserAdmin");
   const [openComments, setOpenComments] = useState(false);
+  const [openValidateImages, setOpenValidateImages] = useState(false);
   const [idBranchOffice, setIdBranchOffice] = useState("");
 
   const columns: ColumnsType<BranchOffice> = useMemo(() => [
@@ -19,25 +22,42 @@ const Branches = () => {
     {
       title: 'Ver en app móvil',
       key: 'showingInApp',
-      render: (_, { id, showInApp, validatingImages, validatedImages }) => (
+      render: (_, { id, showInApp, validatingImages, validatedImages, products }) => (
         <Switch
           checked={showInApp}
           style={{ backgroundColor: showInApp ? "#304878" : undefined }}
-          onChange={() => {
-            if(validatingImages) {
-              message.warning("Sucursal en proceso de validación de fotos.");
+          onChange={async () => {
+            if (validatingImages) {
+              message.warning("No se puede activar, en proceso de validación de fotos.", 4);
               return;
             }
 
-            if(!validatedImages) {
-              //aqui nos quedamos.
+            if (!validatedImages) {
+              const resultConfirm = await confirmDialog("Sucursal sin fotos validadas, desea validar las fotos?", async () => {
+                setOpenValidateImages(true)
+
+                return true;
+              });
+
+              if(resultConfirm) {
+                setIdBranchOffice(id!);
+                setOpenValidateImages(true);
+              }
+
+              return;
             }
 
-            //esto se hara si se activa o inactiva.
+
+            if (!products.length) {
+              message.warning("No se puede activar, sucursal sin productos para vender.", 4);
+              return;
+            }
+
+            //esto se hara si se activa o inactiva para refrescar la lista.
             setUrlTable("");
             setTimeout(() => {
               setUrlTable("branchOffice/paginatedListByUserAdmin");
-            }, 500); 
+            }, 500);
           }}
         />
       )
@@ -48,8 +68,8 @@ const Branches = () => {
       render: (_, { validatingImages, showInApp }) => (
         <Tag
           color={validatingImages ? "red" : showInApp ? "green" : "orange"}
-          children={validatingImages ? "Validando fotos" : showInApp ? "Mostrando en app" : "Ocupalta en app"}
-          title={validatingImages ? "Validando fotos" : showInApp ? "Mostrando en app" : "Ocupalta en app"}
+          children={validatingImages ? "Validando fotos" : showInApp ? "Mostrando en app" : "Oculta en app"}
+          title={validatingImages ? "Validando fotos" : showInApp ? "Mostrando en app" : "Oculta en app"}
         />
       )
     },
@@ -61,15 +81,13 @@ const Branches = () => {
           icon={<CommentOutlined />}
           type="primary"
           onClick={() => {
-            setIdBranchOffice(id!)
-            setOpenComments(true)
+            setIdBranchOffice(id!);
+            setOpenComments(true);
           }}
         />
       ),
     },
   ], [setOpenComments]);
-
-  console.log(urlTable)
 
   return (
     <div>
@@ -87,6 +105,11 @@ const Branches = () => {
       <Comments
         open={openComments}
         onClose={() => setOpenComments(false)}
+        idBranchOffice={idBranchOffice}
+      />
+      <ModalValidateImages 
+        open={openValidateImages}
+        onClose={() => setOpenValidateImages(false)}
         idBranchOffice={idBranchOffice}
       />
     </div>

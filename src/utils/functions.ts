@@ -151,4 +151,7 @@ export const confirmDialog = <T>(content: ReactNode, fun: () => Promise<T>, text
         reject(error);
       }
     },
+    onCancel: () => {
+      resolve(false as T);
+    }
   }));

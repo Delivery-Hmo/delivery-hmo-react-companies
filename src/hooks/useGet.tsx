@@ -20,12 +20,16 @@ const useGet = <T extends {}>(url: string, wait?: boolean) => {
 
 				setResponse(_response);
 			} catch (error) {
-				if (typeof error === "string") {
-					message.error(error as string, 4);
+				console.log(error);
+
+				if (error instanceof Error) {
+					message.error(error.message, 4);
 					return;
 				}
 
-				console.log(error);
+				if (typeof error === "string") {
+					message.error(error, 4);
+				}
 			} finally {
 				await sleep(500);
 				setLoading(false);
@@ -35,11 +39,11 @@ const useGet = <T extends {}>(url: string, wait?: boolean) => {
 		init();
 
 		return () => {
-			controller.abort();
+			if (process.env.NODE_ENV !== "development") controller.abort();
 		}
 	}, [url, wait]);
 
-	return { loading, response }
+	return { loading, response };
 }
 
 export default useGet;

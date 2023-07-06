@@ -1,7 +1,8 @@
 import { UploadFile } from "antd/es/upload";
 import { LatLng } from ".";
 import { Rols } from "../types";
-import { CommentsBranchOffice } from "./commentBranchOffice";
+import { CommentsBranchOffice } from "./branchOffice/commentBranchOffice";
+import { ProductBranchOffice } from "./branchOffice/productBranchOffice";
 
 export interface User {
   readonly id?: string;
@@ -25,16 +26,17 @@ export interface BranchOffice extends User {
   readonly userAdmin: string | UserAdmin;
   salesGoalByMonth: number;
   facebook: string;
-  readonly phones: number[];
+  phones: number[];
   latLng: LatLng;
   center: LatLng;
   radius: number;
   address: string;
-  comments?: CommentsBranchOffice[];
+  comments: CommentsBranchOffice[];
   totolSales?: number;
   readonly showInApp: boolean;
   readonly validatedImages: boolean;
   readonly validatingImages: boolean;
+  products: ProductBranchOffice[];
 
   //solo front
   changingShowInApp: boolean;

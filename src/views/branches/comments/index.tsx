@@ -2,7 +2,7 @@ import { Empty, Skeleton } from "antd";
 import { FC, useMemo } from "react";
 import Modal from "../../../components/modal"
 import useGet from "../../../hooks/useGet";
-import { CommentsBranchOffice } from "../../../interfaces/commentBranchOffice";
+import { CommentsBranchOffice } from "../../../interfaces/branchOffice/commentBranchOffice";
 import { Get } from "../../../components/table";
 import CardComment from "./cardComment";
 
@@ -23,7 +23,7 @@ const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
       title="Comentarios"
       open={open}
       onCancel={onClose}
-      //confirmLoading={loading}
+      cancelText="Cerrar"
       okButtonProps={{
         style: {
           display: "none"
