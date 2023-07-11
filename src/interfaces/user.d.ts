@@ -7,7 +7,7 @@ import { ProductBranchOffice } from "./branchOffice/productBranchOffice";
 export interface User {
   readonly id?: string;
   readonly uid?: string;
-  readonly role?: Rols;
+  readonly role: Rols;
   name?: string;
   email: string;
   description: string;
@@ -40,6 +40,7 @@ export interface BranchOffice extends User {
 
   //solo front
   changingShowInApp: boolean;
+  images: UploadFile<any>[] | string[];
 }
 
 export interface UserSeller extends User {

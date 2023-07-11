@@ -5,18 +5,22 @@ import { BranchOffice, UserAdmin, UserDeliveryMan, UserSeller } from "../interfa
 import { Users } from "../types";
 import { ReactNode } from "react";
 
-export const getCurrentToken = () => new Promise<string>((resolve) => {
-  const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {
-    uns();
+export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
+  const uns = onIdTokenChanged(
+    getAuth(),
+    async (user: User | null) => {
+      uns();
 
-    if (user) {
+      if (!user) {
+        reject("Error de autenticación");
+        return;
+      }
+
       const token = await user.getIdToken();
       resolve(token);
-      return;
-    }
-
-    resolve("");
-  });
+    },
+    () => reject("Error de autenticación")
+  );
 });
 
 export const sleep = (time: number) => new Promise<void>((resolve) => setTimeout(() => resolve(), time));
@@ -123,7 +127,7 @@ export const fileToBase64 = (file: File) => new Promise((resolve, reject) => {
 
 export const handleError = (error: any) => {
   console.log(error);
-  
+
   if (error instanceof Error) {
     throw new Error(error.message);
   }
@@ -141,7 +145,7 @@ export const confirmDialog = <T>(content: ReactNode, fun: () => Promise<T>, text
       try {
         const res = await fun();
 
-        if(textSuccess) {
+        if (textSuccess) {
           message.success(textSuccess);
         }
 

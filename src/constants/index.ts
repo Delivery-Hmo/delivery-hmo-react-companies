@@ -40,6 +40,8 @@ export const initBranch: BranchOffice = {
   showInApp: false,
   validatedImages: false,
   validatingImages: false,
+  role: "Administrador sucursal",
+  images: []
 };
 export const initUserSeller: UserSeller = {
   active: true,
@@ -47,7 +49,8 @@ export const initUserSeller: UserSeller = {
   email: '',
   name: '',
   phone: '',
-  rfc: ""
+  rfc: "",
+  role: "Vendedor"
 } as const;
 export const initUserAdmin: UserAdmin = {
   id: '',
@@ -58,7 +61,8 @@ export const initUserAdmin: UserAdmin = {
   phone: '',
   password: '',
   confirmPassword: '',
-  rfc: ''
+  rfc: '',
+  role: "Administrador"
 } as const;
 export const namesDaysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 export const initUserDeliveryMan: UserDeliveryMan = {
@@ -69,6 +73,7 @@ export const initUserDeliveryMan: UserDeliveryMan = {
   phone: '',
   password: '',
   confirmPassword: '',
+  role: "Repartidor"
 } as const;
 export const rulePhoneInput: FormRule = {
   required: true,

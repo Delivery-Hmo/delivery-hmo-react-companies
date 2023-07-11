@@ -7,6 +7,7 @@ import { BranchOffice, UserDeliveryMan } from '../../../interfaces/user';
 import useGet from '../../../hooks/useGet';
 import { Option } from '../../../interfaces';
 import DynamicForm from "../../../components/dynamicForm";
+import useAbortController from "../../../hooks/useAbortController";
 
 type TypeRute = "create" | "update";
 
@@ -16,6 +17,7 @@ const title: Record<TypeRute, string> = {
 };
 
 const CreateUserDeliveryMan = () => {
+  const abortController = useAbortController(); 
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
@@ -61,9 +63,9 @@ const CreateUserDeliveryMan = () => {
 
     try {
       if (type === "update") {
-        await put(`userDeliveryMan/${type}`, deliveryMan);
+        await put(`userDeliveryMan/${type}`, deliveryMan, abortController);
       } else {
-        await post(`userDeliveryMan/${type}`, deliveryMan);
+        await post(`userDeliveryMan/${type}`, deliveryMan, abortController);
       }
 
       message.success('Repartidor guardado con éxito.', 4);

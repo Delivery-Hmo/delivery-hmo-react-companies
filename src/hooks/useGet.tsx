@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react';
 import { get } from "../services";
 import { message } from 'antd';
 import { sleep } from '../utils/functions';
+import useAbortController from "./useAbortController";
 
 const useGet = <T extends {}>(url: string, wait?: boolean) => {
+	const abortController = useAbortController();
 	const [loading, setLoading] = useState(true);
 	const [response, setResponse] = useState<T>();
 
 	useEffect(() => {
 		if (wait || !url) return;
 
-		const controller = new AbortController();
-
 		const init = async () => {
 			setLoading(true);
 
 			try {
-				const _response = await get<T>(url, controller);
+				const _response = await get<T>(url, abortController);
 
 				setResponse(_response);
 			} catch (error) {
@@ -37,11 +37,7 @@ const useGet = <T extends {}>(url: string, wait?: boolean) => {
 		}
 
 		init();
-
-		return () => {
-			if (process.env.NODE_ENV !== "development") controller.abort();
-		}
-	}, [url, wait]);
+	}, [url, wait, abortController]);
 
 	return { loading, response };
 }

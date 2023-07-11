@@ -77,8 +77,3 @@ input[type=number] {
 .ant-table-tbody {
   background-color: white;
 }
-
-.ant-upload-list-item-container {
-  width: 300px !important;
-  height: 200px !important;
-}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Button, Switch, Tag, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { CommentOutlined } from "@ant-design/icons";
@@ -6,14 +6,49 @@ import HeaderView from '../../components/headerView';
 import Table from '../../components/table';
 import { BranchOffice } from "../../interfaces/user";
 import { confirmDialog } from "../../utils/functions";
-import Comments from './comments';
 import ModalValidateImages from "./modalValidateImages";
+import Comments from './comments';
 
 const Branches = () => {
   const [urlTable, setUrlTable] = useState("branchOffice/paginatedListByUserAdmin");
   const [openComments, setOpenComments] = useState(false);
   const [openValidateImages, setOpenValidateImages] = useState(false);
   const [idBranchOffice, setIdBranchOffice] = useState("");
+
+  const onChangeShowInApp = useCallback(async ({ id, showInApp, validatingImages, validatedImages, products }: BranchOffice) => {
+    if (validatingImages) {
+      //hay que hacer un modal como el de abajo para que se peudan editar las imagenes si queire el usaurio antes que se las confirmen o denieguen
+      message.warning("No se puede activar, en proceso de validación de fotos.", 4);
+      return;
+    }
+
+    if (!validatedImages) {
+      const resultConfirm = await confirmDialog("Sucursal sin fotos validadas, desea validar las fotos?", async () => {
+        setOpenValidateImages(true)
+
+        return true;
+      });
+
+      if(resultConfirm) {
+        setIdBranchOffice(id!);
+        setOpenValidateImages(true);
+      }
+
+      return;
+    }
+
+
+    if (!products.length) {
+      message.warning("No se puede activar, sucursal sin productos para vender.", 4);
+      return;
+    }
+
+    //esto se hara si se activa o inactiva para refrescar la lista.
+    setUrlTable("");
+    setTimeout(() => {
+      setUrlTable("branchOffice/paginatedListByUserAdmin");
+    }, 500);
+  }, []);
 
   const columns: ColumnsType<BranchOffice> = useMemo(() => [
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
@@ -22,43 +57,11 @@ const Branches = () => {
     {
       title: 'Ver en app móvil',
       key: 'showingInApp',
-      render: (_, { id, showInApp, validatingImages, validatedImages, products }) => (
+      render: (_, branchOffice) => (
         <Switch
-          checked={showInApp}
-          style={{ backgroundColor: showInApp ? "#304878" : undefined }}
-          onChange={async () => {
-            if (validatingImages) {
-              message.warning("No se puede activar, en proceso de validación de fotos.", 4);
-              return;
-            }
-
-            if (!validatedImages) {
-              const resultConfirm = await confirmDialog("Sucursal sin fotos validadas, desea validar las fotos?", async () => {
-                setOpenValidateImages(true)
-
-                return true;
-              });
-
-              if(resultConfirm) {
-                setIdBranchOffice(id!);
-                setOpenValidateImages(true);
-              }
-
-              return;
-            }
-
-
-            if (!products.length) {
-              message.warning("No se puede activar, sucursal sin productos para vender.", 4);
-              return;
-            }
-
-            //esto se hara si se activa o inactiva para refrescar la lista.
-            setUrlTable("");
-            setTimeout(() => {
-              setUrlTable("branchOffice/paginatedListByUserAdmin");
-            }, 500);
-          }}
+          checked={branchOffice.showInApp}
+          style={{ backgroundColor: branchOffice.showInApp ? "#304878" : undefined }}
+          onChange={async () => await onChangeShowInApp(branchOffice)}
         />
       )
     },
@@ -87,7 +90,7 @@ const Branches = () => {
         />
       ),
     },
-  ], [setOpenComments]);
+  ], [setOpenComments, onChangeShowInApp]);
 
   return (
     <div>

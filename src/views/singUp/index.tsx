@@ -6,8 +6,10 @@ import { get, post } from '../../services';
 import DynamicForm from '../../components/dynamicForm';
 import { initUserAdmin } from "../../constants";
 import HeaderView from "../../components/headerView";
+import useAbortController from "../../hooks/useAbortController";
 
 const SingUp = () => {
+  const abortController = useAbortController(); 
   const [userAdmin, setUserAdmin] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +25,7 @@ const SingUp = () => {
 
     try {
       //este error hay que sacarlo del createUserWhitEmailAndPassword
-      const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + userAdmin.email);
+      const userAdminRegistered = await get<boolean>("userAdmin/verifyEmail?email=" + userAdmin.email, abortController);
 
       if (userAdminRegistered) {
         message.error('El usuario ya esta registrado.', 4)
@@ -31,13 +33,13 @@ const SingUp = () => {
       }
 
       const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email!, userAdmin.password as string);
-      const additional = getAdditionalUserInfo(result)
+      const additional = getAdditionalUserInfo(result);
 
       if (!additional?.isNewUser) return;
 
       delete userAdmin.confirmPassword;
 
-      await post('userAdmin/create', userAdmin);
+      await post('userAdmin/create', userAdmin, abortController);
     } catch (error) {
       console.log(error);
       message.error('Error al registrarse.', 4)

@@ -7,6 +7,7 @@ import { BranchOffice, UserAdmin } from '../interfaces/user';
 import { message } from "antd";
 import { DS, Rols, Users } from "../types";
 import { sleep } from "../utils/functions";
+import useAbortController from "../hooks/useAbortController";
 
 interface Auth {
   user: User | null;
@@ -45,11 +46,11 @@ export const AuthProvider: FC<Props> = ({ children }) => {
   const [userAuth, setUserAuth] = useState<Users | null>(null);
   const [loading, setLoading] = useState<Boolean>(true);
   const [creatingUser, setCreatingUser] = useState<Boolean>(false);
+  const abortController = useAbortController();
 
   useEffect(() => {
     if (creatingUser) return;
 
-    const controller = new AbortController();
     const uns = onIdTokenChanged(auth, async (user: User | null) => {
       setUser(user);
 
@@ -60,7 +61,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       };
 
       try {
-        const _userAuth = await getUserDatas[(user?.displayName || "") as Rols](user.uid, controller);
+        const _userAuth = await getUserDatas[(user?.displayName || "") as Rols](user.uid, abortController);
 
         setUserAuth(_userAuth);
       } catch (error) {
@@ -83,9 +84,8 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
     return () => {
       uns();
-      controller.abort();
     }
-  }, [creatingUser]);
+  }, [creatingUser, abortController]);
 
   if (loading) return <FullLoader />;
 

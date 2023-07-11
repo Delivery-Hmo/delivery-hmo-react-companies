@@ -10,19 +10,21 @@ import HeaderView from "../../../components/headerView";
 import { Option } from "../../../interfaces";
 import useGet from "../../../hooks/useGet";
 import { setImagesToState } from "../../../utils/functions";
+import useAbortController from "../../../hooks/useAbortController";
 
 const { useBreakpoint } = Grid;
 
 const CreateUserSeller = () => {
+  const abortController = useAbortController();
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
+  const { loading: loadingBranchOffices, response: branchOffices } = useGet<BranchOffice[]>("branchOffice/listByUserAdmin");
+  const screens = useBreakpoint();
   const [type, setType] = useState<TypeRute>("create");
   const [saving, setSaving] = useState(false);
   const [seller, setSeller] = useState<UserSeller>(initUserSeller)
-  const { loading: loadingBranchOffices, response: branchOffices } = useGet<BranchOffice[]>("branchOffice/listByUserAdmin");
-  const screens = useBreakpoint();
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !seller.id && seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
@@ -57,9 +59,9 @@ const CreateUserSeller = () => {
 
     try {
       if (type === "update") {
-        await put(`userSeller/${type}`, _seller);
+        await put(`userSeller/${type}`, _seller, abortController);
       } else {
-        await post(`userSeller/${type}`, _seller);
+        await post(`userSeller/${type}`, _seller, abortController);
       }
 
       message.success('Vendedor guardado con éxito.', 4);

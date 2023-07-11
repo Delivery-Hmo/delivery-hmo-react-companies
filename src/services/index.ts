@@ -11,18 +11,15 @@ const getHeaders = (token: string) => ({
   Authorization: "Bearer " + token
 });
 
-export const get = async <T>(url: string, controller?: AbortController) => {
+export const get = async <T>(url: string, abortController: AbortController) => {
   try {
     const token = await getCurrentToken();
-
-    if (!token) throw new Error("Error al obtener el token.");
-  
     const response = await fetch(
       baseUrl + url,
       {
         method: 'GET',
         headers: getHeaders(token),
-        signal: controller?.signal
+        signal: abortController?.signal
       }
     );
   
@@ -37,20 +34,17 @@ export const get = async <T>(url: string, controller?: AbortController) => {
   }
 }
 
-export const post = async <T>(url: string, body: Record<string, any>) => {
+export const post = async <T>(url: string, body: Record<string, any>, abortController: AbortController) => {
   try {
     const token = await getCurrentToken();
-
-    if (!token) throw new Error("Error al obtener el token.");
-
     body = await getBodyWithBase64Files({ ...body });
-
     const response = await fetch(
       baseUrl + url,
       {
         method: 'POST',
         body: JSON.stringify(body),
-        headers: getHeaders(token)
+        headers: getHeaders(token),
+        signal: abortController?.signal
       }
     )
 
@@ -65,22 +59,19 @@ export const post = async <T>(url: string, body: Record<string, any>) => {
   }
 }
 
-export const put = async <T>(url: string, body: Record<string, any>) => {
+export const put = async <T>(url: string, body: Record<string, any>, abortController: AbortController) => {
   try {
     const token = await getCurrentToken();
-
-    if (!token) throw handleError("Error al obtener el token.");
-
     body = await getBodyWithBase64Files({ ...body });
-
     const response = await fetch(
       baseUrl + url,
       {
         method: 'PUT',
         body: JSON.stringify(body),
-        headers: getHeaders(token)
+        headers: getHeaders(token),
+        signal: abortController?.signal
       }
-    )
+    );
 
     if (!response.ok) {
       const error = await response.json();
@@ -93,17 +84,15 @@ export const put = async <T>(url: string, body: Record<string, any>) => {
   }
 }
 
-export const patch = async <T>(url: string, body: Record<string, any>) => {
+export const patch = async <T>(url: string, body: Record<string, any>, abortController: AbortController) => {
   const token = await getCurrentToken();
-
-  if (!token) throw new Error("Error al obtener el token.");
-
   const response = await fetch(
     baseUrl + url,
     {
       method: 'PATCH',
       body: JSON.stringify(body),
-      headers: getHeaders(token)
+      headers: getHeaders(token),
+      signal: abortController?.signal
     }
   )
 
@@ -121,7 +110,7 @@ const getBodyWithBase64Files = async (body: Record<string, any>) => {
       const imageUploadFile = body?.image[0] as UploadFile;
 
       if (imageUploadFile.url?.includes(baseUrlStorage) || imageUploadFile.url?.includes(baseUrlStorageGCP)) {
-        body.image = imageUploadFile.url;
+        body.image = "";
       } else {
         const imageFile = imageUploadFile.originFileObj!;
 
@@ -133,8 +122,8 @@ const getBodyWithBase64Files = async (body: Record<string, any>) => {
       const images = body.images as UploadFile[];
 
       body.images = await Promise.all(images.map((image) => {
-        if (typeof image === "string" || image.url?.includes(baseUrlStorage) || image.url?.includes(baseUrlStorageGCP)) {
-          return image;
+        if (image.url?.includes(baseUrlStorage) || image.url?.includes(baseUrlStorageGCP)) {
+          return "";
         }
 
         const imageFile = image.originFileObj!;

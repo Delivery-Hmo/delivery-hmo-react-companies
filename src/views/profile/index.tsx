@@ -7,8 +7,10 @@ import { useAuth } from '../../context/authContext';
 import { UserAdmin } from '../../interfaces/user';
 import { initUserAdmin } from '../../constants';
 import { setImagesToState } from "../../utils/functions";
+import useAbortController from "../../hooks/useAbortController";
 
 const Perfil = () => {
+  const abortController = useAbortController();
   const { user: userFirebase, userAuth, loading: loadingUserAdmin } = useAuth();
   const [form] = Form.useForm();
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
@@ -25,7 +27,7 @@ const Perfil = () => {
     }
 
     try {
-      await put("userAdmin/update", {...user});
+      await put("userAdmin/update", user, abortController);
       message.success("Datos de perfil actualizados con éxito.", 4);
 
     } finally {

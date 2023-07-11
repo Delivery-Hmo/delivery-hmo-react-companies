@@ -9,8 +9,10 @@ import HeaderView from '../../../components/headerView';
 import { TypeRute } from "../../../types";
 import { BranchOffice } from "../../../interfaces/user";
 import Map from './map';
+import useAbortController from "../../../hooks/useAbortController";
 
 const CreateBranch = () => {
+  const abortController = useAbortController();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,9 +66,9 @@ const CreateBranch = () => {
 
     try {
       if (type === "create") {
-        await post("branchOffice/create", branch);
+        await post("branchOffice/create", branch, abortController);
       } else {
-        await put("branchOffice/update", branch);
+        await put("branchOffice/update", branch, abortController);
       }
 
       message.success("Sucursal guardada con exito.", 4);

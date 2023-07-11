@@ -1,5 +1,6 @@
 import { TypeControl, TypeInput } from "../types";
 import { FormRule } from 'antd';
+import { UploadListType } from 'antd/lib/upload/interface'; 
 
 export interface LatLng {
   lat: number;
@@ -14,7 +15,6 @@ export interface CustomInput {
   md?: number;
   label?: string;
   options?: Option[];
-  required?: boolean;
   show?: boolean;
   disabled?: boolean;
   readonly?: boolean;
@@ -26,6 +26,7 @@ export interface CustomInput {
   maxCount?: number;
   multiple?: boolean;
   loading?: boolean;
+  listType?: UploadListType;
 }
 
 export interface Option {
