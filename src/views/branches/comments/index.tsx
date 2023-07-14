@@ -1,5 +1,5 @@
 import { Skeleton } from "antd";
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import Modal from "../../../components/modal"
 import { Get } from "../../../components/table";
 import useGet from "../../../hooks/useGet";
@@ -14,8 +14,20 @@ interface Props {
 }
 
 const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
-  const url = useMemo(() => `commentsBranchOffice/list?page=1&limit=10&idBranchOffice=${idBranchOffice}`, [idBranchOffice]);
-  const { loading, response } = useGet<Get<CommentsBranchOffice>>(url, !Boolean(idBranchOffice));
+  const [page, setPage] = useState(1);
+  const url = useMemo(() => `commentsBranchOffice/list?page=${page}&limit=10&idBranchOffice=${idBranchOffice}`, [idBranchOffice, page]);
+  const { loading, response } = useGet<Get<CommentsBranchOffice>>(url, !Boolean(idBranchOffice), true);
+
+  const onScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    if (loading) return;
+
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+    const bottom = (scrollHeight - scrollTop) < (clientHeight + 2);
+
+    if (!bottom || !scrollTop || (response?.list.length || 0) >= (response?.total || 0)) return;
+
+    setPage(page + 1);
+  }
 
   return (
     <Modal
@@ -29,16 +41,20 @@ const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
         }
       }}
     >
-      {loading ? (
+      {false ? (
         <Skeleton avatar paragraph={{ rows: 4 }} />
       ) : (
-        response?.list.map((comment) => (
-          <CardComments
-            key={comment.id}
-            comment={comment}
-          />
-        ))
-      )} 
+        <div onScroll={onScroll} style={{ minHeight: "60vh", maxHeight: "60vh", overflowY: "auto" }}>
+          {
+            response?.list.map((comment) => (
+              <CardComments
+                key={comment.id}
+                comment={comment}
+              />
+            ))
+          }
+        </div>
+      )}
     </Modal>
   )
 }

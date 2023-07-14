@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { Button, message, Space, Tooltip, Modal } from 'antd';
-import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import DeleteButton from '../../deleteButton';
 
 interface Props {
   record: any;
@@ -53,17 +54,12 @@ const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError, 
           shape="circle"
           onClick={() => navigate(pathEdit, { state: record })}
           size="middle"
-          style={{ color: '#fff', backgroundColor: '#ec9822' }}
+          style={{ color: '#fff', backgroundColor: '#ec9822 ' }}
+          type='ghost'
         />
       </Tooltip>
       <Tooltip title="Eliminar">
-        <Button
-          icon={<DeleteOutlined />}
-          shape="circle"
-          onClick={del}
-          size="middle"
-          style={{ color: '#fff', backgroundColor: '#d34745' }}
-        />
+        <DeleteButton onClick={del} />
       </Tooltip>
     </Space>
   )

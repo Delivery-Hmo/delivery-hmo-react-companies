@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { CalendarOutlined, DeleteOutlined, LineOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, Row } from 'antd';
+import { CalendarOutlined } from '@ant-design/icons';
+import { Avatar, Card, Col, Row } from 'antd';
 import { CommentsBranchOffice } from "../../../../interfaces/commentBranchOffice";
 import dayjs from "dayjs";
+import DeleteButton from "../../../../components/deleteButton";
 
 const { Meta } = Card;
 
@@ -14,7 +15,7 @@ const CardComments: FC<Props> = ({ comment: objectComment }) => {
   const { date, comment, user } = objectComment;
 
   return (
-    <Card>
+    <Card bodyStyle={{ padding: 0 }} style={{ margin: '10px', padding: '16px' }}>
       <Meta
         avatar={<Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />}
         title={user as string}
@@ -40,10 +41,7 @@ const CardComments: FC<Props> = ({ comment: objectComment }) => {
         </Col>
         <Col xs={11}>
           <Row justify="space-evenly">
-            <Button 
-              shape="circle"
-              icon={<DeleteOutlined />}
-            />
+            <DeleteButton />
           </Row>
         </Col>
       </Row>

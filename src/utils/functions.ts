@@ -1,6 +1,7 @@
 import { UploadFile, message } from "antd";
 import { RcFile } from "antd/es/upload";
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
+import { Get } from "../components/table";
 import { BranchOffice, UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
 import { Users } from "../types";
 
@@ -26,10 +27,10 @@ export const validFiles = (fileList: RcFile[], accept: string, showMessageError?
     const types = accept.split(",").map(type => type.trim()) || [];
 
     if (!types.includes(file.type!)) {
-      if(showMessageError) {
+      if (showMessageError) {
         message.error(`Formato incorrecto.`, 4);
       }
-      
+
       return false;
     }
   }
@@ -43,7 +44,7 @@ export const onPreviewImage = async (file: UploadFile) => {
   if (!src) {
     src = await new Promise((resolve) => {
       const reader = new FileReader();
-      
+
       reader.readAsDataURL(file.originFileObj!);
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = () => resolve("");
@@ -64,7 +65,7 @@ export const onPreviewImage = async (file: UploadFile) => {
 export const setImagesToState = <T extends { image?: string | UploadFile[], images?: string[] | UploadFile[] }>(state: T) => {
   if (state.image) {
     const url = state.image as string;
-    
+
     const imageUploadFile: UploadFile = {
       name: url,
       uid: url,
@@ -109,6 +110,10 @@ export const isSeller = (user: Users): user is UserDeliveryMan => {
 
 export const isUserDeliveryMan = (user: Users): user is UserSeller => {
   return user.role === "Vendedor";
+}
+
+export const isGet = (get: Get<any>): get is Get<any> => {
+  return Array.isArray(get.list) && isFinite(get.total);
 }
 
 export const fileToBase64 = (file: File) => new Promise((resolve, reject) => {
