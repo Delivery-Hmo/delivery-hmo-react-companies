@@ -48,19 +48,15 @@ const TableActionsButtons: FC<Props> = ({ record, onDeleted, fun, messageError, 
 
   return (
     <Space>
-      <Tooltip title="Editar">
-        <Button
-          icon={<EditOutlined />}
-          shape="circle"
-          onClick={() => navigate(pathEdit, { state: record })}
-          size="middle"
-          style={{ color: '#fff', backgroundColor: '#ec9822 ' }}
-          type='ghost'
-        />
-      </Tooltip>
-      <Tooltip title="Eliminar">
-        <DeleteButton onClick={del} />
-      </Tooltip>
+      <Button
+        icon={<EditOutlined />}
+        shape="circle"
+        onClick={() => navigate(pathEdit, { state: record })}
+        size="middle"
+        style={{ color: '#fff', backgroundColor: '#ec9822 ' }}
+        type='ghost'
+      />
+      <DeleteButton onClick={del} />
     </Space>
   )
 }

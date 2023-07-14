@@ -30,7 +30,6 @@ const useGet = <T extends {}>(url: string, wait?: boolean, mergeResponse?: boole
 				console.log(error);
 			} finally {
 				abortController.current = undefined;
-				await sleep(500);
 				setLoading(false);
 			}
 		}
@@ -39,7 +38,7 @@ const useGet = <T extends {}>(url: string, wait?: boolean, mergeResponse?: boole
 
 	}, [url, wait, mergeResponse, abortController]);
 
-	return { loading, response }
+	return { loading, response, setResponse }
 }
 
 export default useGet;

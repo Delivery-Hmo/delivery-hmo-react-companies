@@ -6,7 +6,6 @@ import useGet from "../../../hooks/useGet";
 import { CommentsBranchOffice } from "../../../interfaces/commentBranchOffice";
 import CardComments from "./card";
 
-
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -16,13 +15,13 @@ interface Props {
 const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
   const [page, setPage] = useState(1);
   const url = useMemo(() => `commentsBranchOffice/list?page=${page}&limit=10&idBranchOffice=${idBranchOffice}`, [idBranchOffice, page]);
-  const { loading, response } = useGet<Get<CommentsBranchOffice>>(url, !Boolean(idBranchOffice), true);
+  const { loading, response, setResponse } = useGet<Get<CommentsBranchOffice>>(url, !Boolean(idBranchOffice), true);
 
   const onScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
     if (loading) return;
 
     const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
-    const bottom = (scrollHeight - scrollTop) < (clientHeight + 2);
+    const bottom = Math.floor(scrollHeight - scrollTop) < clientHeight;
 
     if (!bottom || !scrollTop || (response?.list.length || 0) >= (response?.total || 0)) return;
 
@@ -31,9 +30,14 @@ const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
 
   return (
     <Modal
+      destroyOnClose
       title="Comentarios"
       open={open}
-      onCancel={onClose}
+      onCancel={() => {
+        setPage(1);
+        setResponse({ list: [], total: 0 });
+        onClose();
+      }}
       confirmLoading={loading}
       okButtonProps={{
         style: {
@@ -41,22 +45,25 @@ const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
         }
       }}
     >
-      {false ? (
-        <Skeleton avatar paragraph={{ rows: 4 }} />
-      ) : (
-        <div onScroll={onScroll} style={{ minHeight: "60vh", maxHeight: "60vh", overflowY: "auto" }}>
-          {
-            response?.list.map((comment) => (
-              <CardComments
-                key={comment.id}
-                comment={comment}
-              />
-            ))
-          }
-        </div>
-      )}
+      {
+        loading && !response?.list.length
+          ? <Skeleton avatar paragraph={{ rows: 4 }} />
+          : <div onScroll={onScroll} style={{ minHeight: "60vh", maxHeight: "60vh", overflowY: "auto" }}>
+            {
+              response?.list.map((comment) => (
+                <CardComments
+                  key={comment.id}
+                  comment={comment}
+                />
+              ))
+            }
+            {
+              loading && response?.list.length && <Skeleton avatar paragraph={{ rows: 4 }} />
+            }
+          </div>
+      }
     </Modal>
   )
 }
 
-export default Comments
+export default Comments;
