@@ -80,7 +80,7 @@ const Branches = () => {
       title: 'Comentarios', key: 'comment',
       render: (_, { id }) => (
         <Button
-          shape="round"
+          shape="circle"
           icon={<CommentOutlined />}
           type="primary"
           onClick={() => {

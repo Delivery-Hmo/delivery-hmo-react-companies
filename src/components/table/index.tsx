@@ -5,6 +5,7 @@ import useGet from '../../hooks/useGet';
 import SearchTable from '../searchTable';
 import TableActionsButtons from "./tableActionsButtons";
 import { patch } from "../../services";
+import useAbortController from "../../hooks/useAbortController";
 
 interface Props<T> {
 	columns: ColumnsType<T>;
@@ -23,11 +24,14 @@ export interface Get<T> {
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 
 const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeholderSearch, pathEdit, urlDisabled }: Props<T>) => {
+	const abortController = useAbortController();
 	const [url, setUrl] = useState(`${urlProp}?page=1&limit=10`);
 	const { loading, response } = useGet<Get<T>>(url, wait);
 	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState(10);
 	const [search, setSearch] = useState("");
+
+	console.log(response)
 
 	useEffect(() => {
 		setUrl(urlProp);
@@ -48,7 +52,7 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 						<TableActionsButtons
 							record={record}
 							onDeleted={() => setUrl(`${urlProp}?page=1&limit=${limit}&search=${search}`)}
-							fun={() => patch(urlDisabled, { id: r.id })}
+							fun={() => patch(urlDisabled, { id: r.id }, abortController)}
 							pathEdit={pathEdit}
 						/>
 					)

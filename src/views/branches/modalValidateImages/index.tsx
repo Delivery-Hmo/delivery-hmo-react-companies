@@ -27,7 +27,7 @@ const ModalValidateImages: FC<Props> = ({ open, onClose, idBranchOffice }) => {
     setSaving(true);
 
     try {
-      await put("branchOffice/update", { images, id: idBranchOffice }, abortController);
+      await put("branchOffice/validateImages", { images, id: idBranchOffice }, abortController);
       onClose(true);
     } finally {
       setSaving(false);
