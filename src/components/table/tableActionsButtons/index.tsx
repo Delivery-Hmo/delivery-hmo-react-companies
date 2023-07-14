@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Button, message, Space, Tooltip, Modal } from 'antd';
+import { Button, message, Space, Modal } from 'antd';
 import { EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import DeleteButton from '../../deleteButton';

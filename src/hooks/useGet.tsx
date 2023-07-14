@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { get } from "../services";
 import { message } from 'antd';
-import { sleep } from '../utils/functions';
 import useAbortController from './useAbortController';
 
 const useGet = <T extends {}>(url: string, wait?: boolean, mergeResponse?: boolean) => {
