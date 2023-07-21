@@ -21,7 +21,7 @@ const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
     if (loading) return;
 
     const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
-    const bottom = Math.floor(scrollHeight - scrollTop) < clientHeight;
+    const bottom = Math.floor(scrollHeight - scrollTop) <= clientHeight;
 
     if (!bottom || !scrollTop || (response?.list.length || 0) >= (response?.total || 0)) return;
 
