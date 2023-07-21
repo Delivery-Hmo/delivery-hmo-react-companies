@@ -31,7 +31,7 @@ export interface BranchOffice extends User {
   center: LatLng;
   radius: number;
   address: string;
-  comments: CommentsBranchOffice[];
+  comments?: CommentsBranchOffice[];
   totolSales?: number;
   readonly showInApp: boolean;
   readonly validatedImages: boolean;
@@ -39,7 +39,7 @@ export interface BranchOffice extends User {
   products: ProductBranchOffice[];
 
   //solo front
-  changingShowInApp: boolean;
+  changingShowInApp?: boolean;
   images: UploadFile<any>[] | string[];
 }
 

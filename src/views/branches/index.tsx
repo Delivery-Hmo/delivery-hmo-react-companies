@@ -13,30 +13,28 @@ const Branches = () => {
   const [urlTable, setUrlTable] = useState("branchOffice/paginatedListByUserAdmin");
   const [openComments, setOpenComments] = useState(false);
   const [openValidateImages, setOpenValidateImages] = useState(false);
-  const [idBranchOffice, setIdBranchOffice] = useState("");
+  const [branchOffice, setBranchOffice] = useState<BranchOffice>();
 
-  const onChangeShowInApp = useCallback(async ({ id, showInApp, validatingImages, validatedImages, products }: BranchOffice) => {
+  const onChangeShowInApp = useCallback(async (_branchOffice: BranchOffice) => {
+    const { showInApp, validatingImages, validatedImages, products } = _branchOffice;
+
     if (validatingImages) {
-      //hay que hacer un modal como el de abajo para que se peudan editar las imagenes si queire el usaurio antes que se las confirmen o denieguen
-      message.warning("No se puede activar, en proceso de validación de fotos.", 4);
+      await confirmDialog("En proceso de validación de fotos, ¿desea cambiar las fotos?", async () => {
+        setBranchOffice(_branchOffice);
+        setOpenValidateImages(true);
+      });
+
       return;
     }
 
     if (!validatedImages) {
-      const resultConfirm = await confirmDialog("Sucursal sin fotos validadas, desea validar las fotos?", async () => {
-        setOpenValidateImages(true)
-
-        return true;
-      });
-
-      if(resultConfirm) {
-        setIdBranchOffice(id!);
+      await confirmDialog("Sucursal sin fotos validadas, ¿desea validar las fotos?", async () => {
+        setBranchOffice(_branchOffice);
         setOpenValidateImages(true);
-      }
+      });
 
       return;
     }
-
 
     if (!products.length) {
       message.warning("No se puede activar, sucursal sin productos para vender.", 4);
@@ -77,18 +75,19 @@ const Branches = () => {
       )
     },
     {
-      title: 'Comentarios', key: 'comment',
-      render: (_, { id }) => (
+      title: 'Comentarios',
+      key: 'comment',
+      render: (_, _branchOffice) => (
         <Button
           shape="circle"
           icon={<CommentOutlined />}
           type="primary"
           onClick={() => {
-            setIdBranchOffice(id!);
+            setBranchOffice(_branchOffice);
             setOpenComments(true);
           }}
         />
-      ),
+      )
     },
   ], [setOpenComments, onChangeShowInApp]);
 
@@ -107,14 +106,30 @@ const Branches = () => {
       />
       <Comments
         open={openComments}
-        onClose={() => setOpenComments(false)}
-        idBranchOffice={idBranchOffice}
+        onClose={() => {
+          setBranchOffice(undefined);
+          setOpenComments(false);
+        }}
+        idBranchOffice={branchOffice?.id!}
       />
-      <ModalValidateImages 
-        open={openValidateImages}
-        onClose={() => setOpenValidateImages(false)}
-        idBranchOffice={idBranchOffice}
-      />
+      {
+        branchOffice && <ModalValidateImages
+          open={openValidateImages}
+          onClose={(success) => {
+            setBranchOffice(undefined);
+            setOpenValidateImages(false);
+
+            if (success) {
+              setUrlTable("");
+              setTimeout(() => {
+                setUrlTable("branchOffice/paginatedListByUserAdmin");
+              }, 500);
+            }
+          }}
+          branchOffice={branchOffice}
+        />
+      }
+
     </div>
   )
 }

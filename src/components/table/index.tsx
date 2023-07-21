@@ -25,18 +25,13 @@ const { PRESENTED_IMAGE_SIMPLE } = Empty;
 
 const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeholderSearch, pathEdit, urlDisabled }: Props<T>) => {
 	const abortController = useAbortController();
-	const [url, setUrl] = useState(`${urlProp}?page=1&limit=10`);
-	const { loading, response } = useGet<Get<T>>(url, wait);
 	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState(10);
 	const [search, setSearch] = useState("");
 
-	console.log(response)
+	const url = useMemo(() => `${urlProp}?page=${page}&limit=${limit}&search=${search}`, [urlProp, page, limit, search]);
+	const { loading, response } = useGet<Get<T>>(url, urlProp === "" || wait);
 
-	useEffect(() => {
-		setUrl(urlProp);
-	}, [urlProp]);
- 
 	const columns = useMemo<ColumnsType<T>>(() => {
 		return [
 			...columnsProp.map(c => ({ ...c, width: c.width || 150 })),
@@ -51,7 +46,7 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 					return (
 						<TableActionsButtons
 							record={record}
-							onDeleted={() => setUrl(`${urlProp}?page=1&limit=${limit}&search=${search}`)}
+							onDeleted={() => setPage(1)}
 							fun={() => patch(urlDisabled, { id: r.id }, abortController)}
 							pathEdit={pathEdit}
 						/>
@@ -67,7 +62,6 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 				onSearch={(value) => {
 					setSearch(value);
 					setPage(1);
-					setUrl(`${urlProp}?page=1&limit=${limit}&search=${value}`);
 				}}
 				placeholder={placeholderSearch}
 			/>
@@ -86,7 +80,6 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 					onChange: (_page: number, pageSize: number) => {
 						setPage(_page);
 						setLimit(pageSize);
-						setUrl(`${urlProp}?page=${_page}&limit=${pageSize}&search=${search}`);
 					},
 					showTotal: (total: number, range: number[]) => `${range[0]}-${range[1]} de ${total} registros.`,
 					locale: { items_per_page: '/ página' },

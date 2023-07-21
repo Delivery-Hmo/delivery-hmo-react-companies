@@ -85,7 +85,7 @@ export const setImagesToState = <T extends { image?: string | UploadFile[], imag
 
   if (_state.images?.length) {
     _state.images = _state.images.map(url => {
-      url = _state.image as string;
+      url = url as string;
 
       const imageUploadFile: UploadFile = {
         name: url,

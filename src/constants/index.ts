@@ -5,7 +5,7 @@ import menuItems from "../components/menu/menuItems";
 
 export const blockedPathsBranchOffice: readonly string[] = ["/sucursales"] as const;
 export const bloquedPathsUsers: Record<Rols, readonly string[]> = {
-  "": menuItems.map(item => item.key), 
+  "": menuItems.map(item => item.key),
   "Administrador": [],
   "Administrador sucursal": blockedPathsBranchOffice,
   "Vendedor": [],
@@ -34,7 +34,6 @@ export const initBranch: BranchOffice = {
   address: "",
   active: true,
   description: "",
-  comments: [],
   products: [],
   changingShowInApp: false,
   showInApp: false,
@@ -78,7 +77,7 @@ export const initUserDeliveryMan: UserDeliveryMan = {
 export const rulePhoneInput: FormRule = {
   required: true,
   message: 'El número telefónico tiene que ser de 10 dígitos.',
-  validator: (rule, value?: string ) => value?.length !== 10 ? Promise.reject(rule.message) : Promise.resolve(),
+  validator: (rule, value?: string) => value?.length !== 10 ? Promise.reject(rule.message) : Promise.resolve(),
 } as const;
 export const ruleMaxLength: FormRule = {
   max: 300,

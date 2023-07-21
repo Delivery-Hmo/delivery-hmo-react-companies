@@ -25,27 +25,30 @@ const CreateBranch = () => {
   const { name, email, facebook, salesGoalByMonth, phones, latLng, radius, center, password, confirmPassword, description, id } = branch;
 
   useEffect(() => {
-    if (!staring) return;
+    try {
+      if (!staring) return;
 
-    const _brancOffice = state as BranchOffice | null;
+      const _brancOffice = state as BranchOffice | null;
 
-    setType(_brancOffice?.id ? "update" : "create");
+      setType(_brancOffice?.id ? "update" : "create");
 
-    if (!_brancOffice) return;
+      if (!_brancOffice) return;
 
-    form.setFieldsValue({
-      ..._brancOffice,
-      phone0: _brancOffice?.phones[0],
-      phone1: _brancOffice?.phones[1] || undefined,
-      phone2: _brancOffice?.phones[2] || undefined
-    });
-    setBranch(_brancOffice);
-    setStaring(false);
+      form.setFieldsValue({
+        ..._brancOffice,
+        phone0: _brancOffice?.phones[0],
+        phone1: _brancOffice?.phones[1] || undefined,
+        phone2: _brancOffice?.phones[2] || undefined
+      });
+      setBranch(_brancOffice);
+    } finally {
+      setStaring(false);
+    }
   }, [state, staring, form])
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !id && password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o más.' },
-  ], [password, id])
+  ], [password, id]);
 
   const onFinish = async () => {
     if (saving) return;
@@ -63,6 +66,7 @@ const CreateBranch = () => {
     setSaving(true);
 
     delete branch.confirmPassword;
+    delete branch.changingShowInApp;
 
     try {
       if (type === "create") {

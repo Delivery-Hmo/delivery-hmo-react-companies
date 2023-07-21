@@ -94,7 +94,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         onPreview: onPreviewImage,
         listType: listType || "picture-card",
         onChange: ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
-          const isValid = validFiles(fileList.map(f => f.originFileObj!), accept!, true);
+          const isValid = validFiles(fileList.filter(f => f.originFileObj).map(f => f.originFileObj!), accept!, true);
 
           if (!isValid) {
             onChange([]);

@@ -22,12 +22,12 @@ export const get = async <T>(url: string, abortController: AbortController) => {
         signal: abortController?.signal
       }
     );
-  
+
     if (!response.ok) {
       const error = await response.json();
       throw handleError(error);
     }
-  
+
     return response.json() as Promise<T>;
   } catch (error) {
     throw handleError(error);

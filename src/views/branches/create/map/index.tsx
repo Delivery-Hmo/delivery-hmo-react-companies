@@ -44,13 +44,16 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
       }
     });
 
-    if (!branch.id) return;
+    if (!branch.id) {
+      setStaring(false);
+      return;
+    };
 
     const _circle = new google.maps.Circle({
       center: branch.center,
       radius: branch.radius
     });
-    
+
     const _marker = new google.maps.Marker({
       position: branch.latLng
     });
@@ -62,8 +65,7 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
     setCircle(_circle);
     setMarker(_marker);
     setStaring(false);
-  }
-  , [staring, isLoaded, isLoadedDM, branch, map]);
+  }, [staring, isLoaded, isLoadedDM, branch, map]);
 
   if (!isLoaded) return <FullLoader />;
 
@@ -119,7 +121,7 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
 
   return (
     <Card>
-      <HeaderMap 
+      <HeaderMap
         branch={branch}
         marker={marker}
         circle={circle}
@@ -137,14 +139,12 @@ const Map: FC<Props> = ({ branch, setBranch }) => {
         center={center}
         onLoad={_map => setMap(_map)}
       >
-        {
-          <DrawingManagerF
-            onCircleComplete={onCircleComplete}
-            onMarkerComplete={onMarkerComplete}
-            options={options}
-            onLoad={() => setIsLoadedDM(true)}
-          />
-        }
+        <DrawingManagerF
+          onCircleComplete={onCircleComplete}
+          onMarkerComplete={onMarkerComplete}
+          options={options}
+          onLoad={() => setIsLoadedDM(true)}
+        />
       </GoogleMap>
     </Card>
   )
