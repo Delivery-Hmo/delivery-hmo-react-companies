@@ -1,24 +1,29 @@
 import { useEffect, useState } from 'react';
 import { get } from "../services";
 import { message } from 'antd';
-import { sleep } from '../utils/functions';
-import useAbortController from "./useAbortController";
+import useAbortController from './useAbortController';
 
-const useGet = <T extends {}>(url: string, wait?: boolean) => {
+const useGet = <T extends {}>(url: string, wait?: boolean, mergeResponse?: boolean) => {
 	const abortController = useAbortController();
 	const [loading, setLoading] = useState(true);
 	const [response, setResponse] = useState<T>();
 
 	useEffect(() => {
-		if (wait || !url) return;
+		if (wait || !url || abortController.current) return;
 
 		const init = async () => {
 			setLoading(true);
 
-			try {
-				const _response = await get<T>(url, abortController);
+			abortController.current = new AbortController();
 
-				setResponse(_response);
+			try {
+				const _response = await get<T>(url, abortController.current);
+
+				setResponse(r =>
+					mergeResponse
+						? ({ list: [...(r as any)?.list || [], ...(_response as any)?.list], total: (_response as any)?.total }) as any as T
+						: _response
+				);
 			} catch (error) {
 				console.log(error);
 
@@ -31,15 +36,15 @@ const useGet = <T extends {}>(url: string, wait?: boolean) => {
 					message.error(error, 4);
 				}
 			} finally {
-				await sleep(500);
+				abortController.current = undefined;
 				setLoading(false);
 			}
 		}
 
 		init();
-	}, [url, wait, abortController]);
+	}, [url, wait, mergeResponse, abortController]);
 
-	return { loading, response };
+	return { loading, response, setResponse };
 }
 
 export default useGet;

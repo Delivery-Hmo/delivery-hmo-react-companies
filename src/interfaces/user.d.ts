@@ -1,7 +1,7 @@
 import { UploadFile } from "antd/es/upload";
 import { LatLng } from ".";
 import { Rols } from "../types";
-import { CommentsBranchOffice } from "./branchOffice/commentBranchOffice";
+import { CommentsBranchOffice } from "./commentBranchOffice";
 import { ProductBranchOffice } from "./branchOffice/productBranchOffice";
 
 export interface User {

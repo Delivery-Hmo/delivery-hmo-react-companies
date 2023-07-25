@@ -1,5 +1,5 @@
-import { User } from "../user";
-import { BranchOffice } from "../user";
+import { User } from "./user";
+import { BranchOffice } from "./user";
 
 export interface CommentsBranchOffice {
   id?: string;

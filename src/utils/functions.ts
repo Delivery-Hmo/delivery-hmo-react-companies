@@ -1,8 +1,6 @@
 import { Modal, UploadFile, message } from "antd";
 import { RcFile } from "antd/es/upload";
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
-import { BranchOffice, UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
-import { Users } from "../types";
 import { ReactNode } from "react";
 
 export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
@@ -100,22 +98,6 @@ export const setImagesToState = <T extends { image?: string | UploadFile[], imag
   }
 
   return _state;
-}
-
-export const isUserAdmin = (user: Users): user is UserAdmin => {
-  return user.role === "Administrador";
-}
-
-export const isBranchOffice = (user: Users): user is BranchOffice => {
-  return user.role === "Administrador sucursal";
-}
-
-export const isSeller = (user: Users): user is UserDeliveryMan => {
-  return user.role === "Repartidor";
-}
-
-export const isUserDeliveryMan = (user: Users): user is UserSeller => {
-  return user.role === "Vendedor";
 }
 
 export const fileToBase64 = (file: File) => new Promise((resolve, reject) => {

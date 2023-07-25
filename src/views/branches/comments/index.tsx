@@ -1,10 +1,10 @@
-import { Empty, Skeleton } from "antd";
-import { FC, useMemo } from "react";
+import { Skeleton } from "antd";
+import { FC, useMemo, useState } from "react";
 import Modal from "../../../components/modal"
-import useGet from "../../../hooks/useGet";
-import { CommentsBranchOffice } from "../../../interfaces/branchOffice/commentBranchOffice";
 import { Get } from "../../../components/table";
-import CardComment from "./cardComment";
+import useGet from "../../../hooks/useGet";
+import CardComments from "./card";
+import { CommentsBranchOffice } from "../../../interfaces/commentBranchOffice";
 
 interface Props {
   open: boolean;
@@ -12,18 +12,33 @@ interface Props {
   idBranchOffice: string;
 }
 
-const { PRESENTED_IMAGE_SIMPLE } = Empty;
-
 const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
-  const url = useMemo(() => `commentsBranchOffice/list?page=1&limit=10&idBranchOffice=${idBranchOffice}`, [idBranchOffice]);
-  const { loading, response } = useGet<Get<CommentsBranchOffice>>(url, !Boolean(idBranchOffice));
+  const [page, setPage] = useState(1);
+  const url = useMemo(() => `commentsBranchOffice/list?page=${page}&limit=10&idBranchOffice=${idBranchOffice}`, [idBranchOffice, page]);
+  const { loading, response, setResponse } = useGet<Get<CommentsBranchOffice>>(url, !Boolean(idBranchOffice), true);
+
+  const onScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    if (loading) return;
+
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+    const bottom = Math.floor(scrollHeight - scrollTop) <= clientHeight;
+
+    if (!bottom || !scrollTop || (response?.list.length || 0) >= (response?.total || 0)) return;
+
+    setPage(page + 1);
+  }
 
   return (
     <Modal
+      destroyOnClose
       title="Comentarios"
       open={open}
-      onCancel={onClose}
-      cancelText="Cerrar"
+      onCancel={() => {
+        setPage(1);
+        setResponse({ list: [], total: 0 });
+        onClose();
+      }}
+      confirmLoading={loading}
       okButtonProps={{
         style: {
           display: "none"
@@ -31,19 +46,24 @@ const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
       }}
     >
       {
-        loading
-        ? <Skeleton avatar paragraph={{ rows: 4 }} />
-        : !response?.list.length
-          ? <Empty image={PRESENTED_IMAGE_SIMPLE} description='Sin comentarios.' />
-          : response?.list.map((comment) => (
-            <CardComment
-              key={comment.id}
-              comment={comment}
-            />
-          ))
+        loading && !response?.list.length
+          ? <Skeleton avatar paragraph={{ rows: 4 }} />
+          : <div onScroll={onScroll} style={{ minHeight: "60vh", maxHeight: "60vh", overflowY: "auto" }}>
+            {
+              response?.list.map((comment) => (
+                <CardComments
+                  key={comment.id}
+                  comment={comment}
+                />
+              ))
+            }
+            {
+              loading && response?.list.length && <Skeleton avatar paragraph={{ rows: 4 }} />
+            }
+          </div>
       }
     </Modal>
   )
 }
 
-export default Comments
+export default Comments;
