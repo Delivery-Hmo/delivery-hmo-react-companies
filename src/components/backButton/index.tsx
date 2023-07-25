@@ -1,14 +1,14 @@
-import  { FC } from 'react';
+import { FC } from 'react';
 import { Button, ButtonProps } from 'antd';
 import { RollbackOutlined } from "@ant-design/icons";
 
-const BackButton: FC<ButtonProps> = ({...rest}) => {
+const BackButton: FC<ButtonProps> = (props) => {
   return (
     <Button
       shape="round"
       type="primary"
       icon={<RollbackOutlined />}
-      {...rest}
+      {...props}
     >
       Regresar
     </Button>
