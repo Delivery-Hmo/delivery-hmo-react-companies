@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react'
 import Modal from "../../../components/modal";
-import { Card, UploadFile, message, Spin } from "antd";
+import { Card, UploadFile, message } from "antd";
 import DynamicForm from "../../../components/dynamicForm";
 import { put } from "../../../services";
 import useAbortController from "../../../hooks/useAbortController";
 import { BranchOffice } from "../../../interfaces/user";
 import { setImagesToState } from "../../../utils/functions";
-import FullLoader from "../../../components/fullLoader";
 import CenterCircularProgress from "../../../components/centerCircularProgress";
 
 interface Props {
@@ -32,7 +31,7 @@ const ModalValidateImages: FC<Props> = ({ open, onClose, branchOffice: branchOff
     } finally {
       setStaring(false);
     }
-  }, [staring, branchOffice]);
+  }, [staring, branchOffice, id]);
 
   const onFinish = async () => {
     if (saving) return;
@@ -45,7 +44,7 @@ const ModalValidateImages: FC<Props> = ({ open, onClose, branchOffice: branchOff
     setSaving(true);
 
     try {
-      await put("branchOffice/validateImages", { images, id }, abortController);
+      await put("branchOffice/validateImages", { images, id }, abortController.current!);
       message.success("Fotos subidas correctamente.", 4);
       onClose(true);
     } finally {

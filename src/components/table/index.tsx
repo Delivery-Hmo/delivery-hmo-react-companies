@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Empty, Table as TableAnt } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import useGet from '../../hooks/useGet';
@@ -47,14 +47,14 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 						<TableActionsButtons
 							record={record}
 							onDeleted={() => setPage(1)}
-							fun={() => patch(urlDisabled, { id: r.id }, abortController)}
+							fun={() => patch(urlDisabled, { id: r.id }, abortController.current!)}
 							pathEdit={pathEdit}
 						/>
 					)
 				},
 			}
 		];
-	}, [columnsProp, urlDisabled, pathEdit, limit, search, urlProp]);
+	}, [columnsProp, urlDisabled, pathEdit, abortController]);
 
 	return (
 		<div>

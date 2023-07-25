@@ -27,13 +27,13 @@ const Perfil = () => {
     }
 
     try {
-      await put("userAdmin/update", user, abortController);
+      await put("userAdmin/update", user, abortController.current!);
       message.success("Datos de perfil actualizados con éxito.", 4);
 
     } finally {
       setLoading(false);
     }
-  }, [user, password, confirmPassword]);
+  }, [user, password, confirmPassword, abortController]);
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
@@ -152,7 +152,7 @@ const Perfil = () => {
 
     return istPassword;
   }, [userFirebase, user, setUser, loading, email, password, confirmPassword, onEditProfile, rulesPassword, form]);
-  
+
   useEffect(() => {
     if (loadingUserAdmin) return;
 

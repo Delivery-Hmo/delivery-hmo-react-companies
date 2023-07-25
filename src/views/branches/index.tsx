@@ -16,7 +16,7 @@ const Branches = () => {
   const [branchOffice, setBranchOffice] = useState<BranchOffice>();
 
   const onChangeShowInApp = useCallback(async (_branchOffice: BranchOffice) => {
-    const { showInApp, validatingImages, validatedImages, products } = _branchOffice;
+    const { validatingImages, validatedImages, products } = _branchOffice;
 
     if (validatingImages) {
       await confirmDialog("En proceso de validación de fotos, ¿desea cambiar las fotos?", async () => {
