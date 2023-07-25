@@ -1,22 +1,24 @@
-import { UploadFile, message } from "antd";
+import { Modal, UploadFile, message } from "antd";
 import { RcFile } from "antd/es/upload";
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
-import { Get } from "../components/table";
-import { BranchOffice, UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
-import { Users } from "../types";
+import { ReactNode } from "react";
 
-export const getCurrentToken = () => new Promise<string>((resolve) => {
-  const uns = onIdTokenChanged(getAuth(), async (user: User | null) => {
-    uns();
+export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
+  const uns = onIdTokenChanged(
+    getAuth(),
+    async (user: User | null) => {
+      uns();
 
-    if (user) {
+      if (!user) {
+        reject("Error de autenticación");
+        return;
+      }
+
       const token = await user.getIdToken();
       resolve(token);
-      return;
-    }
-
-    resolve("");
-  });
+    },
+    () => reject("Error de autenticación")
+  );
 });
 
 export const sleep = (time: number) => new Promise<void>((resolve) => setTimeout(() => resolve(), time));
@@ -63,8 +65,10 @@ export const onPreviewImage = async (file: UploadFile) => {
 }
 
 export const setImagesToState = <T extends { image?: string | UploadFile[], images?: string[] | UploadFile[] }>(state: T) => {
-  if (state.image) {
-    const url = state.image as string;
+  const _state = { ...state };
+
+  if (_state.image) {
+    const url = _state.image as string;
 
     const imageUploadFile: UploadFile = {
       name: url,
@@ -74,12 +78,12 @@ export const setImagesToState = <T extends { image?: string | UploadFile[], imag
       status: "done"
     };
 
-    state.image = [imageUploadFile];
+    _state.image = [imageUploadFile];
   }
 
-  if (state.images?.length) {
-    state.images = state.images.map(url => {
-      url = state.image as string;
+  if (_state.images?.length) {
+    _state.images = _state.images.map(url => {
+      url = url as string;
 
       const imageUploadFile: UploadFile = {
         name: url,
@@ -93,27 +97,7 @@ export const setImagesToState = <T extends { image?: string | UploadFile[], imag
     });
   }
 
-  return state;
-}
-
-export const isUserAdmin = (user: Users): user is UserAdmin => {
-  return user.role === "Administrador";
-}
-
-export const isBranchOffice = (user: Users): user is BranchOffice => {
-  return user.role === "Administrador sucursal";
-}
-
-export const isSeller = (user: Users): user is UserDeliveryMan => {
-  return user.role === "Repartidor";
-}
-
-export const isUserDeliveryMan = (user: Users): user is UserSeller => {
-  return user.role === "Vendedor";
-}
-
-export const isGet = (get: Get<any>): get is Get<any> => {
-  return Array.isArray(get.list) && isFinite(get.total);
+  return _state;
 }
 
 export const fileToBase64 = (file: File) => new Promise((resolve, reject) => {
@@ -124,9 +108,36 @@ export const fileToBase64 = (file: File) => new Promise((resolve, reject) => {
 });
 
 export const handleError = (error: any) => {
+  console.log(error);
+
   if (error instanceof Error) {
     throw new Error(error.message);
   }
 
   throw new Error(error as string);
 }
+
+export const confirmDialog = <T>(content: ReactNode, fun: () => Promise<T>, textSuccess?: string) =>
+  new Promise<T>((resolve, reject) => Modal.confirm({
+    title: `Espera!`,
+    content,
+    okText: 'Aceptar',
+    cancelText: 'Cancelar',
+    onOk: async () => {
+      try {
+        const res = await fun();
+
+        if (textSuccess) {
+          message.success(textSuccess);
+        }
+
+        resolve(res);
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    },
+    onCancel: () => {
+      resolve(false as T);
+    }
+  }));

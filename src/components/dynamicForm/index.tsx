@@ -80,21 +80,23 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
     checkbox: ({ value, onChange }: CustomInput) => <Checkbox checked={value} onChange={e => onChange(e.target.checked)} />,
     date: ({ value, onChange }: CustomInput) => <DatePicker style={{ width: '100%' }} value={value} onChange={onChange} />,
     timeRangePicker: ({ value, onChange }) => <TimePicker.RangePicker value={value} onChange={onChange} />,
-    file: ({ value, onChange, accept, maxCount, multiple }: CustomInput) => {
-      const _value = value as UploadFile<any>[] | undefined;
+    file: ({ value, onChange, accept, maxCount, multiple, listType }: CustomInput) => {
+      const _value = value as UploadFile<any>[];
+      const count = _value?.length || 0;
 
+      maxCount = maxCount || 1;
+
+      const disabled = count >= maxCount;
       const propsUpload: UploadProps = {
         fileList: _value,
         accept,
-        maxCount,
         multiple,
-        
         onPreview: onPreviewImage,
-        listType: "picture-card",
+        listType: listType || "picture-card",
         onChange: ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
-          const isValid = validFiles(fileList.map(f => f.originFileObj!), accept!, true);
+          const isValid = validFiles(fileList.filter(f => f.originFileObj).map(f => f.originFileObj!), accept!, true);
 
-          if(!isValid) {
+          if (!isValid) {
             onChange([]);
             return;
           }
@@ -105,18 +107,15 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
           setTimeout(() => {
             onSuccess!("ok");
           }, 0);
-        }
+        },
+        children: <ButtonUpload value={_value} multiple={multiple} maxCount={maxCount} disabled={disabled} />
       };
 
       return accept?.includes("image")
         ? <Crop beforeCrop={(_, fileList) => validFiles(fileList, accept)}>
-          <Upload {...propsUpload}>
-            <ButtonUpload multiple={multiple} value={_value} />
-          </Upload>
+          <Upload {...propsUpload} />
         </Crop>
-        : <Upload {...propsUpload}>
-          <ButtonUpload multiple={multiple} value={_value} />
-        </Upload>
+        : <Upload {...propsUpload} />;
     }
   }), []);
 
@@ -133,7 +132,12 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             return;
           }
 
-          message.error(error as string, 4);
+          if (typeof error === "string") {
+            message.error(error as string, 4);
+            return;
+          }
+
+          message.error("Error!", 4);
         }
       }}
     >

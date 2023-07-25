@@ -5,6 +5,7 @@ import useGet from '../../hooks/useGet';
 import SearchTable from '../searchTable';
 import TableActionsButtons from "./tableActionsButtons";
 import { patch } from "../../services";
+import useAbortController from "../../hooks/useAbortController";
 
 interface Props<T> {
 	columns: ColumnsType<T>;
@@ -23,15 +24,17 @@ export interface Get<T> {
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 
 const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeholderSearch, pathEdit, urlDisabled }: Props<T>) => {
-	const [url, setUrl] = useState(`${urlProp}?page=1&limit=10`);
-	const { loading, response } = useGet<Get<T>>(url, wait);
+	const abortController = useAbortController();
 	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState(10);
 	const [search, setSearch] = useState("");
 
+	const url = useMemo(() => `${urlProp}?page=${page}&limit=${limit}&search=${search}`, [urlProp, page, limit, search]);
+	const { loading, response } = useGet<Get<T>>(url, urlProp === "" || wait);
+
 	const columns = useMemo<ColumnsType<T>>(() => {
 		return [
-			...columnsProp,
+			...columnsProp.map(c => ({ ...c, width: c.width || 150 })),
 			{
 				title: 'Acciones',
 				key: 'actions',
@@ -43,16 +46,15 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 					return (
 						<TableActionsButtons
 							record={record}
-							onDeleted={() => setUrl(`${urlProp}?page=1&limit=${limit}&search=${search}`)}
-							fun={() => patch(urlDisabled, { id: r.id })}
-							messageError="Registro eliminado con éxito."
+							onDeleted={() => setPage(1)}
+							fun={() => patch(urlDisabled, { id: r.id }, abortController.current!)}
 							pathEdit={pathEdit}
 						/>
 					)
 				},
 			}
 		];
-	}, [columnsProp, urlDisabled, pathEdit, limit, search, urlProp]);
+	}, [columnsProp, urlDisabled, pathEdit, abortController]);
 
 	return (
 		<div>
@@ -60,7 +62,6 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 				onSearch={(value) => {
 					setSearch(value);
 					setPage(1);
-					setUrl(`${urlProp}?page=1&limit=${limit}&search=${value}`);
 				}}
 				placeholder={placeholderSearch}
 			/>
@@ -79,7 +80,6 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 					onChange: (_page: number, pageSize: number) => {
 						setPage(_page);
 						setLimit(pageSize);
-						setUrl(`${urlProp}?page=${_page}&limit=${pageSize}&search=${search}`);
 					},
 					showTotal: (total: number, range: number[]) => `${range[0]}-${range[1]} de ${total} registros.`,
 					locale: { items_per_page: '/ página' },

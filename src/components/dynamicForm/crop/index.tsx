@@ -13,7 +13,6 @@ const Crop: FC<ImgCropProps> = (props) => {
       resetText="Reiniciar"
      {...props}
     />
-  
   )
 }
 

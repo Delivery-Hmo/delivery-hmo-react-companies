@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 const useAbortController = () => {
-  const abortControllerRef = useRef<AbortController>();
+  const abortControllerRef = useRef<AbortController | undefined>(new AbortController());
 
   useEffect(() => {
     const abortController = abortControllerRef.current;

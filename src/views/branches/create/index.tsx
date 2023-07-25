@@ -9,8 +9,10 @@ import HeaderView from '../../../components/headerView';
 import { TypeRute } from "../../../types";
 import { BranchOffice } from "../../../interfaces/user";
 import Map from './map';
+import useAbortController from "../../../hooks/useAbortController";
 
 const CreateBranch = () => {
+  const abortController = useAbortController();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,27 +25,30 @@ const CreateBranch = () => {
   const { name, email, facebook, salesGoalByMonth, phones, latLng, radius, center, password, confirmPassword, description, id } = branch;
 
   useEffect(() => {
-    if (!staring) return;
+    try {
+      if (!staring) return;
 
-    const _brancOffice = state as BranchOffice | null;
+      const _brancOffice = state as BranchOffice | null;
 
-    setType(_brancOffice?.id ? "update" : "create");
+      setType(_brancOffice?.id ? "update" : "create");
 
-    if (!_brancOffice) return;
+      if (!_brancOffice) return;
 
-    form.setFieldsValue({
-      ..._brancOffice,
-      phone0: _brancOffice?.phones[0],
-      phone1: _brancOffice?.phones[1] || undefined,
-      phone2: _brancOffice?.phones[2] || undefined
-    });
-    setBranch(_brancOffice);
-    setStaring(false);
+      form.setFieldsValue({
+        ..._brancOffice,
+        phone0: _brancOffice?.phones[0],
+        phone1: _brancOffice?.phones[1] || undefined,
+        phone2: _brancOffice?.phones[2] || undefined
+      });
+      setBranch(_brancOffice);
+    } finally {
+      setStaring(false);
+    }
   }, [state, staring, form])
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !id && password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o más.' },
-  ], [password, id])
+  ], [password, id]);
 
   const onFinish = async () => {
     if (saving) return;
@@ -61,12 +66,13 @@ const CreateBranch = () => {
     setSaving(true);
 
     delete branch.confirmPassword;
+    delete branch.changingShowInApp;
 
     try {
       if (type === "create") {
-        await post("branchOffice/create", branch);
+        await post("branchOffice/create", branch, abortController);
       } else {
-        await put("branchOffice/update", branch);
+        await put("branchOffice/update", branch, abortController);
       }
 
       message.success("Sucursal guardada con exito.", 4);
@@ -145,8 +151,8 @@ const CreateBranch = () => {
                 value: salesGoalByMonth,
                 rules: [
                   {
-                    message: 'La meta de ventas no puede ser mayor a 50,000.',
-                    validator: (rule, value) => value > 50000 ? Promise.reject(rule.message) : Promise.resolve(),
+                    message: 'La meta de ventas no puede ser mayor a 100,000.',
+                    validator: (rule, value) => value > 100000 ? Promise.reject(rule.message) : Promise.resolve(),
                   }
                 ],
                 onChange: (value: string) => setBranch({ ...branch, salesGoalByMonth: +value })

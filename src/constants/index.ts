@@ -5,14 +5,15 @@ import menuItems from "../components/menu/menuItems";
 
 export const blockedPathsBranchOffice: readonly string[] = ["/sucursales"] as const;
 export const bloquedPathsUsers: Record<Rols, readonly string[]> = {
-  "": menuItems.map(item => item.key), 
+  "": menuItems.map(item => item.key),
   "Administrador": [],
   "Administrador sucursal": blockedPathsBranchOffice,
   "Vendedor": [],
   "Repartidor": [],
 } as const;
-export const urlImageDefaultProfile = "https://firebasestorage.googleapis.com/v0/b/delivery-hmo.appspot.com/o/imagenesPerfil%2Fperfil.jpg?alt=media&token=a07f8154-7aaa-4397-a8cf-4aeaee5b0f5e";
+export const urlImageDefaultProfile = "https://firebasestorage.googleapis.com/v0/b/delivery-hmo.appspot.com/o/imagenesPerfil%2F1467646262_522853_1467646344_noticia_normal.jpg?alt=media&token=f6e761ad-95c5-462f-bc39-0e889ac30a5c";
 export const baseUrlStorage = "https://firebasestorage.googleapis.com/v0/b/delivery-hmo.appspot.com/o/";
+export const baseUrlStorageGCP = "https://storage.googleapis.com/delivery-hmo.appspot.com/images/";
 export const googleMapsApiKey = "AIzaSyAJZcZP0yqFEeD3roIhSRrwDyLlpUkWKb4";
 export const initBranch: BranchOffice = {
   userAdmin: "",
@@ -31,9 +32,15 @@ export const initBranch: BranchOffice = {
     lng: 0
   },
   address: "",
-  role: "Administrador sucursal",
   active: true,
-  description: ""
+  description: "",
+  products: [],
+  changingShowInApp: false,
+  showInApp: false,
+  validatedImages: false,
+  validatingImages: false,
+  role: "Administrador sucursal",
+  images: []
 };
 export const initUserSeller: UserSeller = {
   active: true,
@@ -41,21 +48,20 @@ export const initUserSeller: UserSeller = {
   email: '',
   name: '',
   phone: '',
-  role: 'Vendedor',
-  rfc: ""
+  rfc: "",
+  role: "Vendedor"
 } as const;
 export const initUserAdmin: UserAdmin = {
   id: '',
   uid: '',
   active: true,
-  company: '',
   description: '',
   email: '',
   phone: '',
   password: '',
   confirmPassword: '',
-  role: 'Administrador',
-  rfc: ''
+  rfc: '',
+  role: "Administrador"
 } as const;
 export const namesDaysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 export const initUserDeliveryMan: UserDeliveryMan = {
@@ -71,7 +77,7 @@ export const initUserDeliveryMan: UserDeliveryMan = {
 export const rulePhoneInput: FormRule = {
   required: true,
   message: 'El número telefónico tiene que ser de 10 dígitos.',
-  validator: (rule, value?: string ) => value?.length !== 10 ? Promise.reject(rule.message) : Promise.resolve(),
+  validator: (rule, value?: string) => value?.length !== 10 ? Promise.reject(rule.message) : Promise.resolve(),
 } as const;
 export const ruleMaxLength: FormRule = {
   max: 300,

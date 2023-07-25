@@ -7,13 +7,14 @@ import { useAuth } from '../../context/authContext';
 import { UserAdmin } from '../../interfaces/user';
 import { initUserAdmin } from '../../constants';
 import { setImagesToState } from "../../utils/functions";
+import useAbortController from "../../hooks/useAbortController";
 
 const Perfil = () => {
+  const abortController = useAbortController();
   const { user: userFirebase, userAuth, loading: loadingUserAdmin } = useAuth();
   const [form] = Form.useForm();
   const [user, setUser] = useState<UserAdmin>(initUserAdmin);
   const [loading, setLoading] = useState<boolean>(false);
-
   const { password, confirmPassword, email } = user;
   const userAdmin = userAuth as UserAdmin;
 
@@ -26,13 +27,13 @@ const Perfil = () => {
     }
 
     try {
-      await put("userAdmin/update", user);
+      await put("userAdmin/update", user, abortController.current!);
       message.success("Datos de perfil actualizados con éxito.", 4);
 
     } finally {
       setLoading(false);
     }
-  }, [user, password, confirmPassword]);
+  }, [user, password, confirmPassword, abortController]);
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' },
@@ -54,10 +55,10 @@ const Perfil = () => {
               typeControl: 'input',
               typeInput: 'text',
               label: 'Empresa ',
-              name: 'company',
+              name: 'name',
               rules: [{ required: true, message: 'Favor de escribir nombre de la empresa.' }],
-              value: user.company,
-              onChange: (value) => setUser({ ...user, company: value })
+              value: user.name,
+              onChange: (value) => setUser({ ...user, name: value })
             },
             {
               md: 6,
@@ -155,7 +156,7 @@ const Perfil = () => {
   useEffect(() => {
     if (loadingUserAdmin) return;
 
-    const _userAdmin = setImagesToState({ ...userAdmin! });
+    const _userAdmin = setImagesToState(userAdmin!);
 
     setUser(_userAdmin);
     form.setFieldsValue(_userAdmin);
@@ -165,7 +166,7 @@ const Perfil = () => {
     <>
       <Row gutter={15} style={{ marginTop: 20 }}>
         <Col md={6}>
-          <Card title={<h2>Perfil empresa </h2>} bordered={false} style={{ textAlign: 'center' }}>
+          <Card title={<h1>Perfil empresa </h1>} bordered={false} style={{ textAlign: 'center' }}>
             {
               !userAdmin ? <Spin /> : (
                 <>
@@ -186,14 +187,14 @@ const Perfil = () => {
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.email}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Empresa : </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.company || "Sin empresa ."}</span>
+                      <b>Empresa : </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.name || "Sin empresa."}</span>
                     </Col>
                     <Col xs={24}>
                       <b>Celular: </b>
                       <span style={{ fontSize: '1.1em' }}>{userAdmin?.phone || "Sin teléfono."}</span>
                     </Col>
                     <Col xs={24}>
-                      <b>Descripción: </b> <span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripción."}</span>
+                      <b>Descripción: </b><span style={{ fontSize: '1.1em' }}>{userAdmin?.description || "Sin descripción."}</span>
                     </Col>
                   </Row>
                 </>

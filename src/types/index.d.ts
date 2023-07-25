@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import dayjs from "dayjs";
 import { UserAdmin, UserDeliveryMan, UserSeller, BranchOffice } from "../interfaces/user";
 
@@ -8,3 +9,4 @@ export type TypeControl = 'input' | 'select' | 'date' | 'checkbox' | 'radio' | '
 export type TypeInput = 'text' | 'number' | 'password' | 'email';
 export type LibrariesGoogleMaps = ("drawing" | "geometry" | "localContext" | "places" | "visualization")[];
 export type TypeRute = "create" | "update";
+export type DS<T> = Dispatch<SetStateAction<T>>;

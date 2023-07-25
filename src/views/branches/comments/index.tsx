@@ -3,8 +3,8 @@ import { FC, useMemo, useState } from "react";
 import Modal from "../../../components/modal"
 import { Get } from "../../../components/table";
 import useGet from "../../../hooks/useGet";
-import { CommentsBranchOffice } from "../../../interfaces/commentBranchOffice";
 import CardComments from "./card";
+import { CommentsBranchOffice } from "../../../interfaces/commentBranchOffice";
 
 interface Props {
   open: boolean;

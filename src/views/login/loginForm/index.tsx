@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { FC, useState } from 'react';
 import { Avatar, Button, Form, Input, message } from 'antd';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, getAdditionalUserInfo, FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
@@ -8,11 +8,13 @@ import { post } from '../../../services';
 import { UserAdmin } from '../../../interfaces/user';
 import { ruleEmail, rulePassword } from '../../../constants';
 import { useAuth } from '../../../context/authContext';
+import { DS } from "../../../types";
+import useAbortController from "../../../hooks/useAbortController";
 
 type KeysProviders = 'facebook' | 'google';
 
 interface Props {
-  setCurrentForm: Dispatch<SetStateAction<string>>;
+  setCurrentForm: DS<string>;
 }
 
 interface Account {
@@ -31,6 +33,7 @@ const scopes: Record<KeysProviders, string> = {
 };
 
 const LoginForm: FC<Props> = ({ setCurrentForm }) => {
+  const abortController = useAbortController();
   const [account, setAccount] = useState<Account>({ email: '', password: '' });
   const [loading, setLoading] = useState<boolean>(false);
   const { creatingUser, setCreatingUser } = useAuth();
@@ -70,12 +73,10 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
         active: true,
         phone: user?.phoneNumber || '',
         description: '',
-        company: '',
-        rfc: '',
         role: "Administrador"
       };
 
-      await post('userAdminPublic/create', userInfo);
+      await post('userAdminPublic/create', userInfo, abortController);
     } catch (e) {
       console.log(e);
       message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
