@@ -17,7 +17,7 @@ const useGet = <T extends {}>(url: string, wait?: boolean, mergeResponse?: boole
 			abortController.current = new AbortController();
 
 			try {
-				const _response = await get<T>(url, abortController.current) as any;
+				const _response = await get<T>(url, abortController.current);
 
 				setResponse(r => mergeResponse ? ({ list: [...(r as any)?.list || [], ...(_response as any)?.list], total: (_response as any)?.total }) as any as T : _response);
 			} catch (error) {
