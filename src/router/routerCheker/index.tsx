@@ -11,7 +11,6 @@ import { blockedPathsBranchOffice } from "../../constants";
 
 const blockedPathsWithAuthentication: readonly string[] = ["/registrarse", "/"] as const;
 const initUrlByRole: Record<Rols, string> = {
-  "" : "/",
   "Administrador": "/sucursales",
   "Administrador sucursal": "/panel-sucursal",
   "Repartidor": "/pedidos-repartidor",
@@ -37,7 +36,7 @@ const RoterChecker = () => {
     }
 
     if (user && blockedPathsWithAuthentication.includes(pathname)) {
-      navigate(initUrlByRole[userAuth?.role || ""]);
+      navigate(initUrlByRole[userAuth?.role!]);
     }
   }, [user, pathname, navigate, loading, userAuth])
 
