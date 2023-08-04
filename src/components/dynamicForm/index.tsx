@@ -90,10 +90,10 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
       const propsUpload: UploadProps = {
         fileList: _value,
         accept,
-        multiple,
+        multiple: multiple && !accept?.includes("image"),
         onPreview: onPreviewImage,
         listType: listType || "picture-card",
-        onChange: ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
+        onChange: ({ fileList, file }: UploadChangeParam<UploadFile<any>>) => {
           const isValid = validFiles(fileList.filter(f => f.originFileObj).map(f => f.originFileObj!), accept!, true);
 
           if (!isValid) {
@@ -101,14 +101,14 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             return;
           }
 
-          onChange(fileList);
+          onChange(multiple ? fileList : [file]);
         },
         customRequest: ({ onSuccess }) => {
           setTimeout(() => {
             onSuccess!("ok");
           }, 0);
         },
-        children: <ButtonUpload value={_value} multiple={multiple} maxCount={maxCount} disabled={disabled} />
+        children: <ButtonUpload value={_value} multiple={multiple} maxCount={maxCount} disabled={Boolean(multiple) && disabled} />
       };
 
       return accept?.includes("image")

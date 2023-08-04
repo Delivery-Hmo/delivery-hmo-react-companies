@@ -7,6 +7,7 @@ import useAbortController from "../../../hooks/useAbortController";
 import { BranchOffice } from "../../../interfaces/user";
 import { setImagesToState } from "../../../utils/functions";
 import CenterCircularProgress from "../../../components/centerCircularProgress";
+import { baseUrlStorageGCP } from "../../../constants";
 
 interface Props {
   open: boolean;
@@ -19,11 +20,16 @@ const ModalValidateImages: FC<Props> = ({ open, onClose, branchOffice: branchOff
   const [staring, setStaring] = useState(true);
   const [saving, setSaving] = useState(false);
   const [branchOffice, setBranchOffice] = useState<BranchOffice>(branchOfficeProp);
+  const [oldImages, setOldImages] = useState<string[]>([]);
   const { id, images } = branchOffice;
 
   useEffect(() => {
     try {
-      if (!id || !staring) return;
+      if (!staring) return;
+
+      setOldImages([]);
+
+      if (!id) return;
 
       const _branchOffice = setImagesToState(branchOffice);
 
@@ -44,7 +50,7 @@ const ModalValidateImages: FC<Props> = ({ open, onClose, branchOffice: branchOff
     setSaving(true);
 
     try {
-      await put("branchOffice/validateImages", { images, id }, abortController.current!);
+      await put("branchOffice/validateImages", { images, id, oldImages }, abortController.current!);
       message.success("Fotos subidas correctamente.", 4);
       onClose(true);
     } finally {
@@ -92,9 +98,16 @@ const ModalValidateImages: FC<Props> = ({ open, onClose, branchOffice: branchOff
               {
                 name: 'images',
                 typeControl: "file",
-                onChange: (files: UploadFile<any>[]) => setBranchOffice(b => ({ ...b, images: files })),
+                onChange: (files: UploadFile<any>[]) => {
+                  const images = branchOffice.images as UploadFile<any>[];
+                  const _oldImages = images.filter(img => img.url && !files.some(file => img.url === file.url && file.url?.includes(baseUrlStorageGCP))).map(img => img.url!);
+
+                  setOldImages(oldImgs => [...oldImgs, ..._oldImages]);
+                  setBranchOffice(b => ({ ...b, images: files }));
+                },
                 value: branchOffice.images,
                 accept: "image/png, image/jpeg",
+                multiple: true,
                 maxCount: 3,
                 listType: "picture"
               }

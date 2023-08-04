@@ -93,7 +93,6 @@ const Perfil = () => {
               label: "Logo de la empresa ",
               name: "image",
               value: user.image,
-              maxCount: 1,
               accept: "image/png, image/jpeg",
               onChange: (value: UploadFile<any>[]) => setUser({ ...user, image: value }),
               md: 24,

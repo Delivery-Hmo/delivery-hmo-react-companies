@@ -12,10 +12,10 @@ interface Props {
 const ButtonUpload: FC<Props> = ({ value, multiple, maxCount, disabled }) => {
   const textButton = useMemo(() => {
     if (multiple) {
-      return value?.length ? "Cambiar fotos/imagenes" : "Subir fotos/imagenes";
+      return "Subir foto/imagen";
     }
 
-    return value.length && maxCount < 2 ? "Cambiar foto/imagen" : "Subir foto/imagen";
+    return value?.length && maxCount === 1 ? "Cambiar foto/imagen" : "Subir foto/imagen";
   }, [multiple, maxCount, value]);
 
   return (

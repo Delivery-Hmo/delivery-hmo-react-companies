@@ -27,7 +27,7 @@ type AC = AbortController;
 const AuthContext = createContext<Auth>({
   user: null,
   userAuth: null,
-  setUserAuth: () => {},
+  setUserAuth: () => { },
   loading: true,
   creatingUser: false,
   setCreatingUser: () => false
@@ -61,12 +61,12 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       };
 
       try {
-        const _userAuth = await getUserDatas[(user?.displayName || "") as Rols](user.uid, abortController);
+        const _userAuth = await getUserDatas[(user?.displayName || "") as Rols](user.uid, abortController.current!);
 
         setUserAuth(_userAuth);
       } catch (error) {
         //este if hay que quitarlo en producción
-        if(error instanceof Error && error.message === "Failed to execute 'fetch' on 'Window': The user aborted a request.") {
+        if (error instanceof Error && error.message === "Failed to execute 'fetch' on 'Window': The user aborted a request.") {
           return;
         }
 
