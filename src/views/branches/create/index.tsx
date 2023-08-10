@@ -70,9 +70,9 @@ const CreateBranch = () => {
 
     try {
       if (type === "create") {
-        await post("branchOffice/create", branch, abortController);
+        await post("branchOffice/create", branch, abortController.current!);
       } else {
-        await put("branchOffice/update", branch, abortController);
+        await put("branchOffice/update", branch, abortController.current!);
       }
 
       message.success("Sucursal guardada con exito.", 4);

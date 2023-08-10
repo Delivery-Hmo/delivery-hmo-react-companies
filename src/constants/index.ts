@@ -5,7 +5,6 @@ import menuItems from "../components/menu/menuItems";
 
 export const blockedPathsBranchOffice: readonly string[] = ["/sucursales"] as const;
 export const bloquedPathsUsers: Record<Rols, readonly string[]> = {
-  "": menuItems.map(item => item.key),
   "Administrador": [],
   "Administrador sucursal": blockedPathsBranchOffice,
   "Vendedor": [],
@@ -85,7 +84,7 @@ export const ruleMaxLength: FormRule = {
 } as const;
 export const ruleEmail: FormRule = {
   required: true,
-  message: 'Favor de escribir el Correo electrónico válido.',
+  message: 'Favor de escribir un correo electrónico válido.',
   type: "email"
 } as const;
 export const rulePassword: FormRule = {

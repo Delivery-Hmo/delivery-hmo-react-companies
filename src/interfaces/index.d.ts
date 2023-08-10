@@ -1,6 +1,6 @@
 import { TypeControl, TypeInput } from "../types";
 import { FormRule } from 'antd';
-import { UploadListType } from 'antd/lib/upload/interface'; 
+import { UploadListType } from 'antd/lib/upload/interface';
 
 export interface LatLng {
   lat: number;
@@ -10,7 +10,7 @@ export interface LatLng {
 export interface CustomInput {
   typeControl: TypeControl;
   typeInput?: TypeInput;
-  value: any;
+  value?: any;
   name: string;
   md?: number;
   label?: string;
@@ -19,7 +19,7 @@ export interface CustomInput {
   disabled?: boolean;
   readonly?: boolean;
   rules?: FormRule[];
-  onChange: (value: any) => void;
+  onChange?: (value: any) => void;
   styleFI?: React.CSSProperties;
   required?: boolean;
   accept?: string;

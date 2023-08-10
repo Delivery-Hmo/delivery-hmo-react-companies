@@ -2,8 +2,8 @@ import { ReactNode, useState } from 'react';
 import { Layout, Menu, Modal } from 'antd';
 import logo from '../../assets/logo-hmo2.png';
 import { IdcardOutlined, UserOutlined } from '@ant-design/icons';
-import Login from '../../views/login';
-import { useNavigate } from 'react-router-dom'
+import Login from "./login";
+import SingUp from "./singUp";
 
 const { Header } = Layout;
 
@@ -15,21 +15,21 @@ interface MenuItems {
 }
 
 const HeaderComponent = () => {
-  const [open, setOpen] = useState(false)
-  const navigate = useNavigate()
+  const [openLogin, setOpenLogin] = useState(false);
+  const [openSingUp, setOpenSingUp] = useState(false);
 
   const menuItems: MenuItems[] = [
     {
       key: '0',
       icon: <UserOutlined />,
-      label: 'Iniciar Sesión',
-      onClick: () => setOpen(true)
+      label: 'Iniciar sesión',
+      onClick: () => setOpenLogin(true)
     },
     {
       key: '1',
       icon: <IdcardOutlined />,
-      label: 'Registrarse',
-      onClick: () => navigate('/registrarse')
+      label: 'Registrar empresa',
+      onClick: () => setOpenSingUp(true)
     }
   ];
 
@@ -50,11 +50,18 @@ const HeaderComponent = () => {
         />
       </Header>
       <Modal
-        open={open}
-        onCancel={() => setOpen(false)}
+        open={openLogin}
+        onCancel={() => setOpenLogin(false)}
         footer={null}
       >
-        <Login open={open} />
+        <Login open={openLogin} />
+      </Modal>
+      <Modal
+        open={openSingUp}
+        onCancel={() => setOpenSingUp(false)}
+        footer={null}
+      >
+        <SingUp />
       </Modal>
     </>
   )
