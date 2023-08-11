@@ -1,58 +1,43 @@
-import { useState } from 'react';
 import { message } from 'antd';
-import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { UserAdmin } from '../../../interfaces/user';
 import { post } from '../../../services';
 import DynamicForm from '../../dynamicForm';
 import useAbortController from "../../../hooks/useAbortController";
 import { rulePassword } from "../../../constants";
-import { FirebaseError } from "firebase/app";
+import { useAuth } from "../../../context/authContext";
 
 const SingUp = () => {
   const abortController = useAbortController();
-  const [loading, setLoading] = useState(false);
+  const { creatingUser, setCreatingUser } = useAuth();
 
   const onFinish = async (userAdmin: UserAdmin) => {
-    if (loading) return;
+    if (creatingUser) return;
 
     if (userAdmin.password !== userAdmin.confirmPassword) {
       message.error('Las contraseñas no coinciden.', 4);
       return;
     }
 
-    setLoading(true);
+    setCreatingUser(true);
 
     try {
       const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email!, userAdmin.password as string);
       const additional = getAdditionalUserInfo(result);
 
       if (!additional?.isNewUser) {
-        message.error('Error al registrarse.', 4);
+        message.error('Error esta cuenta ya esta registrada.', 4);
         return;
       };
 
       delete userAdmin.confirmPassword;
 
+      await updateProfile(result.user, { displayName: "Administrador" });
       await post('userAdmin/create', userAdmin, abortController.current!);
     } catch (error) {
       getAuth().signOut();
-
-      let messageError = 'Error al registrar la empresa, intentelo mas tarde.';
-
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case "auth/email-already-in-use":
-            messageError = "Otra empresa ya está utilizando el correo proporcionado."
-            break
-          case "auth/invalid-email":
-            messageError = "El correo electrónico no es válido."
-            break
-        }
-      }
-
-      message.error(messageError, 5);
     } finally {
-      setLoading(false);
+      setCreatingUser(false);
     }
   }
 
@@ -65,7 +50,7 @@ const SingUp = () => {
       <DynamicForm
         layout="vertical"
         onFinish={onFinish}
-        loading={loading}
+        loading={creatingUser}
         textSubmit="Registrar empresa"
         styleSubmit={{ width: '100%' }}
         inputs={[

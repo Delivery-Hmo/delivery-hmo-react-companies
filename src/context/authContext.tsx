@@ -14,8 +14,8 @@ interface Auth {
   userAuth: Users | null;
   setUserAuth: DS<UserAdmin | null>;
   loading: boolean;
-  creatingUser: Boolean;
-  setCreatingUser: DS<Boolean>;
+  creatingUser: boolean;
+  setCreatingUser: DS<boolean>;
 }
 
 interface Props {
@@ -34,18 +34,16 @@ const AuthContext = createContext<Auth>({
 });
 
 const getUserDatas: Record<Rols, (uid: string, controller: AC) => Promise<Users>> = {
-  "": () => Promise.reject('Error, no se pudo obtener la información del usuario.'),
   "Administrador": (uid: string, controller: AC) => get<UserAdmin>('userAdmin/getByUid?uid=' + uid, controller),
   "Administrador sucursal": (uid: string, controller: AC) => get<BranchOffice>('branchOffice/getByUid?uid=' + uid, controller),
   "Vendedor": (uid: string, controller: AC) => Promise.reject('Error, no se pudo obtener la información del usuario.'),
-  "Repartidor": (uid: string, controller: AC) => Promise.reject('Error, no se pudo obtener la información del usuario.')
 };
 
 export const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userAuth, setUserAuth] = useState<Users | null>(null);
-  const [loading, setLoading] = useState<Boolean>(true);
-  const [creatingUser, setCreatingUser] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [creatingUser, setCreatingUser] = useState<boolean>(false);
   const abortController = useAbortController();
 
   useEffect(() => {

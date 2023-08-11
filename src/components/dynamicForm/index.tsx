@@ -8,6 +8,7 @@ import SaveButton from "../saveButton";
 import ButtonUpload from "./buttonUpload";
 import Crop from "./crop";
 import { onPreviewImage, validFiles } from "../../utils/functions";
+import { FirebaseError } from "firebase/app";
 
 interface Props {
   form?: FormInstance<any>;
@@ -129,6 +130,24 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         try {
           await onFinish(values);
         } catch (error) {
+          console.log(error);
+
+          if (error instanceof FirebaseError) {
+            let messageError = error.message;
+
+            switch (error.code) {
+              case "auth/email-already-in-use":
+                messageError = "Otra empresa ya está utilizando el correo proporcionado."
+                break
+              case "auth/invalid-email":
+                messageError = "El correo electrónico no es válido."
+                break
+            }
+
+            message.error(messageError, 4);
+            return;
+          }
+
           if (error instanceof Error) {
             message.error(error.message, 4);
             return;
@@ -139,7 +158,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             return;
           }
 
-          message.error("Error!", 4);
+          message.error("Ocurrio un error!", 4);
         }
       }}
     >
