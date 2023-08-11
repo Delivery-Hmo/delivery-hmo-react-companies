@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Button, Form, Input } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-import '../../../assets/styles/login.css'
+import '../../../../assets/styles/login.css'
 import { sendPasswordResetEmail } from 'firebase/auth'
-import { auth } from '../../../firebaseConfig'
+import { auth } from '../../../../firebaseConfig'
+import { ruleEmail } from "../../../../constants"
 
 const RecoveryForm = () => {
   const [email, setEmail] = useState<string>('')
@@ -30,7 +31,7 @@ const RecoveryForm = () => {
       <Form onFinish={onRecoverPassword}>
         <Form.Item
           name="email"
-          rules={[{ required: true, message: 'Favor de escribir el correo.' }]}
+          rules={[ruleEmail]}
           hasFeedback
           style={{ marginBottom: '10px' }}
         >

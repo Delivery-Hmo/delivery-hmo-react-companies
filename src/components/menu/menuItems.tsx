@@ -1,10 +1,8 @@
-import { DollarCircleOutlined, SettingOutlined, ShopOutlined, LogoutOutlined, AuditOutlined} from '@ant-design/icons';
-import { getAuth } from 'firebase/auth';
+import { DollarCircleOutlined, SettingOutlined, ShopOutlined, LogoutOutlined, AuditOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { MdOutlineDeliveryDining } from 'react-icons/md';
-
-
-const signOut = () => getAuth().signOut();
+import { message } from "antd";
+import { getAuth } from "firebase/auth";
 
 const styleIcon = {
   fontSize: 20
@@ -46,7 +44,14 @@ const menuItems = [
         title: '',
         icon: <LogoutOutlined style={styleIcon} />,
         label: 'Cerrar sesión',
-        onClick: async () => await signOut()
+        onClick: async () => {
+          try {
+            await getAuth().signOut();
+          } catch (error) {
+            console.log(error);
+            message.error("Error al cerrar sesión.", 4);
+          }
+        }
       }
     ]
   }

@@ -2,14 +2,14 @@ import { FC, useState } from 'react';
 import { Avatar, Button, Form, Input, message } from 'antd';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, getAdditionalUserInfo, FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import '../../../assets/styles/login.css';
-import { auth } from '../../../firebaseConfig';
-import { post } from '../../../services';
-import { UserAdmin } from '../../../interfaces/user';
-import { ruleEmail, rulePassword } from '../../../constants';
-import { useAuth } from '../../../context/authContext';
-import { DS } from "../../../types";
-import useAbortController from "../../../hooks/useAbortController";
+import '../../../../assets/styles/login.css';
+import { auth } from '../../../../firebaseConfig';
+import { post } from '../../../../services';
+import { UserAdmin } from '../../../../interfaces/user';
+import { ruleEmail, rulePassword } from '../../../../constants';
+import { useAuth } from '../../../../context/authContext';
+import { DS } from "../../../../types";
+import useAbortController from "../../../../hooks/useAbortController";
 
 type KeysProviders = 'facebook' | 'google';
 
@@ -52,7 +52,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
   }
 
   const signInWithProvider = async (keyProvider: KeysProviders) => {
-    if(creatingUser) return;
+    if (creatingUser) return;
 
     setCreatingUser(true);
 
@@ -76,7 +76,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
         role: "Administrador"
       };
 
-      await post('userAdminPublic/create', userInfo, abortController);
+      await post('userAdminPublic/create', userInfo, abortController.current!);
     } catch (e) {
       console.log(e);
       message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);

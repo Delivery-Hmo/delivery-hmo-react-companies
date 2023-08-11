@@ -8,6 +8,7 @@ import SaveButton from "../saveButton";
 import ButtonUpload from "./buttonUpload";
 import Crop from "./crop";
 import { onPreviewImage, validFiles } from "../../utils/functions";
+import { FirebaseError } from "firebase/app";
 
 interface Props {
   form?: FormInstance<any>;
@@ -16,9 +17,11 @@ interface Props {
   onFinish: (values: any) => Promise<void>;
   loading: boolean;
   justify?: "start" | "end" | "center" | "space-around" | "space-between";
+  textSubmit?: string;
+  styleSubmit?: React.CSSProperties;
 }
 
-const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, loading, justify }) => {
+const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, loading, justify, textSubmit, styleSubmit }) => {
   const [inputs, setInputs] = useState<CustomInput[]>(inputsProp);
 
   useEffect(() => {
@@ -55,7 +58,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
 
         return typeInput === "number" && ["e", "E", "+", "-"].includes(e.key) && e.preventDefault();
       }}
-      onChange={e => onChange(e.target.value)}
+      onChange={e => onChange && onChange(e.target.value)}
       onWheel={e => e.preventDefault()}
       onKeyUp={e => e.preventDefault()}
       autoComplete="new-password"
@@ -70,14 +73,14 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
 
         return ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()
       }}
-      onChange={e => onChange(e.target.value)}
+      onChange={e => onChange && onChange(e.target.value)}
       onWheel={e => e.preventDefault()}
     />,
     select: ({ value, onChange, options }: CustomInput) => <Select value={value} onChange={onChange}>
       {options?.map((option: Option) => <Select.Option key={option.value} value={option.value}>{option.text}</Select.Option>)}
     </Select>,
-    textarea: ({ value, onChange }: CustomInput) => <Input.TextArea value={value} onChange={e => onChange(e.target.value)} />,
-    checkbox: ({ value, onChange }: CustomInput) => <Checkbox checked={value} onChange={e => onChange(e.target.checked)} />,
+    textarea: ({ value, onChange }: CustomInput) => <Input.TextArea value={value} onChange={e => onChange && onChange(e.target.value)} />,
+    checkbox: ({ value, onChange }: CustomInput) => <Checkbox checked={value} onChange={e => onChange && onChange(e.target.checked)} />,
     date: ({ value, onChange }: CustomInput) => <DatePicker style={{ width: '100%' }} value={value} onChange={onChange} />,
     timeRangePicker: ({ value, onChange }) => <TimePicker.RangePicker value={value} onChange={onChange} />,
     file: ({ value, onChange, accept, maxCount, multiple, listType }: CustomInput) => {
@@ -97,11 +100,11 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
           const isValid = validFiles(fileList.filter(f => f.originFileObj).map(f => f.originFileObj!), accept!, true);
 
           if (!isValid) {
-            onChange([]);
+            onChange && onChange([]);
             return;
           }
 
-          onChange(multiple ? fileList : [file]);
+          onChange && onChange(multiple ? fileList : [file]);
         },
         customRequest: ({ onSuccess }) => {
           setTimeout(() => {
@@ -127,6 +130,24 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         try {
           await onFinish(values);
         } catch (error) {
+          console.log(error);
+
+          if (error instanceof FirebaseError) {
+            let messageError = error.message;
+
+            switch (error.code) {
+              case "auth/email-already-in-use":
+                messageError = "Otra empresa ya está utilizando el correo proporcionado."
+                break
+              case "auth/invalid-email":
+                messageError = "El correo electrónico no es válido."
+                break
+            }
+
+            message.error(messageError, 4);
+            return;
+          }
+
           if (error instanceof Error) {
             message.error(error.message, 4);
             return;
@@ -137,7 +158,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             return;
           }
 
-          message.error("Error!", 4);
+          message.error("Ocurrio un error!", 4);
         }
       }}
     >
@@ -166,8 +187,9 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
       <SaveButton
         htmlType='submit'
         loading={loading}
+        style={styleSubmit}
       >
-        Guardar
+        {textSubmit || "Guardar"}
       </SaveButton>
     </Form>
   )

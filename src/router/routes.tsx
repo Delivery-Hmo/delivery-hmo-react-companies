@@ -2,15 +2,15 @@ import { lazy } from "react";
 import { PathRouteProps } from 'react-router-dom';
 import DashborachBranch from "../views/dashbordBranch";
 
-const Branches =  lazy(() => import('../views/branches'));
-const CreateBranch =  lazy(() => import('../views/branches/create'));
-const LandingPage =  lazy(() => import('../views/landingPage'));
-const SingUp =  lazy(() => import('../views/singUp'));
-const UserSeller =  lazy(() => import('../views/userSellers'));
-const CreateuserSeller =  lazy(() => import('../views/userSellers/create'));
-const Profile =  lazy(() => import('../views/profile'));
-const UserDeliveryMan =  lazy(() => import('../views/userDeliveryMan'));
-const CreateuserDeliveryMan =  lazy(() => import('../views/userDeliveryMan/create'));
+const Branches = lazy(() => import('../views/branches'));
+const CreateBranch = lazy(() => import('../views/branches/create'));
+const LandingPage = lazy(() => import('../views/landingPage'));
+const SingUp = lazy(() => import('../components/header/singUp'));
+const UserSeller = lazy(() => import('../views/userSellers'));
+const CreateuserSeller = lazy(() => import('../views/userSellers/create'));
+const Profile = lazy(() => import('../views/profile'));
+const UserDeliveryMan = lazy(() => import('../views/userDeliveryMan'));
+const CreateuserDeliveryMan = lazy(() => import('../views/userDeliveryMan/create'));
 
 const routes: PathRouteProps[] = [
   {
