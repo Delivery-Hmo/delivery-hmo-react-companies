@@ -11,6 +11,7 @@ const CreateuserSeller = lazy(() => import('../views/userSellers/create'));
 const Profile = lazy(() => import('../views/profile'));
 const UserDeliveryMan = lazy(() => import('../views/userDeliveryMan'));
 const CreateuserDeliveryMan = lazy(() => import('../views/userDeliveryMan/create'));
+const Product = lazy(() => import('../views/products'));
 
 const routes: PathRouteProps[] = [
   {
@@ -60,6 +61,14 @@ const routes: PathRouteProps[] = [
   {
     path: '/repartidores/registrar',
     element: <CreateuserDeliveryMan />
+  },
+  {
+    path: '/productos',
+    element: <Product />,
+  },
+  {
+    path: '/productos/registrar',
+    element: <Product />
   },
   {
     path: 'repartidores/editar',

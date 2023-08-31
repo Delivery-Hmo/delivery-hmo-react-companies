@@ -7,6 +7,20 @@ export interface LatLng {
   lng: number;
 }
 
+export interface Product {
+  readonly id: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+  category: string;
+  stock: number;
+  rating: number;
+  reviews: number;
+  discount: number;
+  discountedPrice: number;
+}
+
 export interface CustomInput {
   typeControl: TypeControl;
   typeInput?: TypeInput;

@@ -11,10 +11,11 @@ import { blockedPathsBranchOffice } from "../../constants";
 
 const blockedPathsWithAuthentication: readonly string[] = ["/registrarse", "/"] as const;
 const initUrlByRole: Record<Rols, string> = {
-  "Administrador": "/sucursales",
+  "Administrador": "/sucursales, /productos",
   "Administrador sucursal": "/panel-sucursal",
   "Repartidor": "/pedidos-repartidor",
-  "Vendedor": "/pedidos-sucursal"
+  "Vendedor": "/pedidos-sucursal",
+  
 } as const;
 
 const RoterChecker = () => {
