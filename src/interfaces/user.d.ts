@@ -50,7 +50,7 @@ export interface UserSeller extends User {
   rfc: string;
 }
 
-export interface UserDeliveryMan extends User {
+export interface UserDeliveryMan extends Omit<User, "role"> {
   phone?: string;
   readonly branchOffice?: string | BranchOffice;
   readonly userAdmin?: string | UserAdmin;
