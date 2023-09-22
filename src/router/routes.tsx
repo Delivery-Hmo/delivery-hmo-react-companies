@@ -12,6 +12,7 @@ const Profile = lazy(() => import('../views/profile'));
 const UserDeliveryMan = lazy(() => import('../views/userDeliveryMan'));
 const CreateuserDeliveryMan = lazy(() => import('../views/userDeliveryMan/create'));
 const Product = lazy(() => import('../views/products'));
+const DashbordBranch = lazy(() => import('../views/dashbordBranch'));
 
 const routes: PathRouteProps[] = [
   {
@@ -69,6 +70,10 @@ const routes: PathRouteProps[] = [
   {
     path: '/productos/registrar',
     element: <Product />
+  },
+  {
+    path: '/estadisticas',
+    element: <DashbordBranch />,
   },
   {
     path: 'repartidores/editar',

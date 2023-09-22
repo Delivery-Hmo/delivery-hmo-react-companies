@@ -1,4 +1,4 @@
-import { DollarCircleOutlined, SettingOutlined, ShopOutlined, LogoutOutlined, AuditOutlined } from '@ant-design/icons';
+import { DollarCircleOutlined, SettingOutlined, ShopOutlined, LogoutOutlined, AuditOutlined, ProjectOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { MdOutlineDeliveryDining } from 'react-icons/md';
 import { message } from "antd";
@@ -31,7 +31,13 @@ const menuItems = [
     key: '/productos',
     title: '',
     label: <Link to="/productos">Productos</Link>,
-    icon: <MdOutlineDeliveryDining style={styleIcon} />
+    icon: <ShoppingCartOutlined style={styleIcon} />
+  },
+  {
+    key: '/estadisticas',
+    title: '',
+    label: <Link to="/estadisticas">Estadisticas</Link>,
+    icon: <ProjectOutlined style={styleIcon} />
   },
   {
     key: '/configuracion',
