@@ -17,7 +17,7 @@ const title: Record<TypeRute, string> = {
 };
 
 const CreateUserDeliveryMan = () => {
-  const abortController = useAbortController(); 
+  const abortController = useAbortController();
   const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
@@ -63,9 +63,9 @@ const CreateUserDeliveryMan = () => {
 
     try {
       if (type === "update") {
-        await put(`userDeliveryMan/${type}`, deliveryMan, abortController);
+        await put(`userDeliveryMan/${type}`, deliveryMan, abortController.current);
       } else {
-        await post(`userDeliveryMan/${type}`, deliveryMan, abortController);
+        await post(`userDeliveryMan/${type}`, deliveryMan, abortController.current);
       }
 
       message.success('Repartidor guardado con éxito.', 4);
@@ -91,81 +91,81 @@ const CreateUserDeliveryMan = () => {
             onFinish={onFinish}
           >
             <Card>
-              <DynamicForm 
+              <DynamicForm
                 form={form}
                 layout="vertical"
                 onFinish={onFinish}
                 loading={saving}
                 inputs={[
-                {
-                  typeControl: 'input',
-                  typeInput: 'text',
-                  label: 'Nombre',
-                  name: 'name',
-                  rules: [{ required: true, message: 'Favor de escribir el nombre del repartidor.' }],
-                  value: deliveryMan.name,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, name: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'input',
-                  typeInput: 'email',
-                  label: 'Correo',
-                  name: 'email',
-                  value: deliveryMan.email,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, email: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'input',
-                  typeInput: 'password',
-                  label: 'Contraseña',
-                  name: 'password',
-                  rules: rulesPassword,
-                  value: deliveryMan.password,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, password: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'input',
-                  typeInput: 'password',
-                  label: 'Confirmar Contraseña',
-                  name: 'confirmPassword',
-                  rules: rulesPassword,
-                  value: deliveryMan.confirmPassword,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, confirmPassword: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'phone',
-                  label: 'Teléfono',
-                  name: 'phone',
-                  value: deliveryMan.phone,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, phone: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'select',
-                  loading,
-                  options: branchOffices?.map(b => ({ text: b.name, value: b.id })) as Option[],
-                  label: 'Sucursal',
-                  name: 'branchOffice',
-                  rules: [{ required: true, message: 'Favor de escribir la sucursal que pertenece el repartidor.' }],
-                  value: deliveryMan.branchOffice,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, branchOffice: value }),
-                  md: 8
-                },
-                {
-                  typeControl: 'input',
-                  typeInput: 'text',
-                  label: 'Descripción',
-                  name: 'description',
-                  rules: [{ message: 'Favor de escribir una breve descripción del repartidor.' }],
-                  value: deliveryMan.description,
-                  onChange: (value: string) => setDeliveryMan({ ...deliveryMan, description: value }),
-                  md: 24
-                }
-              ]} />
+                  {
+                    typeControl: 'input',
+                    typeInput: 'text',
+                    label: 'Nombre',
+                    name: 'name',
+                    rules: [{ required: true, message: 'Favor de escribir el nombre del repartidor.' }],
+                    value: deliveryMan.name,
+                    onChange: (value: string) => setDeliveryMan({ ...deliveryMan, name: value }),
+                    md: 8
+                  },
+                  {
+                    typeControl: 'input',
+                    typeInput: 'email',
+                    label: 'Correo',
+                    name: 'email',
+                    value: deliveryMan.email,
+                    onChange: (value: string) => setDeliveryMan({ ...deliveryMan, email: value }),
+                    md: 8
+                  },
+                  {
+                    typeControl: 'input',
+                    typeInput: 'password',
+                    label: 'Contraseña',
+                    name: 'password',
+                    rules: rulesPassword,
+                    value: deliveryMan.password,
+                    onChange: (value: string) => setDeliveryMan({ ...deliveryMan, password: value }),
+                    md: 8
+                  },
+                  {
+                    typeControl: 'input',
+                    typeInput: 'password',
+                    label: 'Confirmar Contraseña',
+                    name: 'confirmPassword',
+                    rules: rulesPassword,
+                    value: deliveryMan.confirmPassword,
+                    onChange: (value: string) => setDeliveryMan({ ...deliveryMan, confirmPassword: value }),
+                    md: 8
+                  },
+                  {
+                    typeControl: 'phone',
+                    label: 'Teléfono',
+                    name: 'phone',
+                    value: deliveryMan.phone,
+                    onChange: (value: string) => setDeliveryMan({ ...deliveryMan, phone: value }),
+                    md: 8
+                  },
+                  {
+                    typeControl: 'select',
+                    loading,
+                    options: branchOffices?.map(b => ({ text: b.name, value: b.id })) as Option[],
+                    label: 'Sucursal',
+                    name: 'branchOffice',
+                    rules: [{ required: true, message: 'Favor de escribir la sucursal que pertenece el repartidor.' }],
+                    value: deliveryMan.branchOffice,
+                    onChange: (value: string) => setDeliveryMan({ ...deliveryMan, branchOffice: value }),
+                    md: 8
+                  },
+                  {
+                    typeControl: 'input',
+                    typeInput: 'text',
+                    label: 'Descripción',
+                    name: 'description',
+                    rules: [{ message: 'Favor de escribir una breve descripción del repartidor.' }],
+                    value: deliveryMan.description,
+                    onChange: (value: string) => setDeliveryMan({ ...deliveryMan, description: value }),
+                    md: 24
+                  }
+                ]} />
             </Card>
           </Form>
         </Col>
