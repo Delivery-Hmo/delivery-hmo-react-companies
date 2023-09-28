@@ -1,9 +1,8 @@
 import { FC, useState } from 'react';
 import { Avatar, Button, Form, Input, message } from 'antd';
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, getAdditionalUserInfo, FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth';
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, getAdditionalUserInfo, FacebookAuthProvider, GoogleAuthProvider, reload } from 'firebase/auth';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import '../../../../assets/styles/login.css';
-import { auth } from '../../../../firebaseConfig';
 import { post } from '../../../../services';
 import { UserAdmin } from '../../../../interfaces/user';
 import { ruleEmail, rulePassword } from '../../../../constants';
@@ -25,7 +24,7 @@ interface Account {
 const providers: Record<KeysProviders, FacebookAuthProvider | GoogleAuthProvider> = {
   facebook: new FacebookAuthProvider(),
   google: new GoogleAuthProvider()
-}
+};
 
 const scopes: Record<KeysProviders, string> = {
   facebook: 'email',
@@ -43,13 +42,14 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
 
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(auth, account.email, account.password);
+      await signInWithEmailAndPassword(getAuth(), account.email, account.password);
     } catch (error) {
       console.log(error);
       message.error('Error, datos incorrectos.');
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   const signInWithProvider = async (keyProvider: KeysProviders) => {
     if (creatingUser) return;
@@ -77,13 +77,14 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
       };
 
       await post('userAdminPublic/create', userInfo, abortController.current!);
+      await reload(user);
     } catch (e) {
       console.log(e);
       message.error(`Error, al iniciar con ${keyProvider.toUpperCase()}`);
     } finally {
       setCreatingUser(false);
     }
-  }
+  };
 
   return (
     <>
@@ -197,7 +198,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
       </Form>
       <br />
     </>
-  )
-}
+  );
+};
 
 export default LoginForm;

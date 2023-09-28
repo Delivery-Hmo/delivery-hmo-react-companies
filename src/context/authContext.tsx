@@ -78,16 +78,16 @@ export const AuthProvider: FC<Props> = ({ children }) => {
         await sleep(500);
         setLoading(false);
       }
-    })
+    });
 
     return () => {
       uns();
-    }
+    };
   }, [creatingUser, abortController]);
 
   if (loading) return <FullLoader />;
 
   return <AuthContext.Provider value={{ user, userAuth, setUserAuth, loading, creatingUser, setCreatingUser }}>{children}</AuthContext.Provider>;
-}
+};
 
 export const useAuth = () => useContext(AuthContext);
