@@ -35,18 +35,13 @@ const data = {
     {
       label: 'Semana Actual',
       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      backgroundColor: '#304878',
     },
     {
       label: 'Mes Actual',
       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-    {
-      label: 'Año Actual',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(73, 167, 335, 0.5)',
-    },
+      backgroundColor: '#87D068',
+    }
   ],
 };
 

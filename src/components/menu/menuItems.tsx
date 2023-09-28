@@ -34,12 +34,6 @@ const menuItems = [
     icon: <ShoppingCartOutlined style={styleIcon} />
   },
   {
-    key: '/estadisticas',
-    title: '',
-    label: <Link to="/estadisticas">Estadisticas</Link>,
-    icon: <ProjectOutlined style={styleIcon} />
-  },
-  {
     key: '/configuracion',
     title: '',
     icon: <SettingOutlined style={styleIcon} />,
