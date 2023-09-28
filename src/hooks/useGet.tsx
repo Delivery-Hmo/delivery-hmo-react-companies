@@ -9,15 +9,13 @@ const useGet = <T extends {}>(url: string, wait?: boolean, mergeResponse?: boole
 	const [response, setResponse] = useState<T>();
 
 	useEffect(() => {
-		if (wait || !url || abortController.current) return;
+		if (wait || !url) return;
 
 		const init = async () => {
 			setLoading(true);
 
-			abortController.current = new AbortController();
-
 			try {
-				const _response = await get<T>(url, abortController.current);
+				const _response = await get<T>(url, abortController.current!);
 
 				setResponse(r =>
 					mergeResponse
@@ -36,15 +34,14 @@ const useGet = <T extends {}>(url: string, wait?: boolean, mergeResponse?: boole
 					message.error(error, 4);
 				}
 			} finally {
-				abortController.current = undefined;
 				setLoading(false);
 			}
-		}
+		};
 
 		init();
 	}, [url, wait, mergeResponse, abortController]);
 
 	return { loading, response, setResponse };
-}
+};
 
 export default useGet;

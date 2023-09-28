@@ -10,8 +10,8 @@ import { Rols } from "../../types";
 import { blockedPathsBranchOffice } from "../../constants";
 
 const blockedPathsWithAuthentication: readonly string[] = ["/registrarse", "/"] as const;
-const initUrlByRole: Record<Rols, string> = {
-  "Administrador": "/sucursales, /productos",
+const initRouteByRole: Record<Rols, string> = {
+  "Administrador": "/sucursales",
   "Administrador sucursal": "/panel-sucursal",
   "Vendedor": "/pedidos-sucursal",
 } as const;
@@ -30,12 +30,12 @@ const RoterChecker = () => {
     }
 
     if (userAuth?.role === "Administrador sucursal" && blockedPathsBranchOffice.includes(pathname)) {
-      navigate(initUrlByRole["Administrador sucursal"]);
+      navigate(initRouteByRole["Administrador sucursal"]);
       return;
     }
 
     if (user && blockedPathsWithAuthentication.includes(pathname)) {
-      navigate(initUrlByRole[userAuth?.role!]);
+      navigate(initRouteByRole[userAuth?.role!]);
     }
   }, [user, pathname, navigate, loading, userAuth]);
 
