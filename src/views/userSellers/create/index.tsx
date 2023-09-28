@@ -59,9 +59,9 @@ const CreateUserSeller = () => {
 
     try {
       if (type === "update") {
-        await put(`userSeller/${type}`, _seller, abortController);
+        await put(`userSeller/${type}`, _seller, abortController.current);
       } else {
-        await post(`userSeller/${type}`, _seller, abortController);
+        await post(`userSeller/${type}`, _seller, abortController.current);
       }
 
       message.success('Vendedor guardado con éxito.', 4);
@@ -156,7 +156,7 @@ const CreateUserSeller = () => {
             },
             {
               typeControl: "file",
-              label:  screens.xs ? "" : "Foto vendedor",
+              label: screens.xs ? "" : "Foto vendedor",
               name: "image",
               value: seller.image,
               maxCount: 1,

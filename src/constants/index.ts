@@ -1,7 +1,6 @@
 import { FormRule } from "antd";
 import { BranchOffice, UserAdmin, UserDeliveryMan, UserSeller } from "../interfaces/user";
 import { Rols, TypeRute } from "../types";
-import menuItems from "../components/menu/menuItems";
 
 export const blockedPathsBranchOffice: readonly string[] = ["/sucursales"] as const;
 export const bloquedPathsUsers: Record<Rols, readonly string[]> = {
