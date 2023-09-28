@@ -24,20 +24,13 @@ export interface Get<T> {
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 
 const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeholderSearch, pathEdit, urlDisabled }: Props<T>) => {
-<<<<<<< Updated upstream
 	const abortController = useAbortController();
-=======
->>>>>>> Stashed changes
 	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState(10);
 	const [search, setSearch] = useState("");
 
 	const url = useMemo(() => `${urlProp}?page=${page}&limit=${limit}&search=${search}`, [urlProp, page, limit, search]);
-<<<<<<< Updated upstream
 	const { loading, response } = useGet<Get<T>>(url, urlProp === "" || wait);
-=======
-	const { loading, response } = useGet<Get<T>>(url, wait);
->>>>>>> Stashed changes
 
 	const columns = useMemo<ColumnsType<T>>(() => {
 		return [
@@ -48,21 +41,16 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 				fixed: 'right',
 				width: 100,
 				render: (_, record: T) => {
-					const r = record as T & { id: string };
+					const r = record as T & { id: string; };
 
 					return (
 						<TableActionsButtons
 							record={record}
 							onDeleted={() => setPage(1)}
-<<<<<<< Updated upstream
 							fun={() => patch(urlDisabled, { id: r.id }, abortController.current!)}
-=======
-							fun={() => patch(urlDisabled, { id: r.id })}
-							messageError="Registro eliminado con éxito."
->>>>>>> Stashed changes
 							pathEdit={pathEdit}
 						/>
-					)
+					);
 				},
 			}
 		];
@@ -99,7 +87,7 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 				}}
 			/>
 		</div>
-	)
-}
+	);
+};
 
 export default Table;
