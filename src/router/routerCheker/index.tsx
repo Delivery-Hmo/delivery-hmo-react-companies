@@ -13,9 +13,7 @@ const blockedPathsWithAuthentication: readonly string[] = ["/registrarse", "/"] 
 const initUrlByRole: Record<Rols, string> = {
   "Administrador": "/sucursales, /productos",
   "Administrador sucursal": "/panel-sucursal",
-  "Repartidor": "/pedidos-repartidor",
   "Vendedor": "/pedidos-sucursal",
-  
 } as const;
 
 const RoterChecker = () => {
@@ -39,7 +37,7 @@ const RoterChecker = () => {
     if (user && blockedPathsWithAuthentication.includes(pathname)) {
       navigate(initUrlByRole[userAuth?.role!]);
     }
-  }, [user, pathname, navigate, loading, userAuth])
+  }, [user, pathname, navigate, loading, userAuth]);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -51,7 +49,7 @@ const RoterChecker = () => {
         </Suspense>
       </Layout.Content>
     </Layout>
-  )
-}
+  );
+};
 
 export default RoterChecker;
