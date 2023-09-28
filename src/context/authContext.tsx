@@ -12,7 +12,7 @@ import useAbortController from "../hooks/useAbortController";
 interface Auth {
   user: User | null;
   userAuth: Users | null;
-  setUserAuth: DS<UserAdmin | null>;
+  setUserAuth: DS<Users | null>;
   loading: boolean;
   creatingUser: boolean;
   setCreatingUser: DS<boolean>;
@@ -63,11 +63,6 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
         setUserAuth(_userAuth);
       } catch (error) {
-        //este if hay que quitarlo en producción
-        if (error instanceof Error && error.message === "Failed to execute 'fetch' on 'Window': The user aborted a request.") {
-          return;
-        }
-
         setUserAuth(null);
         setUser(null);
 
