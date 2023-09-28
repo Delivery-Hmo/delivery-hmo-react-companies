@@ -49,7 +49,7 @@ const DashborachBranch = () => {
   return (
     <div style={{ margin: 20 }}>
       <HeaderView
-        title="Estadisticas"
+        title=""
       />
 
       <div style={containerStyle}>
