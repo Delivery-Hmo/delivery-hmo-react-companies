@@ -1,7 +1,7 @@
 import { useAuth } from '../../context/authContext';
 import { useMemo } from 'react'
 import { ColumnsType } from 'antd/es/table';
-import { UserDeliveryMan } from '../../interfaces/user';
+import { BranchOffice, UserDeliveryMan } from '../../interfaces/user';
 import HeaderView from '../../components/headerView';
 import Table from '../../components/table';
 
@@ -11,7 +11,11 @@ const UserDeliveryManView = () => {
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Correo', dataIndex: 'email', key: 'email' },
     { title: 'Teléfono', dataIndex: 'phone', key: 'phone' },
-    { title: 'Sucursal', dataIndex: 'branchOffice', key: 'branchOffice' },
+    {
+      title: 'Sucursal',
+      key: 'branchOffice',
+      render: (_, { branchOffice }) => (branchOffice as BranchOffice)?.name || 'Sin sucursal',
+    },
   ], [])
 
   return (
@@ -20,7 +24,7 @@ const UserDeliveryManView = () => {
         path='/repartidores/crear'
         title='Repartidores'
       />
-      <Table 
+      <Table
         url="userDeliveryMan/listByUserAdmin"
         columns={columns}
         wait={loadingUser}

@@ -15,11 +15,12 @@ export interface User {
   image?: UploadFile<any>[] | string;
   password?: string;
   confirmPassword?: string;
+  rfc?: string;
 }
 
 export interface UserAdmin extends User {
   phone?: string;
-  rfc?: string;
+  company?: string;
 }
 
 export interface BranchOffice extends User {
