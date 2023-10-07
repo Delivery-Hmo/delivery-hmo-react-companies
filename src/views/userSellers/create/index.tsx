@@ -42,6 +42,12 @@ const CreateUserSeller = () => {
     setSeller(_userSeller);
   }, [state, form])
 
+  const optionsBranchOffices = useMemo<Option[]>(() => {
+    const _branchOfficesOptions = (branchOffices?.map(b => ({ text: b.name, value: b.id })) || []) as Option[]
+    _branchOfficesOptions.unshift({ text: "Sin sucursal", value: "" })
+    return _branchOfficesOptions;
+  }, [branchOffices])
+
   const onFinish = async () => {
     if (saving) return;
 
@@ -98,6 +104,24 @@ const CreateUserSeller = () => {
             },
             {
               typeControl: 'input',
+              typeInput: 'text',
+              label: 'RFC',
+              name: 'rfc',
+              rules: [{ required: true, message: 'Favor de escribir el RFC del vendedor.' }],
+              value: seller.rfc,
+              onChange: (value: string) => setSeller({ ...seller, rfc: value }),
+              md: 12
+            },
+            {
+              typeControl: 'phone',
+              label: 'Teléfono',
+              name: 'phone',
+              value: seller.phone,
+              onChange: (value: string) => setSeller({ ...seller, phone: value }),
+              md: 12
+            },
+            {
+              typeControl: 'input',
               typeInput: 'email',
               label: 'Correo',
               name: 'email',
@@ -126,23 +150,15 @@ const CreateUserSeller = () => {
               md: 12
             },
             {
-              typeControl: 'phone',
-              label: 'Teléfono',
-              name: 'phone',
-              value: seller.phone,
-              onChange: (value: string) => setSeller({ ...seller, phone: value }),
-              md: 12
-            },
-            {
               typeControl: 'select',
               loading: loadingBranchOffices,
-              options: branchOffices?.map(b => ({ text: b.name, value: b.id })) as Option[],
+              options: optionsBranchOffices,
               label: 'Sucursal',
               name: 'branchOffice',
               rules: [{ required: true, message: 'Favor de escribir la sucursal que pertenece el repartidor.' }],
               value: seller.branchOffice,
               onChange: (value: string) => setSeller({ ...seller, branchOffice: value }),
-              md: 12
+              md: 24
             },
             {
               typeControl: 'textarea',
