@@ -3,7 +3,13 @@ import { get } from "../services";
 import { message } from 'antd';
 import useAbortController from './useAbortController';
 
-const useGet = <T extends {}>(url: string, wait?: boolean, mergeResponse?: boolean) => {
+export interface PropsUseGet {
+	url: string;
+	wait?: boolean;
+	mergeResponse?: boolean;
+}
+
+const useGet = <T extends {}>({ url, wait, mergeResponse }: PropsUseGet) => {
 	const abortController = useAbortController();
 	const [loading, setLoading] = useState(true);
 	const [response, setResponse] = useState<T>();

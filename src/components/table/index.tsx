@@ -1,16 +1,14 @@
 import { useMemo, useState } from 'react';
 import { Empty, Table as TableAnt } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import useGet from '../../hooks/useGet';
+import useGet, { PropsUseGet } from '../../hooks/useGet';
 import SearchTable from '../searchTable';
 import TableActionsButtons from "./tableActionsButtons";
 import { patch } from "../../services";
 import useAbortController from "../../hooks/useAbortController";
 
-interface Props<T> {
+interface Props<T> extends PropsUseGet {
 	columns: ColumnsType<T>;
-	url: string;
-	wait?: boolean;
 	placeholderSearch?: string;
 	pathEdit: string;
 	urlDisabled: string;
@@ -30,7 +28,7 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 	const [search, setSearch] = useState("");
 
 	const url = useMemo(() => `${urlProp}?page=${page}&limit=${limit}&search=${search}`, [urlProp, page, limit, search]);
-	const { loading, response } = useGet<Get<T>>(url, urlProp === "" || wait);
+	const { loading, response } = useGet<Get<T>>({ url, wait: urlProp === "" || wait });
 
 	const columns = useMemo<ColumnsType<T>>(() => {
 		return [
