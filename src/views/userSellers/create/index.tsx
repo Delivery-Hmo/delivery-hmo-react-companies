@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
-import DynamicForm from '../../../components/dynamicForm'
-import { Card, Form, FormRule, Grid, message, UploadFile } from 'antd'
+import { useEffect, useMemo, useState } from 'react';
+import DynamicForm from '../../../components/dynamicForm';
+import { Card, Form, FormRule, Grid, message, UploadFile } from 'antd';
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { initUserSeller, titleForm } from '../../../constants';
@@ -8,7 +8,7 @@ import { BranchOffice, UserSeller } from '../../../interfaces/user';
 import { TypeRute } from '../../../types';
 import HeaderView from "../../../components/headerView";
 import { Option } from "../../../interfaces";
-import useGet from "../../../hooks/useGet";
+import useGet, { PropsUseGet } from "../../../hooks/useGet";
 import { setImagesToState } from "../../../utils/functions";
 import useAbortController from "../../../hooks/useAbortController";
 
@@ -20,15 +20,16 @@ const CreateUserSeller = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
-  const { loading: loadingBranchOffices, response: branchOffices } = useGet<BranchOffice[]>("branchOffice/listByUserAdmin");
+  const propsUseGet = useMemo<PropsUseGet>(() => ({ url: "branchOffice/listByUserAdmin" }), []);
+  const { loading: loadingBranchOffices, response: branchOffices } = useGet<BranchOffice[]>(propsUseGet);
   const screens = useBreakpoint();
   const [type, setType] = useState<TypeRute>("create");
   const [saving, setSaving] = useState(false);
-  const [seller, setSeller] = useState<UserSeller>(initUserSeller)
+  const [seller, setSeller] = useState<UserSeller>(initUserSeller);
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !seller.id && seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
-  ], [seller])
+  ], [seller]);
 
   useEffect(() => {
     let _userSeller = { ...state } as UserSeller | null;
@@ -40,13 +41,13 @@ const CreateUserSeller = () => {
     _userSeller = setImagesToState(_userSeller);
     form.setFieldsValue(_userSeller);
     setSeller(_userSeller);
-  }, [state, form])
+  }, [state, form]);
 
   const optionsBranchOffices = useMemo<Option[]>(() => {
-    const _branchOfficesOptions = (branchOffices?.map(b => ({ text: b.name, value: b.id })) || []) as Option[]
-    _branchOfficesOptions.unshift({ text: "Sin sucursal", value: "" })
+    const _branchOfficesOptions = (branchOffices?.map(b => ({ text: b.name, value: b.id })) || []) as Option[];
+    _branchOfficesOptions.unshift({ text: "Sin sucursal", value: "" });
     return _branchOfficesOptions;
-  }, [branchOffices])
+  }, [branchOffices]);
 
   const onFinish = async () => {
     if (saving) return;
@@ -71,11 +72,11 @@ const CreateUserSeller = () => {
       }
 
       message.success('Vendedor guardado con éxito.', 4);
-      navigate('/vendedores')
+      navigate('/vendedores');
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   return (
     <div>
@@ -185,7 +186,7 @@ const CreateUserSeller = () => {
         />
       </Card>
     </div>
-  )
-}
+  );
+};
 
 export default CreateUserSeller;

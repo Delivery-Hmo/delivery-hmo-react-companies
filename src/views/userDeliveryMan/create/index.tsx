@@ -1,14 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Form, message, FormRule, UploadFile } from 'antd'
+import { useEffect, useMemo, useState } from 'react';
+import { Form, message, FormRule } from 'antd';
 import { post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { initUserDeliveryMan, titleForm } from '../../../constants';
 import { BranchOffice, UserDeliveryMan } from '../../../interfaces/user';
-import useGet from '../../../hooks/useGet';
+import useGet, { PropsUseGet } from '../../../hooks/useGet';
 import { CustomInput, Option } from '../../../interfaces';
 import DynamicForm from "../../../components/dynamicForm";
 import useAbortController from "../../../hooks/useAbortController";
-import useIsSmallScreen from '../../../hooks/useIsSmallScreen';
 import { setImagesToState } from '../../../utils/functions';
 import HeaderView from '../../../components/headerView';
 
@@ -18,9 +17,11 @@ const CreateUserDeliveryMan = () => {
   const abortController = useAbortController();
   const [form] = Form.useForm();
   const location = useLocation();
-  const isSmallScreen = useIsSmallScreen();
   const navigate = useNavigate();
-  const { loading, response: branchOffices } = useGet<BranchOffice[]>("branchOffice/listByUserAdmin");
+  const propsUseGet = useMemo<PropsUseGet>(() => ({
+    url: "branchOffice/listByUserAdmin"
+  }), []);
+  const { loading, response: branchOffices } = useGet<BranchOffice[]>(propsUseGet);
   const { state } = location;
   const [type, setType] = useState<TypeRute>("create");
   const [saving, setSaving] = useState(false);
@@ -37,17 +38,17 @@ const CreateUserDeliveryMan = () => {
     _deliveryMan = setImagesToState(_deliveryMan);
     form.setFieldsValue(_deliveryMan);
     setDeliveryMan(_deliveryMan);
-  }, [state, form])
+  }, [state, form]);
 
   const optionsBranchOffices = useMemo<Option[]>(() => {
-    const _branchOfficesOptions = (branchOffices?.map(b => ({ text: b.name, value: b.id })) || []) as Option[]
-    _branchOfficesOptions.unshift({ text: "Sin sucursal", value: "" })
+    const _branchOfficesOptions = (branchOffices?.map(b => ({ text: b.name, value: b.id })) || []) as Option[];
+    _branchOfficesOptions.unshift({ text: "Sin sucursal", value: "" });
     return _branchOfficesOptions;
-  }, [branchOffices])
+  }, [branchOffices]);
 
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !deliveryMan.id && deliveryMan.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o más.' },
-  ], [deliveryMan.password, deliveryMan.id])
+  ], [deliveryMan.password, deliveryMan.id]);
 
   const onFinish = async () => {
     if (saving) return;
@@ -66,20 +67,20 @@ const CreateUserDeliveryMan = () => {
 
     try {
       if (type === "update") {
-        await put(`userDeliveryMan/${type}`, _deliveryMan, abortController.current);
+        await put(`userDeliveryMan/${type}`, _deliveryMan, abortController.current!);
       } else {
-        await post(`userDeliveryMan/${type}`, _deliveryMan, abortController.current);
+        await post(`userDeliveryMan/${type}`, _deliveryMan, abortController.current!);
       }
 
       message.success('Repartidor guardado con éxito.', 4);
-      navigate('/repartidores')
+      navigate('/repartidores');
     } catch (error) {
-      console.log(error)
+      console.log(error);
       message.error('Error al guardar el repartidor.', 4);
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   return (
     <>
@@ -173,7 +174,7 @@ const CreateUserDeliveryMan = () => {
           }
         ] as CustomInput[]} />
     </>
-  )
-}
+  );
+};
 
 export default CreateUserDeliveryMan;

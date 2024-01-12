@@ -1,8 +1,8 @@
 import { Skeleton } from "antd";
 import { FC, useMemo, useState } from "react";
-import Modal from "../../../components/modal"
+import Modal from "../../../components/modal";
 import { Get } from "../../../components/table";
-import useGet from "../../../hooks/useGet";
+import useGet, { PropsUseGet } from "../../../hooks/useGet";
 import CardComments from "./card";
 import { CommentsBranchOffice } from "../../../interfaces/commentBranchOffice";
 
@@ -14,8 +14,14 @@ interface Props {
 
 const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
   const [page, setPage] = useState(1);
-  const url = useMemo(() => `commentsBranchOffice/list?page=${page}&limit=10&idBranchOffice=${idBranchOffice}`, [idBranchOffice, page]);
-  const { loading, response, setResponse } = useGet<Get<CommentsBranchOffice>>(url, !Boolean(idBranchOffice), true);
+  const propsUseGet = useMemo<PropsUseGet>(() => {
+    return {
+      url: `commentsBranchOffice/list?page=${page}&limit=10&idBranchOffice=${idBranchOffice}`,
+      wait: !Boolean(idBranchOffice),
+      mergeResponse: true
+    };
+  }, [page, idBranchOffice]);
+  const { loading, response, setResponse } = useGet<Get<CommentsBranchOffice>>(propsUseGet);
 
   const onScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
     if (loading) return;
@@ -26,7 +32,7 @@ const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
     if (!bottom || !scrollTop || (response?.list.length || 0) >= (response?.total || 0)) return;
 
     setPage(page + 1);
-  }
+  };
 
   return (
     <Modal
@@ -63,7 +69,7 @@ const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
           </div>
       }
     </Modal>
-  )
-}
+  );
+};
 
 export default Comments;
