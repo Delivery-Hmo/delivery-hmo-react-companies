@@ -21,7 +21,7 @@ const UserDeliveryManView = () => {
   return (
     <>
       <HeaderView
-        path='/repartidores/crear'
+        path='/repartidores/registrar'
         title='Repartidores'
       />
       <Table

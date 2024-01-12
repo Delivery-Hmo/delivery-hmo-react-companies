@@ -65,9 +65,9 @@ const CreateUserSeller = () => {
 
     try {
       if (type === "update") {
-        await put(`userSeller/${type}`, _seller, abortController.current);
+        await put(`userSeller/${type}`, _seller, abortController.current as AbortController);
       } else {
-        await post(`userSeller/${type}`, _seller, abortController.current);
+        await post(`userSeller/${type}`, _seller, abortController.current as AbortController);
       }
 
       message.success('Vendedor guardado con éxito.', 4);
@@ -81,7 +81,7 @@ const CreateUserSeller = () => {
     <div>
       <HeaderView
         title={titleForm[type]}
-        path="/sucursales"
+        path="/vendedores"
         goBack
       />
       <Card>
@@ -155,7 +155,6 @@ const CreateUserSeller = () => {
               options: optionsBranchOffices,
               label: 'Sucursal',
               name: 'branchOffice',
-              rules: [{ required: true, message: 'Favor de escribir la sucursal que pertenece el repartidor.' }],
               value: seller.branchOffice,
               onChange: (value: string) => setSeller({ ...seller, branchOffice: value }),
               md: 24
