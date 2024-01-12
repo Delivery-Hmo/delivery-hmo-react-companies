@@ -71,7 +71,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
           e.preventDefault();
         }
 
-        return ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()
+        return ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault();
       }}
       onChange={e => onChange && onChange(e.target.value)}
       onWheel={e => e.preventDefault()}
@@ -93,10 +93,11 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
       const propsUpload: UploadProps = {
         fileList: _value,
         accept,
+        maxCount: multiple ? maxCount : 1,
         multiple: multiple && !accept?.includes("image"),
         onPreview: onPreviewImage,
         listType: listType || "picture-card",
-        onChange: ({ fileList, file }: UploadChangeParam<UploadFile<any>>) => {
+        onChange: ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
           const isValid = validFiles(fileList.filter(f => f.originFileObj).map(f => f.originFileObj!), accept!, true);
 
           if (!isValid) {
@@ -104,7 +105,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
             return;
           }
 
-          onChange && onChange(multiple ? fileList : [file]);
+          onChange && onChange(fileList);
         },
         customRequest: ({ onSuccess }) => {
           setTimeout(() => {
@@ -126,7 +127,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
     <Form
       form={form}
       layout={layout}
-      onFinish={async (values) => {
+      onFinish={async (values: Record<string, any>) => {
         try {
           await onFinish(values);
         } catch (error) {
@@ -137,11 +138,11 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
 
             switch (error.code) {
               case "auth/email-already-in-use":
-                messageError = "Otra empresa ya está utilizando el correo proporcionado."
-                break
+                messageError = "Otra empresa ya está utilizando el correo proporcionado.";
+                break;
               case "auth/invalid-email":
-                messageError = "El correo electrónico no es válido."
-                break
+                messageError = "El correo electrónico no es válido.";
+                break;
             }
 
             message.error(messageError, 4);
@@ -180,7 +181,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
                   </Form.Item>
                 }
               </Col>
-            )
+            );
           })
         }
       </Row>
@@ -192,7 +193,7 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         {textSubmit || "Guardar"}
       </SaveButton>
     </Form>
-  )
-}
+  );
+};
 
 export default DynamicForm;
