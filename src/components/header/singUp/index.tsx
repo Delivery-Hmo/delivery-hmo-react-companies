@@ -1,11 +1,12 @@
 import { message } from 'antd';
-import { getAdditionalUserInfo, getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { UserAdmin } from '../../../interfaces/user';
 import { post } from '../../../services';
 import DynamicForm from '../../dynamicForm';
 import useAbortController from "../../../hooks/useAbortController";
 import { rulePassword } from "../../../constants";
 import { useAuth } from "../../../context/authContext";
+import { FirebaseError } from 'firebase/app';
 
 const SingUp = () => {
   const abortController = useAbortController();
@@ -23,18 +24,16 @@ const SingUp = () => {
 
     try {
       const result = await createUserWithEmailAndPassword(getAuth(), userAdmin.email!, userAdmin.password as string);
-      const additional = getAdditionalUserInfo(result);
-
-      if (!additional?.isNewUser) {
-        message.error('Error esta cuenta ya esta registrada.', 4);
-        return;
-      };
 
       delete userAdmin.confirmPassword;
 
       await updateProfile(result.user, { displayName: "Administrador" });
       await post('userAdmin/create', userAdmin, abortController.current!);
     } catch (error) {
+      console.log(error);
+      if (error instanceof FirebaseError && error.code === 'auth/email-already-in-use') {
+        message.error('Otro usuario ya está utilizando el correo proporcionado.', 4);
+      }
       getAuth().signOut();
     } finally {
       setCreatingUser(false);
@@ -44,7 +43,7 @@ const SingUp = () => {
   return (
     <div style={{ padding: 20 }}>
       <div className="app-login-title" style={{ display: "flex", justifyContent: "center" }}>
-        <span>Registara tu empresa</span>
+        <span>Registra tu empresa</span>
       </div>
       <br />
       <DynamicForm
@@ -75,13 +74,6 @@ const SingUp = () => {
             typeControl: "phone",
             label: "Teléfono",
             name: "phone",
-          },
-          {
-            md: 24,
-            typeControl: "input",
-            label: "RFC",
-            name: "rfc",
-            rules: [{ required: true, message: 'Favor de escribir el RFC de la empresa.' }],
           },
           {
             md: 12,

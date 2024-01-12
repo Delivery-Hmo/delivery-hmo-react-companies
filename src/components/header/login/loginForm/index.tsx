@@ -45,7 +45,7 @@ const LoginForm: FC<Props> = ({ setCurrentForm }) => {
       await signInWithEmailAndPassword(getAuth(), account.email, account.password);
     } catch (error) {
       console.log(error);
-      message.error('Error, datos incorrectos.');
+      message.error('Error, datos incorrectos verifique correo y contraseña.');
     } finally {
       setLoading(false);
     }

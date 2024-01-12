@@ -170,18 +170,6 @@ const CreateUserDeliveryMan = () => {
             value: deliveryMan.description,
             onChange: (value: string) => setDeliveryMan({ ...deliveryMan, description: value }),
             md: 24
-          },
-          {
-            typeControl: "file",
-            label: isSmallScreen ? "" : "Foto vendedor",
-            name: "image",
-            value: deliveryMan.image,
-            maxCount: 1,
-            accept: "image/png, image/jpeg",
-            onChange: (value: UploadFile<any>[]) => setDeliveryMan({ ...deliveryMan, image: value }),
-            md: 8,
-            styleFI: { display: "flex", justifyContent: "center" },
-            multiple: false,
           }
         ] as CustomInput[]} />
     </>
