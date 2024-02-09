@@ -141,3 +141,18 @@ export const confirmDialog = <T>(content: ReactNode, fun: () => Promise<T>, text
       resolve(false as T);
     }
   }));
+
+export const trimValues = (values: Record<string, any>) => {
+  Object.keys(values).forEach(key => {
+    if (typeof values[key] === "string") {
+      values[key] = values[key].trim();
+    }
+  });
+  return values;
+}
+
+export const isValidRFC = (value: string) => {
+  const regex = /^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$/;
+
+  return regex.test(value);
+}

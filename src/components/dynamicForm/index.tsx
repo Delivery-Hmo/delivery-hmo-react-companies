@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { CustomInput, Option } from '../../interfaces';
 import { Input, Row, Col, Select, Form, Checkbox, DatePicker, TimePicker, FormRule, Upload, UploadFile, message } from 'antd';
-import { rulePhoneInput, ruleMaxLength, ruleEmail } from '../../constants';
+import { rulePhoneInput, ruleMaxLength, ruleEmail, ruleRfc } from '../../constants';
 import { FormInstance, FormLayout } from "antd/es/form/Form";
 import { UploadChangeParam, UploadProps } from "antd/es/upload";
 import SaveButton from "../saveButton";
@@ -41,15 +41,19 @@ const DynamicForm: FC<Props> = ({ inputs: inputsProp, layout, form, onFinish, lo
         _rules.push(ruleEmail);
       }
 
+      if (typeInput === "rfc") {
+        _rules.push(ruleRfc);
+      }
+
       return { ...input, rules: _rules };
     });
 
     setInputs(_inputs);
   }, [inputsProp]);
-
+  console.log(inputs);
   const controls: Record<string, (input: CustomInput) => ReactNode> = useMemo(() => ({
     input: ({ value, onChange, typeInput }: CustomInput) => <Input
-      type={typeInput || 'text'}
+      type={typeInput === 'rfc' ? 'text' : typeInput}
       value={value}
       onKeyDown={e => {
         if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {

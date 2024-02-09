@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import DynamicForm from '../../../components/dynamicForm';
 import { Card, Form, FormRule, Grid, message, UploadFile } from 'antd';
-import { post, put } from '../../../services';
+import { get, post, put } from '../../../services';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { initUserSeller, titleForm } from '../../../constants';
 import { BranchOffice, UserSeller } from '../../../interfaces/user';
@@ -30,6 +30,18 @@ const CreateUserSeller = () => {
   const rulesPassword: FormRule[] = useMemo(() => [
     { required: !seller.id && seller.password !== "", min: 6, message: 'La contraseña tiene que ser de 6 dígitos o màs.' }
   ], [seller]);
+
+  const isValidRFC = (value: string) => {
+    const regex = /^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/;
+    let isValid = regex.test(value);
+
+    if (!isValid) {
+      message.error('El RFC no es válido.');
+      return false;
+    }
+
+    return regex.test(value);
+  }
 
   useEffect(() => {
     let _userSeller = { ...state } as UserSeller | null;
@@ -105,10 +117,9 @@ const CreateUserSeller = () => {
             },
             {
               typeControl: 'input',
-              typeInput: 'text',
+              typeInput: 'rfc',
               label: 'RFC',
               name: 'rfc',
-              rules: [{ required: true, message: 'Favor de escribir el RFC del vendedor.' }],
               value: seller.rfc,
               onChange: (value: string) => setSeller({ ...seller, rfc: value }),
               md: 12
