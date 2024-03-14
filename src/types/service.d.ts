@@ -1,0 +1,1 @@
+export type ApiNames = "companies" | "products";

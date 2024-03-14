@@ -25,6 +25,7 @@ const UserDeliveryManView = () => {
         title='Repartidores'
       />
       <Table
+        apiName='companies'
         url="userDeliveryMan/listByUserAdmin"
         columns={columns}
         wait={loadingUser}

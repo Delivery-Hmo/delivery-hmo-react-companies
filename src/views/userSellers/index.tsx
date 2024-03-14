@@ -39,6 +39,7 @@ const UserSellersView = () => {
         path="/vendedores/registrar"
       />
       <Table
+        apiName='companies'
         url="userSeller/listByUserAdmin"
         columns={columns}
         wait={loadingUser}

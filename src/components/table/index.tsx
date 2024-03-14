@@ -21,14 +21,14 @@ export interface Get<T> {
 
 const { PRESENTED_IMAGE_SIMPLE } = Empty;
 
-const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeholderSearch, pathEdit, urlDisabled }: Props<T>) => {
+const Table = <T extends {}>({ apiName, url: urlProp, columns: columnsProp, wait, placeholderSearch, pathEdit, urlDisabled }: Props<T>) => {
 	const abortController = useAbortController();
 	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState(10);
 	const [search, setSearch] = useState("");
 
 	const url = useMemo(() => `${urlProp}?page=${page}&limit=${limit}&search=${search}`, [urlProp, page, limit, search]);
-	const { loading, response } = useGet<Get<T>>({ url, wait: urlProp === "" || wait });
+	const { loading, response } = useGet<Get<T>>({ apiName, url, wait: urlProp === "" || wait });
 
 	const columns = useMemo<ColumnsType<T>>(() => {
 		return [
@@ -45,14 +45,14 @@ const Table = <T extends {}>({ url: urlProp, columns: columnsProp, wait, placeho
 						<TableActionsButtons
 							record={record}
 							onDeleted={() => setPage(1)}
-							fun={() => patch(urlDisabled, { id: r.id }, abortController.current!)}
+							fun={() => patch({ apiName, url: urlDisabled, body: { id: r.id }, abortController: abortController.current! })}
 							pathEdit={pathEdit}
 						/>
 					);
 				},
 			}
 		];
-	}, [columnsProp, urlDisabled, pathEdit, abortController]);
+	}, [apiName, columnsProp, urlDisabled, pathEdit, abortController]);
 
 	return (
 		<div>

@@ -1,8 +1,10 @@
 import { UploadFile } from "antd";
 import { fileToBase64, getCurrentToken, handleError } from '../utils/functions';
 import { baseUrlStorage, baseUrlStorageGCP } from "../constants";
+import { ApiNames } from "../types/service";
+import { Patch, Post, Put } from "../interfaces/service";
 
-const baseUrl = "http://localhost:3001/";
+// const baseUrl = "http://localhost:3001/";
 //const baseUrl = process.env.REACT_APP_SERVER_lOCAL;
 
 const getHeaders = (token: string) => ({
@@ -11,11 +13,16 @@ const getHeaders = (token: string) => ({
   Authorization: "Bearer " + token
 });
 
-export const get = async <T>(url: string, abortController: AbortController) => {
+const apiUrls: Record<ApiNames, string> = {
+  companies: 'http://localhost:3001/',
+  products: 'http://localhost:3002/'
+}
+
+export const get = async <T>(apiName: ApiNames, url: string, abortController: AbortController) => {
   try {
     const token = await getCurrentToken();
     const response = await fetch(
-      baseUrl + url,
+      apiUrls[apiName] + url,
       {
         method: 'GET',
         headers: getHeaders(token),
@@ -34,12 +41,12 @@ export const get = async <T>(url: string, abortController: AbortController) => {
   }
 }
 
-export const post = async <T>(url: string, body: Record<string, any>, abortController: AbortController) => {
+export const post = async <T>({ apiName, url, body, abortController }: Post) => {
   try {
     const token = await getCurrentToken();
     body = await getBodyWithBase64Files({ ...body });
     const response = await fetch(
-      baseUrl + url,
+      apiUrls[apiName] + url,
       {
         method: 'POST',
         body: JSON.stringify(body),
@@ -59,12 +66,12 @@ export const post = async <T>(url: string, body: Record<string, any>, abortContr
   }
 }
 
-export const put = async <T>(url: string, body: Record<string, any>, abortController: AbortController) => {
+export const put = async <T>({ apiName, url, body, abortController }: Put) => {
   try {
     const token = await getCurrentToken();
     body = await getBodyWithBase64Files({ ...body });
     const response = await fetch(
-      baseUrl + url,
+      apiUrls[apiName] + url,
       {
         method: 'PUT',
         body: JSON.stringify(body),
@@ -84,10 +91,10 @@ export const put = async <T>(url: string, body: Record<string, any>, abortContro
   }
 }
 
-export const patch = async <T>(url: string, body: Record<string, any>, abortController: AbortController) => {
+export const patch = async <T>({ apiName, url, body, abortController }: Patch) => {
   const token = await getCurrentToken();
   const response = await fetch(
-    baseUrl + url,
+    apiUrls[apiName] + url,
     {
       method: 'PATCH',
       body: JSON.stringify(body),

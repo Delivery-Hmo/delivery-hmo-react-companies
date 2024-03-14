@@ -16,6 +16,7 @@ const Products = () => {
         path="/productos/registrar"
       />
       <Table
+        apiName='products'
         url="products/list"
         columns={columns}
         placeholderSearch="Buscar por nombre ó correo..."

@@ -19,6 +19,7 @@ const CreateUserDeliveryMan = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const propsUseGet = useMemo<PropsUseGet>(() => ({
+    apiName: 'companies',
     url: "branchOffice/listByUserAdmin"
   }), []);
   const { loading, response: branchOffices } = useGet<BranchOffice[]>(propsUseGet);
@@ -67,9 +68,19 @@ const CreateUserDeliveryMan = () => {
 
     try {
       if (type === "update") {
-        await put(`userDeliveryMan/${type}`, _deliveryMan, abortController.current!);
+        await put({
+          apiName: 'companies',
+          url: `userDeliveryMan/${type}`,
+          body: _deliveryMan,
+          abortController: abortController.current!
+        });
       } else {
-        await post(`userDeliveryMan/${type}`, _deliveryMan, abortController.current!);
+        await post({
+          apiName: 'companies',
+          url: `userDeliveryMan/${type}`,
+          body: _deliveryMan,
+          abortController: abortController.current!
+        });
       }
 
       message.success('Repartidor guardado con éxito.', 4);

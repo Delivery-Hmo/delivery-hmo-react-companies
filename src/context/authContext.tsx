@@ -34,8 +34,8 @@ const AuthContext = createContext<Auth>({
 });
 
 const getUserDatas: Record<Rols, (uid: string, controller: AC) => Promise<Users>> = {
-  "Administrador": (uid: string, controller: AC) => get<UserAdmin>('userAdmin/getByUid?uid=' + uid, controller),
-  "Administrador sucursal": (uid: string, controller: AC) => get<BranchOffice>('branchOffice/getByUid?uid=' + uid, controller),
+  "Administrador": (uid: string, controller: AC) => get<UserAdmin>('companies', 'userAdmin/getByUid?uid=' + uid, controller),
+  "Administrador sucursal": (uid: string, controller: AC) => get<BranchOffice>('companies', 'branchOffice/getByUid?uid=' + uid, controller),
   "Vendedor": (uid: string, controller: AC) => Promise.reject('Error, no se pudo obtener la información del usuario.'),
 };
 
@@ -59,6 +59,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       };
 
       try {
+        console.log(user?.displayName)
         const _userAuth = await getUserDatas[(user?.displayName || "") as Rols](user.uid, abortController.current!);
 
         setUserAuth(_userAuth);

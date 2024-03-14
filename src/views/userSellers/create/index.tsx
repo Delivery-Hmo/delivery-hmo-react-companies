@@ -20,7 +20,7 @@ const CreateUserSeller = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
-  const propsUseGet = useMemo<PropsUseGet>(() => ({ url: "branchOffice/listByUserAdmin" }), []);
+  const propsUseGet = useMemo<PropsUseGet>(() => ({ apiName: 'companies', url: "branchOffice/listByUserAdmin" }), []);
   const { loading: loadingBranchOffices, response: branchOffices } = useGet<BranchOffice[]>(propsUseGet);
   const screens = useBreakpoint();
   const [type, setType] = useState<TypeRute>("create");
@@ -66,9 +66,19 @@ const CreateUserSeller = () => {
 
     try {
       if (type === "update") {
-        await put(`userSeller/${type}`, _seller, abortController.current as AbortController);
+        await put({
+          apiName: 'companies',
+          url: `userSeller/${type}`,
+          body: _seller,
+          abortController: abortController.current!
+        });
       } else {
-        await post(`userSeller/${type}`, _seller, abortController.current as AbortController);
+        await post({
+          apiName: 'companies',
+          url: `userSeller/${type}`,
+          body: _seller,
+          abortController: abortController.current!
+        });
       }
 
       message.success('Vendedor guardado con éxito.', 4);

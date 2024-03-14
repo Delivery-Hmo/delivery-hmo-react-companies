@@ -16,6 +16,7 @@ const Comments: FC<Props> = ({ open, onClose, idBranchOffice }) => {
   const [page, setPage] = useState(1);
   const propsUseGet = useMemo<PropsUseGet>(() => {
     return {
+      apiName: 'companies',
       url: `commentsBranchOffice/list?page=${page}&limit=10&idBranchOffice=${idBranchOffice}`,
       wait: !Boolean(idBranchOffice),
       mergeResponse: true

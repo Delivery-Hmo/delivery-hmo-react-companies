@@ -98,6 +98,7 @@ const Branches = () => {
         path="/sucursales/registrar"
       />
       <Table
+        apiName='companies'
         url={urlTable}
         columns={columns}
         placeholderSearch="Buscar por nombre ó correo..."
