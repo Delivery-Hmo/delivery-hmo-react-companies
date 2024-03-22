@@ -1,5 +1,5 @@
 import { UploadFile } from "antd";
-import { fileToBase64, getCurrentToken, handleError } from '../utils/functions';
+import { fileToBase64, getCurrentToken, handleError, trimValues } from '../utils/functions';
 import { baseUrlStorage, baseUrlStorageGCP } from "../constants";
 
 const baseUrl = "http://localhost:3001/";
@@ -38,6 +38,9 @@ export const post = async <T>(url: string, body: Record<string, any>, abortContr
   try {
     const token = await getCurrentToken();
     body = await getBodyWithBase64Files({ ...body });
+
+    body = trimValues(body);
+
     const response = await fetch(
       baseUrl + url,
       {
@@ -63,6 +66,9 @@ export const put = async <T>(url: string, body: Record<string, any>, abortContro
   try {
     const token = await getCurrentToken();
     body = await getBodyWithBase64Files({ ...body });
+
+    body = trimValues(body);
+
     const response = await fetch(
       baseUrl + url,
       {

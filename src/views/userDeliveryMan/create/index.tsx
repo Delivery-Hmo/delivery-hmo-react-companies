@@ -107,10 +107,9 @@ const CreateUserDeliveryMan = () => {
           },
           {
             typeControl: 'input',
-            typeInput: 'text',
+            typeInput: 'rfc',
             label: 'RFC',
             name: 'rfc',
-            rules: [{ required: true, message: 'Favor de escribir el RFC del repartidor.' }],
             value: deliveryMan.rfc,
             onChange: (value: string) => setDeliveryMan({ ...deliveryMan, rfc: value }),
             md: 12

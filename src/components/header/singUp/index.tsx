@@ -43,7 +43,7 @@ const SingUp = () => {
   return (
     <div style={{ padding: 20 }}>
       <div className="app-login-title" style={{ display: "flex", justifyContent: "center" }}>
-        <span>Registra tu empresa</span>
+        <span>Registra tu restaurante, compañia, local o negocio</span>
       </div>
       <br />
       <DynamicForm
